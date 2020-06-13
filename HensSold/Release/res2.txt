@@ -1,0 +1,8 @@
+Log 4
+ 0.915539s wall, 0.920406s user + 0.015600s system = 0.936006s CPU (102.2%)
+Log 5
+ 0.910549s wall, 0.904806s user + 0.000000s system = 0.904806s CPU (99.4%)
+Log 6
+ 0.908665s wall, 0.904806s user + 0.000000s system = 0.904806s CPU (99.6%)
+No Log 
+ 1.013561s wall, 1.014007s user + 0.000000s system = 1.014007s CPU (100.0%)

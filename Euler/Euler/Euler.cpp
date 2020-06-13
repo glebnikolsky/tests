@@ -1,0 +1,1549 @@
+// Euler.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <algorithm>
+#include <map>
+#include <set>
+#include <sstream>
+#include <stack>
+#include <vector>
+
+#include "boost/date_time/gregorian/gregorian.hpp"
+#include "boost/format.hpp"
+#include <boost/lexical_cast.hpp>
+#include <boost/timer/timer.hpp>
+
+using namespace std;
+
+struct LongNo{
+    LongNo(){
+        v_.push_back(0);
+    }
+
+    LongNo(char *no ){
+        ConvertFromChar(no);
+    }
+
+    LongNo(long no){
+        while( no ){
+            v_.insert(v_.begin(),no%10);
+            no /= 10;
+        }
+    }
+
+    LongNo( const LongNo &r){
+        if( this != &r)
+            v_ = r.v_;
+    }
+
+    LongNo operator+=(const LongNo &r){
+        v_.resize(max(v_.size(), r.v_.size()), 0);
+        for( size_t i = 0; i < v_.size() && i < r.v_.size(); ++i)
+            v_[i] += r.v_[i];
+        AdjustSub();
+        return *this;            
+    }
+
+    LongNo operator *=(int factor){
+        LongNo tmp = *this;
+        LongNo result;
+        while( factor)
+        {
+            int n = factor%10;
+            factor /= 10;
+            LongNo curr(tmp);
+            tmp.v_.insert(tmp.v_.begin(),0);
+            if ( !n ) continue;
+            for( size_t i = 0; i < curr.v_.size(); ++i)
+                curr.v_[i] *= n;
+            AdjustSub(curr.v_);
+            result += curr;
+            AdjustSub(curr.v_);
+        }
+        *this = result;
+        return *this;            
+    }
+
+    LongNo operator *(const int &r){
+        LongNo tmp(*this);
+        tmp *= r;            
+        return tmp;
+    }
+
+    LongNo operator+(const LongNo &r) {
+        LongNo tmp(*this);
+        tmp += r;            
+        return tmp;
+    }
+
+    string Print()
+    {
+        string tmp;
+        for( auto i = v_.rbegin(); i != v_.rend(); i++)
+            tmp += *i+'0';
+        return tmp;
+    }
+
+    string Print(int n)
+    {
+        string tmp;
+        for( auto i = v_.begin(); n && i != v_.end(); --n, i++)
+            tmp += *i+'0';
+        return tmp;
+    }
+
+
+
+    LongNo operator=(LongNo &r){
+        if( this != &r)
+            v_ = r.v_;
+        return *this;
+    }
+
+    void Swap(LongNo &r){
+        std::swap(v_,r.v_);
+    }
+
+    size_t Order(){
+        return v_.size();
+    }
+
+
+    vector<char> v_;
+
+private:
+    void ConvertFromChar(char *no){
+        for(char *ch = no; *ch; ch++)
+            v_.push_back(*ch-'0');
+        for( int i = 0, j = v_.size()-1; i < j; i++, j--)
+            swap( v_[i], v_[j]);
+    }
+    void AdjustSub(){
+        unsigned char sub = 0;
+        for( size_t i = 0; i < v_.size(); ++i){
+            v_[i] += sub;
+            sub = 0;
+            if( v_[i] >= 10 ){
+                sub = v_[i]/10;
+                v_[i] %= 10;
+            }
+        }
+        if( sub )
+            v_.push_back(sub);
+    }
+    void AdjustSub( vector<char> &v){
+        unsigned char sub = 0;
+        for( size_t i = 0; i < v.size(); ++i){
+            v[i] += sub;
+            sub = 0;
+            if( v[i] >= 10 ){
+                sub = v[i]/10;
+                v[i] %= 10;
+            }
+        }
+        if( sub )
+            v.push_back(sub);
+    }
+};
+
+
+
+void PrimesUpTo(vector<long long> &primes, long long up_to)
+{
+	primes.push_back(2);
+	primes.push_back(3);
+	for(long long i = 6;  ; i += 6)
+	{
+		long long probe = i -1;
+		bool prime = true;
+		for(int j = 0; prime && primes[j]*primes[j] <= probe; ++j)
+			if ( !(probe % primes[j])) 
+				prime = false;
+		if ( prime && probe > up_to ) break;
+		if ( prime )
+			primes.push_back(probe);
+		
+		probe = i + 1;
+		prime = true;
+		for(int j = 0; prime && primes[j]*primes[j] <= probe; ++j)
+			if ( !(probe % primes[j])  )
+				prime = false;
+		if ( prime && probe > up_to ) break;
+		if ( prime ) 
+			primes.push_back(probe);
+	}
+}
+
+void PrimesUpTo(vector<long> &primes, long up_to)
+{
+    primes.push_back(2);
+    primes.push_back(3);
+    for(long i = 6;  ; i += 6)
+    {
+        long probe = i -1;
+        bool prime = true;
+        int maxprobe = static_cast<int>(sqrt(probe));
+        for(int j = 0; prime && primes[j] <= maxprobe; ++j)
+            if ( !(probe % primes[j])) 
+                prime = false;
+        if ( prime && probe > up_to ) break;
+        if ( prime )
+            primes.push_back(probe);
+
+        probe = i + 1;
+        prime = true;
+        maxprobe = static_cast<int>(sqrt(probe));
+        for(int j = 0; prime && primes[j] <= maxprobe; ++j)
+            if ( !(probe % primes[j])  )
+                prime = false;
+        if ( prime && probe > up_to ) break;
+        if ( prime ) 
+            primes.push_back(probe);
+    }
+}
+
+
+bool IsPrime(vector<long long> &primes, int no)
+{
+    bool is_prime = no >= 0;
+    for(size_t i=0; is_prime && primes[i]*primes[i] <= no && i < primes.size(); ++i)
+        is_prime = (no % primes[i]) != 0;
+    return is_prime;
+}
+
+bool IsPrime(vector<long> &primes, int no)
+{
+    bool is_prime = no >= 0;
+    for(size_t i=0; is_prime && primes[i]*primes[i] <= no && i < primes.size(); ++i)
+        is_prime = (no % primes[i]) != 0;
+    return is_prime;
+}
+
+int task1()
+{
+	int sum = 0;
+	for(int i = 3; i<1000; ++i)
+		if (!(i%3) || !(i%5) )
+			sum+=i;
+	return sum;
+}
+
+int task2()
+{
+	int sum = 0;
+	int fib[2] = {1,2};
+	for(;fib[1] < 4000000;){
+		if ( !(fib[1]&1) )
+			sum += fib[1];
+		fib[0] += fib[1];
+		std::cout<<fib[1]<<' ';
+		std::swap(fib[0],fib[1]);
+	}
+	return sum;
+}
+
+long long task3( long long no = 600851475143 )
+{
+	long long  factor =1;
+	while( !(no % 2) ){
+		std::cout<<"2 ";
+		factor = 2;
+		no /=2;
+	}
+	while( !(no % 3) ){
+		std::cout<<"3 ";
+		factor = 3;
+		no /= 3;
+	}
+	for(long long test_factor=1, i = 6;  no != 1 && (no/test_factor > test_factor); i += 6)
+	{
+		test_factor = i - 1;
+		if ( ! (no%test_factor) ){
+			factor = factor < test_factor ? test_factor: factor;
+			std::cout<<test_factor<<' ';
+			no /= test_factor;
+		}
+		test_factor = i + 1;
+		if ( ! (no%test_factor) ){
+			factor = factor < test_factor ? test_factor: factor;
+			std::cout<<test_factor<<' ';
+			no /= test_factor;
+		}
+	}
+	factor = factor> no ? factor: no;
+	return no == 1 ? factor: no;
+}
+
+int task4()
+{
+	int product = 1;
+	int end = 0;
+	for(int i =999; i > end; --i)
+		for( int j = 999; j > end; --j)
+		{
+			int lproduct = i*j;
+			char prod[1000];
+			sprintf_s(prod, 1000, "%d",lproduct);
+			char *b = prod, *e = prod + strlen(prod)-1;
+			while( b < e && *b == *e){
+				++b;
+				--e; 
+			}
+			if ( b > e ){
+				end = j;
+				product = std::max(lproduct,product);
+				break;
+			}
+		}
+	return product;
+}
+
+long long task5()
+{
+    long long factor =1;
+    vector<int> res;
+	for(int i = 2; i <= 20; ++i){
+        int probe = i;
+        for(size_t j = 0; j < res.size() && probe != 1; j++) if( !(probe % res[j]) ) probe /= res[j];
+        if ( probe != 1){
+            res.push_back(probe);
+            factor *= probe;
+            cout<<probe<<'\t';
+        }
+	}
+    cout << endl;
+	return factor;
+}
+
+
+int task6()
+{
+	int sumsq=0, sum=0;
+	for(int i = 1; i <=100; ++i){
+		sumsq += i*i;
+		sum += i;
+	}
+	return sum*sum - sumsq;
+}
+
+long long task7( int n = 10001)
+{
+	std::vector< long long> primes;
+	primes.push_back(2);
+	primes.push_back(3);
+	for(long long i = 6;  primes.size() < (size_t)n; i += 6)
+	{
+		long long probe = i -1;
+		bool prime = true;
+		for(int j = 0; prime && primes[j]*primes[j] <= probe; ++j)
+			if ( !(probe % primes[j])) 
+				prime = false;
+		if ( prime )
+			primes.push_back(probe);
+		probe = i + 1;
+		prime = true;
+		for(int j = 0; prime && primes[j]*primes[j] <= probe; ++j)
+			if ( !(probe % primes[j])  )
+				prime = false;
+		if ( prime ) 
+			primes.push_back(probe);
+	}
+	return primes[n-1];
+}
+
+inline int toDig(char ch)
+{
+	return ch-'0';
+}
+
+
+long long task8()
+{
+	_TCHAR b[] = _T("73167176531330624919225119674426574742355349194934")
+		_T("96983520312774506326239578318016984801869478851843")
+		_T("85861560789112949495459501737958331952853208805511")
+		_T("12540698747158523863050715693290963295227443043557")
+		_T("66896648950445244523161731856403098711121722383113")
+		_T("62229893423380308135336276614282806444486645238749")
+		_T("30358907296290491560440772390713810515859307960866")
+		_T("70172427121883998797908792274921901699720888093776")
+		_T("65727333001053367881220235421809751254540594752243")
+		_T("52584907711670556013604839586446706324415722155397")
+		_T("53697817977846174064955149290862569321978468622482")
+		_T("83972241375657056057490261407972968652414535100474")
+		_T("82166370484403199890008895243450658541227588666881")
+		_T("16427171479924442928230863465674813919123162824586")
+		_T("17866458359124566529476545682848912883142607690042")
+		_T("24219022671055626321111109370544217506941658960408")
+		_T("07198403850962455444362981230987879927244284909188")
+		_T("84580156166097919133875499200524063689912560717606")
+		_T("05886116467109405077541002256983155200055935729725")
+		_T("71636269561882670428252483600823257530420752963450"),
+		*e = b+sizeof(b)/sizeof(_TCHAR);
+		long long res = 0;
+        auto Product = [=](_TCHAR *arr){ long long n = 1; for( int j = 0; n && j<13; ++j) n *= arr[j] - '0'; return n;};
+		for(auto i = b; i != &e[-13]; ++i )
+		{
+			long long prod = Product(i);
+			res = std::max(res, prod);
+		}
+
+		return res;
+}
+
+int task9()
+{
+	int a,b,c=1;
+	for( a = 499; a >=2; --a)
+		for(b = a-1; b > c; --b )
+		{
+			c = 1000 -b -a;
+			std::vector<int> v;
+			v.push_back(a);
+			v.push_back(b);
+			v.push_back(c);
+			std::sort(v.begin(), v.end());
+			if ( v[0]*v[0] + v[1]*v[1] == v[2]*v[2])
+				return a*b*c;
+		}
+	return 0;
+}
+
+long long task10( int n = 2000000)
+{
+	std::vector<long long> primes;
+	long long sum = 5;
+	primes.push_back(2);
+	primes.push_back(3);
+	for(long i = 6;  ; i += 6)
+	{
+		long long probe = i -1;
+		bool prime = true;
+		for(int j = 0; prime && primes[j]*primes[j] <= probe; ++j)
+			if ( !(probe % primes[j])  )
+				prime = false;
+		if ( prime ){ 
+			if ( probe > n ) 
+				return sum;
+			primes.push_back(probe);
+			sum += probe;
+		};
+
+		probe = i + 1;
+		prime = true;
+		for(int j = 0; prime && primes[j]*primes[j] <= probe; ++j)
+			if ( !(probe % primes[j])  )
+				prime = false;
+		if ( prime ){ 
+			if ( probe > n ) 
+				return sum;
+			primes.push_back(probe);
+			sum += probe;
+		};
+	}
+	return sum;
+}
+
+
+long long task12(int n)
+{
+	long long tno = 55;
+    int no = 11;
+	for(;;++no){
+		tno += no;
+		int factors = 2;
+		for(long long probe = 2; probe*probe <= tno; ++probe){
+			if ( !(tno%probe) )
+				factors += probe*probe == tno ?1 : 2;
+		}
+		if ( factors >= n)
+			return tno;
+	}
+}
+
+#define HOR(i,j) mtx[i][j]*mtx[i][j+1]*mtx[i][j+2]*mtx[i][j+3]
+#define VER(i,j) mtx[i][j]*mtx[i+1][j]*mtx[i+2][j]*mtx[i+3][j]
+#define D1(i,j) mtx[i][j]*mtx[i+1][j+1]*mtx[i+2][j+2]*mtx[i+3][j+3]
+#define D2(i,j) mtx[i][j]*mtx[i+1][j-1]*mtx[i+2][j-2]*mtx[i+3][j-3]
+
+int task11()
+{
+	int mtx[20][20] = 
+    {{8,2,22,97,38,15,0,40,0,75,4,5,7,78,52,12,50,77,91,8},
+    {49,49,99,40,17,81,18,57,60,87,17,40,98,43,69,48,4,56,62,0},
+    {81,49,31,73,55,79,14,29,93,71,40,67,53,88,30,3,49,13,36,65},
+    {52,70,95,23,4,60,11,42,69,24,68,56,1,32,56,71,37,2,36,91},
+    {22,31,16,71,51,67,63,89,41,92,36,54,22,40,40,28,66,33,13,80},
+    {24,47,32,60,99,3,45,2,44,75,33,53,78,36,84,20,35,17,12,50},
+    {32,98,81,28,64,23,67,10,26,38,40,67,59,54,70,66,18,38,64,70},
+    {67,26,20,68,2,62,12,20,95,63,94,39,63,8,40,91,66,49,94,21},
+    {24,55,58,5,66,73,99,26,97,17,78,78,96,83,14,88,34,89,63,72},
+    {21,36,23,9,75,0,76,44,20,45,35,14,0,61,33,97,34,31,33,95},
+    {78,17,53,28,22,75,31,67,15,94,3,80,4,62,16,14,9,53,56,92},
+    {16,39,5,42,96,35,31,47,55,58,88,24,0,17,54,24,36,29,85,57},
+    {86,56,0,48,35,71,89,7,5,44,44,37,44,60,21,58,51,54,17,58},
+    {19,80,81,68,5,94,47,69,28,73,92,13,86,52,17,77,4,89,55,40},
+    {4,52,8,83,97,35,99,16,7,97,57,32,16,26,26,79,33,27,98,66},
+    {88,36,68,87,57,62,20,72,3,46,33,67,46,55,12,32,63,93,53,69},
+    {4,42,16,73,38,25,39,11,24,94,72,18,8,46,29,32,40,62,76,36},
+    {20,69,36,41,72,30,23,88,34,62,99,69,82,67,59,85,74,4,36,16},
+    {20,73,35,29,78,31,90,1,74,31,49,71,48,86,81,16,23,57,5,54},
+    {1,70,54,71,83,51,54,69,16,92,33,48,61,43,52,1,89,19,67,48}};
+
+	int prod = 1;
+	for(int i = 0; i < 20; ++i)
+		for(int j = 0; j < 17; ++j){
+			int p = HOR(i, j);
+			prod = std::max(prod, p);
+		}
+	for(int i = 0; i < 17; ++i)
+		for(int j = 0; j < 20; ++j){
+			int p = VER(i, j);
+			prod = std::max(prod, p);
+		}
+	for(int i = 0; i < 17; ++i)
+		for(int j = 0; j < 17; ++j){
+			int p = D1(i,j);
+			prod = std::max(prod, p);
+		}
+    for(int i = 0; i < 17; ++i)
+        for(int j = 3; j < 20; ++j){
+            int p = D2(i,j);
+            prod = std::max(prod, p);
+        }
+	return prod;
+}
+
+int CollatzSequence(long long n)
+{
+	int seqLen=1;
+	while( n != 1){
+		if ( n&1 )
+			n = 3*n + 1;
+		else
+			n >>= 1;
+		++seqLen;
+	}
+	return seqLen;
+}
+
+int task14()
+{
+	int res = 1;
+	int start = 2;
+	for(int n = 2; n < 1000000; ++n)
+	{
+		int seq = CollatzSequence(n);
+		if ( seq > res ){
+			start = n;
+			res = seq;
+		}
+	}
+	return start;
+}
+
+string task13()
+{
+    char *tmp[100]={{"37107287533902102798797998220837590246510135740250"},
+    {"46376937677490009712648124896970078050417018260538"},
+    {"74324986199524741059474233309513058123726617309629"},
+    {"91942213363574161572522430563301811072406154908250"},
+    {"23067588207539346171171980310421047513778063246676"},
+    {"89261670696623633820136378418383684178734361726757"},
+    {"28112879812849979408065481931592621691275889832738"},
+    {"44274228917432520321923589422876796487670272189318"},
+    {"47451445736001306439091167216856844588711603153276"},
+    {"70386486105843025439939619828917593665686757934951"},
+    {"62176457141856560629502157223196586755079324193331"},
+    {"64906352462741904929101432445813822663347944758178"},
+    {"92575867718337217661963751590579239728245598838407"},
+    {"58203565325359399008402633568948830189458628227828"},
+    {"80181199384826282014278194139940567587151170094390"},
+    {"35398664372827112653829987240784473053190104293586"},
+    {"86515506006295864861532075273371959191420517255829"},
+    {"71693888707715466499115593487603532921714970056938"},
+    {"54370070576826684624621495650076471787294438377604"},
+    {"53282654108756828443191190634694037855217779295145"},
+    {"36123272525000296071075082563815656710885258350721"},
+    {"45876576172410976447339110607218265236877223636045"},
+    {"17423706905851860660448207621209813287860733969412"},
+    {"81142660418086830619328460811191061556940512689692"},
+    {"51934325451728388641918047049293215058642563049483"},
+    {"62467221648435076201727918039944693004732956340691"},
+    {"15732444386908125794514089057706229429197107928209"},
+    {"55037687525678773091862540744969844508330393682126"},
+    {"18336384825330154686196124348767681297534375946515"},
+    {"80386287592878490201521685554828717201219257766954"},
+    {"78182833757993103614740356856449095527097864797581"},
+    {"16726320100436897842553539920931837441497806860984"},
+    {"48403098129077791799088218795327364475675590848030"},
+    {"87086987551392711854517078544161852424320693150332"},
+    {"59959406895756536782107074926966537676326235447210"},
+    {"69793950679652694742597709739166693763042633987085"},
+    {"41052684708299085211399427365734116182760315001271"},
+    {"65378607361501080857009149939512557028198746004375"},
+    {"35829035317434717326932123578154982629742552737307"},
+    {"94953759765105305946966067683156574377167401875275"},
+    {"88902802571733229619176668713819931811048770190271"},
+    {"25267680276078003013678680992525463401061632866526"},
+    {"36270218540497705585629946580636237993140746255962"},
+    {"24074486908231174977792365466257246923322810917141"},
+    {"91430288197103288597806669760892938638285025333403"},
+    {"34413065578016127815921815005561868836468420090470"},
+    {"23053081172816430487623791969842487255036638784583"},
+    {"11487696932154902810424020138335124462181441773470"},
+    {"63783299490636259666498587618221225225512486764533"},
+    {"67720186971698544312419572409913959008952310058822"},
+    {"95548255300263520781532296796249481641953868218774"},
+    {"76085327132285723110424803456124867697064507995236"},
+    {"37774242535411291684276865538926205024910326572967"},
+    {"23701913275725675285653248258265463092207058596522"},
+    {"29798860272258331913126375147341994889534765745501"},
+    {"18495701454879288984856827726077713721403798879715"},
+    {"38298203783031473527721580348144513491373226651381"},
+    {"34829543829199918180278916522431027392251122869539"},
+    {"40957953066405232632538044100059654939159879593635"},
+    {"29746152185502371307642255121183693803580388584903"},
+    {"41698116222072977186158236678424689157993532961922"},
+    {"62467957194401269043877107275048102390895523597457"},
+    {"23189706772547915061505504953922979530901129967519"},
+    {"86188088225875314529584099251203829009407770775672"},
+    {"11306739708304724483816533873502340845647058077308"},
+    {"82959174767140363198008187129011875491310547126581"},
+    {"97623331044818386269515456334926366572897563400500"},
+    {"42846280183517070527831839425882145521227251250327"},
+    {"55121603546981200581762165212827652751691296897789"},
+    {"32238195734329339946437501907836945765883352399886"},
+    {"75506164965184775180738168837861091527357929701337"},
+    {"62177842752192623401942399639168044983993173312731"},
+    {"32924185707147349566916674687634660915035914677504"},
+    {"99518671430235219628894890102423325116913619626622"},
+    {"73267460800591547471830798392868535206946944540724"},
+    {"76841822524674417161514036427982273348055556214818"},
+    {"97142617910342598647204516893989422179826088076852"},
+    {"87783646182799346313767754307809363333018982642090"},
+    {"10848802521674670883215120185883543223812876952786"},
+    {"71329612474782464538636993009049310363619763878039"},
+    {"62184073572399794223406235393808339651327408011116"},
+    {"66627891981488087797941876876144230030984490851411"},
+    {"60661826293682836764744779239180335110989069790714"},
+    {"85786944089552990653640447425576083659976645795096"},
+    {"66024396409905389607120198219976047599490197230297"},
+    {"64913982680032973156037120041377903785566085089252"},
+    {"16730939319872750275468906903707539413042652315011"},
+    {"94809377245048795150954100921645863754710598436791"},
+    {"78639167021187492431995700641917969777599028300699"},
+    {"15368713711936614952811305876380278410754449733078"},
+    {"40789923115535562561142322423255033685442488917353"},
+    {"44889911501440648020369068063960672322193204149535"},
+    {"41503128880339536053299340368006977710650566631954"},
+    {"81234880673210146739058568557934581403627822703280"},
+    {"82616570773948327592232845941706525094512325230608"},
+    {"22918802058777319719839450180888072429661980811197"},
+    {"77158542502016545090413245809786882778948721859617"},
+    {"72107838435069186155435662884062257473692284509516"},
+    {"20849603980134001723930671666823555245252804609722"},
+    {"53503534226472524250874054075591789781264330331690"}};
+    LongNo vars[100];
+    for(int i = 0; i < 100; ++i)
+        vars[i] = LongNo(tmp[i]);
+    LongNo res;
+    for(int i = 0; i < 100; ++i)
+        res += vars[i];
+      
+    return res.Print();
+}
+
+int task16()
+{
+    LongNo tmp("2");
+    for(int i = 0; i < 999; ++i)
+        tmp *= 2;
+    int res = 0;
+    for(auto i = tmp.v_.begin(); i != tmp.v_.end(); ++i)
+        res += *i;
+    return res;
+}
+
+int NumToStr(int n)
+{
+    char *ones[]={
+        "",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine"
+    };
+    char *teens[] ={
+        "",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen"
+    };
+    char *tens[] ={
+        "",
+        "ten",
+        "twenty",
+        "thirty",
+        "forty",
+        "fifty",
+        "sixty",
+        "seventy",
+        "eighty",
+        "ninety"
+    };
+    char *hdr = "hundred";
+    char *ths = "thousand";
+    string res;
+    bool isHdr = false;
+    if ( n / 1000 ){
+        res = ones[n / 1000];
+        res += ths;
+        n = n %1000;
+    }
+    if ( n && (n / 100) ){
+        res += ones[n/100];
+        res += hdr;
+        isHdr = true;
+        n = n %100;
+    }
+    if ( n && (n >=20 || n == 10) ){
+        if ( isHdr ){
+            res += "and";
+            isHdr = false;
+        }
+        res += tens[n/10];
+        n = n % 10;
+    }else if ( n && (n > 10 &&  n < 20) ){
+        if ( isHdr ){
+            res += "and";
+            isHdr = false;
+        }
+        res += teens[n%10];
+        n = 0;
+    }
+    if ( n ){
+        if ( isHdr ){
+            res += "and";
+            isHdr = false;
+        }
+        res += ones[n];
+    }
+
+    return res.length();
+}
+
+int task17()
+{
+    int res = 0;
+    for(int i = 1; i <=1000; ++i)
+        res += NumToStr(i);
+    return res;
+}
+
+int task18()
+{
+    int mtx[15][15] =
+    {
+        {75, 0},
+        {95,64, 0},
+        {17,47,82, 0},
+        {18,35,87,10, 0},
+        {20,04,82,47,65, 0},
+        {19,01,23,75,03,34, 0},
+        {88,02,77,73,07,63,67, 0},
+        {99,65,04,28,06,16,70,92, 0},
+        {41,41,26,56,83,40,80,70,33, 0},
+        {41,48,72,33,47,32,37,16,94,29, 0},
+        {53,71,44,65,25,43,91,52,97,51,14, 0},
+        {70,11,33,28,77,73,17,78,39,68,17,57, 0},
+        {91,71,52,38,17,14,91,43,58,50,27,29,48, 0},
+        {63,66,04,68,89,53,67,30,73,16,69,87,40,31, 0},
+        {4,62,98,27,23,9,70,98,73,93,38,53,60,04,23}
+    };
+    for(int i = 13; i >=0; i--)
+        for(int j=0; j<=i; ++j)
+            mtx[i][j] += max(mtx[i+1][j],mtx[i+1][j+1]);
+    return mtx[0][0];
+}
+
+int task19()
+{
+    string s;
+    int sundays = 0;
+    for(int y = 1901; y <=2000; ++y )
+        for( int m = 1; m <=12; m++){
+            std::ostringstream str;
+            str<<boost::format("%1%-%2%-1") % y % m;
+            boost::gregorian::date d(boost::gregorian::from_simple_string(str.str()));
+            if ( d.day_of_week() == boost::gregorian::Sunday)
+                ++sundays;
+        }
+    return sundays;
+}
+
+int task20()
+{
+    LongNo tmp("2");
+    for(int i = 100; i > 2; --i)
+        tmp *= i;
+    int res = 0;
+    for(auto i = tmp.v_.begin(); i != tmp.v_.end(); ++i)
+        res += *i;
+    return res;
+}
+
+int SumOfDivisors(int n)
+{
+	int sum = 1;
+	for(int i = 2; i*i <= n; i++)
+		if( !(n%i)){
+			int tmp = n/i;
+			sum += i;
+			if( i != tmp) sum += tmp;
+		}
+	return sum;
+}
+
+long long longtask21()
+{
+	set<int> result;
+	long long sum = 0;
+	for(int i = 10; i <=10000; ++i){
+		int n = SumOfDivisors(i);
+		auto fnd = result.find(i);
+		if( fnd != result.end() ) continue;
+		fnd = result.find(n);
+		if( fnd != result.end() ) continue;
+		if (n == i) continue;
+		if( SumOfDivisors(n) == i ){
+			result.insert(i);
+			result.insert(n);
+			sum += i+n;
+		}
+	}
+	return sum;
+}
+
+int task22()
+{
+	char *tmp[] = {"MARY","PATRICIA","LINDA","BARBARA","ELIZABETH","JENNIFER","MARIA","SUSAN","MARGARET","DOROTHY","LISA","NANCY","KAREN","BETTY","HELEN","SANDRA","DONNA","CAROL","RUTH","SHARON","MICHELLE","LAURA","SARAH","KIMBERLY","DEBORAH","JESSICA","SHIRLEY","CYNTHIA","ANGELA","MELISSA","BRENDA","AMY","ANNA","REBECCA","VIRGINIA","KATHLEEN","PAMELA","MARTHA","DEBRA","AMANDA","STEPHANIE","CAROLYN","CHRISTINE","MARIE","JANET","CATHERINE","FRANCES","ANN","JOYCE","DIANE","ALICE","JULIE","HEATHER","TERESA","DORIS","GLORIA","EVELYN","JEAN","CHERYL","MILDRED","KATHERINE","JOAN","ASHLEY","JUDITH","ROSE","JANICE","KELLY","NICOLE","JUDY","CHRISTINA","KATHY","THERESA","BEVERLY","DENISE","TAMMY","IRENE","JANE","LORI","RACHEL","MARILYN","ANDREA","KATHRYN","LOUISE","SARA","ANNE","JACQUELINE","WANDA","BONNIE","JULIA","RUBY","LOIS","TINA","PHYLLIS","NORMA","PAULA","DIANA","ANNIE","LILLIAN","EMILY","ROBIN","PEGGY","CRYSTAL","GLADYS","RITA","DAWN","CONNIE","FLORENCE","TRACY","EDNA","TIFFANY","CARMEN","ROSA","CINDY","GRACE","WENDY","VICTORIA","EDITH","KIM","SHERRY","SYLVIA","JOSEPHINE","THELMA","SHANNON","SHEILA","ETHEL","ELLEN","ELAINE","MARJORIE","CARRIE","CHARLOTTE","MONICA","ESTHER","PAULINE","EMMA","JUANITA","ANITA","RHONDA","HAZEL","AMBER","EVA","DEBBIE","APRIL","LESLIE","CLARA","LUCILLE","JAMIE","JOANNE","ELEANOR","VALERIE","DANIELLE","MEGAN","ALICIA","SUZANNE","MICHELE","GAIL","BERTHA","DARLENE","VERONICA","JILL","ERIN","GERALDINE","LAUREN","CATHY","JOANN","LORRAINE","LYNN","SALLY","REGINA","ERICA","BEATRICE","DOLORES","BERNICE","AUDREY","YVONNE","ANNETTE","JUNE","SAMANTHA","MARION","DANA","STACY","ANA","RENEE","IDA","VIVIAN","ROBERTA","HOLLY","BRITTANY","MELANIE","LORETTA","YOLANDA","JEANETTE","LAURIE","KATIE","KRISTEN","VANESSA","ALMA","SUE","ELSIE","BETH","JEANNE","VICKI","CARLA","TARA","ROSEMARY","EILEEN","TERRI","GERTRUDE","LUCY","TONYA","ELLA","STACEY","WILMA","GINA","KRISTIN","JESSIE","NATALIE","AGNES","VERA","WILLIE","CHARLENE","BESSIE","DELORES","MELINDA","PEARL","ARLENE","MAUREEN","COLLEEN","ALLISON","TAMARA","JOY","GEORGIA","CONSTANCE","LILLIE","CLAUDIA","JACKIE","MARCIA","TANYA","NELLIE","MINNIE","MARLENE","HEIDI","GLENDA","LYDIA","VIOLA","COURTNEY","MARIAN","STELLA","CAROLINE","DORA","JO","VICKIE","MATTIE","TERRY","MAXINE","IRMA","MABEL","MARSHA","MYRTLE","LENA","CHRISTY","DEANNA","PATSY","HILDA","GWENDOLYN","JENNIE","NORA","MARGIE","NINA","CASSANDRA","LEAH","PENNY","KAY","PRISCILLA","NAOMI","CAROLE","BRANDY","OLGA","BILLIE","DIANNE","TRACEY","LEONA","JENNY","FELICIA","SONIA","MIRIAM","VELMA","BECKY","BOBBIE","VIOLET","KRISTINA","TONI","MISTY","MAE","SHELLY","DAISY","RAMONA","SHERRI","ERIKA","KATRINA","CLAIRE","LINDSEY","LINDSAY","GENEVA","GUADALUPE","BELINDA","MARGARITA","SHERYL","CORA","FAYE","ADA","NATASHA","SABRINA","ISABEL","MARGUERITE","HATTIE","HARRIET","MOLLY","CECILIA","KRISTI","BRANDI","BLANCHE","SANDY","ROSIE","JOANNA","IRIS","EUNICE","ANGIE","INEZ","LYNDA","MADELINE","AMELIA","ALBERTA","GENEVIEVE","MONIQUE","JODI","JANIE","MAGGIE","KAYLA","SONYA","JAN","LEE","KRISTINE","CANDACE","FANNIE","MARYANN","OPAL","ALISON","YVETTE","MELODY","LUZ","SUSIE","OLIVIA","FLORA","SHELLEY","KRISTY","MAMIE","LULA","LOLA","VERNA","BEULAH","ANTOINETTE","CANDICE","JUANA","JEANNETTE","PAM","KELLI","HANNAH","WHITNEY","BRIDGET","KARLA","CELIA","LATOYA","PATTY","SHELIA","GAYLE","DELLA","VICKY","LYNNE","SHERI","MARIANNE","KARA","JACQUELYN","ERMA","BLANCA","MYRA","LETICIA","PAT","KRISTA","ROXANNE","ANGELICA","JOHNNIE","ROBYN","FRANCIS","ADRIENNE","ROSALIE","ALEXANDRA","BROOKE","BETHANY","SADIE","BERNADETTE","TRACI","JODY","KENDRA","JASMINE","NICHOLE","RACHAEL","CHELSEA","MABLE","ERNESTINE","MURIEL","MARCELLA","ELENA","KRYSTAL","ANGELINA","NADINE","KARI","ESTELLE","DIANNA","PAULETTE","LORA","MONA","DOREEN","ROSEMARIE","ANGEL","DESIREE","ANTONIA","HOPE","GINGER","JANIS","BETSY","CHRISTIE","FREDA","MERCEDES","MEREDITH","LYNETTE","TERI","CRISTINA","EULA","LEIGH","MEGHAN","SOPHIA","ELOISE","ROCHELLE","GRETCHEN","CECELIA","RAQUEL","HENRIETTA","ALYSSA","JANA","KELLEY","GWEN","KERRY","JENNA","TRICIA","LAVERNE","OLIVE","ALEXIS","TASHA","SILVIA","ELVIRA","CASEY","DELIA","SOPHIE","KATE","PATTI","LORENA","KELLIE","SONJA","LILA","LANA","DARLA","MAY","MINDY","ESSIE","MANDY","LORENE","ELSA","JOSEFINA","JEANNIE","MIRANDA","DIXIE","LUCIA","MARTA","FAITH","LELA","JOHANNA","SHARI","CAMILLE","TAMI","SHAWNA","ELISA","EBONY","MELBA","ORA","NETTIE","TABITHA","OLLIE","JAIME","WINIFRED","KRISTIE","MARINA","ALISHA","AIMEE","RENA","MYRNA","MARLA","TAMMIE","LATASHA","BONITA","PATRICE","RONDA","SHERRIE","ADDIE","FRANCINE","DELORIS","STACIE","ADRIANA","CHERI","SHELBY","ABIGAIL","CELESTE","JEWEL","CARA","ADELE","REBEKAH","LUCINDA","DORTHY","CHRIS","EFFIE","TRINA","REBA","SHAWN","SALLIE","AURORA","LENORA","ETTA","LOTTIE","KERRI","TRISHA","NIKKI","ESTELLA","FRANCISCA","JOSIE","TRACIE","MARISSA","KARIN","BRITTNEY","JANELLE","LOURDES","LAUREL","HELENE","FERN","ELVA","CORINNE","KELSEY","INA","BETTIE","ELISABETH","AIDA","CAITLIN","INGRID","IVA","EUGENIA","CHRISTA","GOLDIE","CASSIE","MAUDE","JENIFER","THERESE","FRANKIE","DENA","LORNA","JANETTE","LATONYA","CANDY","MORGAN","CONSUELO","TAMIKA","ROSETTA","DEBORA","CHERIE","POLLY","DINA","JEWELL","FAY","JILLIAN","DOROTHEA","NELL","TRUDY","ESPERANZA","PATRICA","KIMBERLEY","SHANNA","HELENA","CAROLINA","CLEO","STEFANIE","ROSARIO","OLA","JANINE","MOLLIE","LUPE","ALISA","LOU","MARIBEL","SUSANNE","BETTE","SUSANA","ELISE","CECILE","ISABELLE","LESLEY","JOCELYN","PAIGE","JONI","RACHELLE","LEOLA","DAPHNE","ALTA","ESTER","PETRA","GRACIELA","IMOGENE","JOLENE","KEISHA","LACEY","GLENNA","GABRIELA","KERI","URSULA","LIZZIE","KIRSTEN","SHANA","ADELINE","MAYRA","JAYNE","JACLYN","GRACIE","SONDRA","CARMELA","MARISA","ROSALIND","CHARITY","TONIA","BEATRIZ","MARISOL","CLARICE","JEANINE","SHEENA","ANGELINE","FRIEDA","LILY","ROBBIE","SHAUNA","MILLIE","CLAUDETTE","CATHLEEN","ANGELIA","GABRIELLE","AUTUMN","KATHARINE","SUMMER","JODIE","STACI","LEA","CHRISTI","JIMMIE","JUSTINE","ELMA","LUELLA","MARGRET","DOMINIQUE","SOCORRO","RENE","MARTINA","MARGO","MAVIS","CALLIE","BOBBI","MARITZA","LUCILE","LEANNE","JEANNINE","DEANA","AILEEN","LORIE","LADONNA","WILLA","MANUELA","GALE","SELMA","DOLLY","SYBIL","ABBY","LARA","DALE","IVY","DEE","WINNIE","MARCY","LUISA","JERI","MAGDALENA","OFELIA","MEAGAN","AUDRA","MATILDA","LEILA","CORNELIA","BIANCA","SIMONE","BETTYE","RANDI","VIRGIE","LATISHA","BARBRA","GEORGINA","ELIZA","LEANN","BRIDGETTE","RHODA","HALEY","ADELA","NOLA","BERNADINE","FLOSSIE","ILA","GRETA","RUTHIE","NELDA","MINERVA","LILLY","TERRIE","LETHA","HILARY","ESTELA","VALARIE","BRIANNA","ROSALYN","EARLINE","CATALINA","AVA","MIA","CLARISSA","LIDIA","CORRINE","ALEXANDRIA","CONCEPCION","TIA","SHARRON","RAE","DONA","ERICKA","JAMI","ELNORA","CHANDRA","LENORE","NEVA","MARYLOU","MELISA","TABATHA","SERENA","AVIS","ALLIE","SOFIA","JEANIE","ODESSA","NANNIE","HARRIETT","LORAINE","PENELOPE","MILAGROS","EMILIA","BENITA","ALLYSON","ASHLEE","TANIA","TOMMIE","ESMERALDA","KARINA","EVE","PEARLIE","ZELMA","MALINDA","NOREEN","TAMEKA","SAUNDRA","HILLARY","AMIE","ALTHEA","ROSALINDA","JORDAN","LILIA","ALANA","GAY","CLARE","ALEJANDRA","ELINOR","MICHAEL","LORRIE","JERRI","DARCY","EARNESTINE","CARMELLA","TAYLOR","NOEMI","MARCIE","LIZA","ANNABELLE","LOUISA","EARLENE","MALLORY","CARLENE","NITA","SELENA","TANISHA","KATY","JULIANNE","JOHN","LAKISHA","EDWINA","MARICELA","MARGERY","KENYA","DOLLIE","ROXIE","ROSLYN","KATHRINE","NANETTE","CHARMAINE","LAVONNE","ILENE","KRIS","TAMMI","SUZETTE","CORINE","KAYE","JERRY","MERLE","CHRYSTAL","LINA","DEANNE","LILIAN","JULIANA","ALINE","LUANN","KASEY","MARYANNE","EVANGELINE","COLETTE","MELVA","LAWANDA","YESENIA","NADIA","MADGE","KATHIE","EDDIE","OPHELIA","VALERIA","NONA","MITZI","MARI","GEORGETTE","CLAUDINE","FRAN","ALISSA","ROSEANN","LAKEISHA","SUSANNA","REVA","DEIDRE","CHASITY","SHEREE","CARLY","JAMES","ELVIA","ALYCE","DEIRDRE","GENA","BRIANA","ARACELI","KATELYN","ROSANNE","WENDI","TESSA","BERTA","MARVA","IMELDA","MARIETTA","MARCI","LEONOR","ARLINE","SASHA","MADELYN","JANNA","JULIETTE","DEENA","AURELIA","JOSEFA","AUGUSTA","LILIANA","YOUNG","CHRISTIAN","LESSIE","AMALIA","SAVANNAH","ANASTASIA","VILMA","NATALIA","ROSELLA","LYNNETTE","CORINA","ALFREDA","LEANNA","CAREY","AMPARO","COLEEN","TAMRA","AISHA","WILDA","KARYN","CHERRY","QUEEN","MAURA","MAI","EVANGELINA","ROSANNA","HALLIE","ERNA","ENID","MARIANA","LACY","JULIET","JACKLYN","FREIDA","MADELEINE","MARA","HESTER","CATHRYN","LELIA","CASANDRA","BRIDGETT","ANGELITA","JANNIE","DIONNE","ANNMARIE","KATINA","BERYL","PHOEBE","MILLICENT","KATHERYN","DIANN","CARISSA","MARYELLEN","LIZ","LAURI","HELGA","GILDA","ADRIAN","RHEA","MARQUITA","HOLLIE","TISHA","TAMERA","ANGELIQUE","FRANCESCA","BRITNEY","KAITLIN","LOLITA","FLORINE","ROWENA","REYNA","TWILA","FANNY","JANELL","INES","CONCETTA","BERTIE","ALBA","BRIGITTE","ALYSON","VONDA","PANSY","ELBA","NOELLE","LETITIA","KITTY","DEANN","BRANDIE","LOUELLA","LETA","FELECIA","SHARLENE","LESA","BEVERLEY","ROBERT","ISABELLA","HERMINIA","TERRA","CELINA","TORI","OCTAVIA","JADE","DENICE","GERMAINE","SIERRA","MICHELL","CORTNEY","NELLY","DORETHA","SYDNEY","DEIDRA","MONIKA","LASHONDA","JUDI","CHELSEY","ANTIONETTE","MARGOT","BOBBY","ADELAIDE","NAN","LEEANN","ELISHA","DESSIE","LIBBY","KATHI","GAYLA","LATANYA","MINA","MELLISA","KIMBERLEE","JASMIN","RENAE","ZELDA","ELDA","MA","JUSTINA","GUSSIE","EMILIE","CAMILLA","ABBIE","ROCIO","KAITLYN","JESSE","EDYTHE","ASHLEIGH","SELINA","LAKESHA","GERI","ALLENE","PAMALA","MICHAELA","DAYNA","CARYN","ROSALIA","SUN","JACQULINE","REBECA","MARYBETH","KRYSTLE","IOLA","DOTTIE","BENNIE","BELLE","AUBREY","GRISELDA","ERNESTINA","ELIDA","ADRIANNE","DEMETRIA","DELMA","CHONG","JAQUELINE","DESTINY","ARLEEN","VIRGINA","RETHA","FATIMA","TILLIE","ELEANORE","CARI","TREVA","BIRDIE","WILHELMINA","ROSALEE","MAURINE","LATRICE","YONG","JENA","TARYN","ELIA","DEBBY","MAUDIE","JEANNA","DELILAH","CATRINA","SHONDA","HORTENCIA","THEODORA","TERESITA","ROBBIN","DANETTE","MARYJANE","FREDDIE","DELPHINE","BRIANNE","NILDA","DANNA","CINDI","BESS","IONA","HANNA","ARIEL","WINONA","VIDA","ROSITA","MARIANNA","WILLIAM","RACHEAL","GUILLERMINA","ELOISA","CELESTINE","CAREN","MALISSA","LONA","CHANTEL","SHELLIE","MARISELA","LEORA","AGATHA","SOLEDAD","MIGDALIA","IVETTE","CHRISTEN","ATHENA","JANEL","CHLOE","VEDA","PATTIE","TESSIE","TERA","MARILYNN","LUCRETIA","KARRIE","DINAH","DANIELA","ALECIA","ADELINA","VERNICE","SHIELA","PORTIA","MERRY","LASHAWN","DEVON","DARA","TAWANA","OMA","VERDA","CHRISTIN","ALENE","ZELLA","SANDI","RAFAELA","MAYA","KIRA","CANDIDA","ALVINA","SUZAN","SHAYLA","LYN","LETTIE","ALVA","SAMATHA","ORALIA","MATILDE","MADONNA","LARISSA","VESTA","RENITA","INDIA","DELOIS","SHANDA","PHILLIS","LORRI","ERLINDA","CRUZ","CATHRINE","BARB","ZOE","ISABELL","IONE","GISELA","CHARLIE","VALENCIA","ROXANNA","MAYME","KISHA","ELLIE","MELLISSA","DORRIS","DALIA","BELLA","ANNETTA","ZOILA","RETA","REINA","LAURETTA","KYLIE","CHRISTAL","PILAR","CHARLA","ELISSA","TIFFANI","TANA","PAULINA","LEOTA","BREANNA","JAYME","CARMEL","VERNELL","TOMASA","MANDI","DOMINGA","SANTA","MELODIE","LURA","ALEXA","TAMELA","RYAN","MIRNA","KERRIE","VENUS","NOEL","FELICITA","CRISTY","CARMELITA","BERNIECE","ANNEMARIE","TIARA","ROSEANNE","MISSY","CORI","ROXANA","PRICILLA","KRISTAL","JUNG","ELYSE","HAYDEE","ALETHA","BETTINA","MARGE","GILLIAN","FILOMENA","CHARLES","ZENAIDA","HARRIETTE","CARIDAD","VADA","UNA","ARETHA","PEARLINE","MARJORY","MARCELA","FLOR","EVETTE","ELOUISE","ALINA","TRINIDAD","DAVID","DAMARIS","CATHARINE","CARROLL","BELVA","NAKIA","MARLENA","LUANNE","LORINE","KARON","DORENE","DANITA","BRENNA","TATIANA","SAMMIE","LOUANN","LOREN","JULIANNA","ANDRIA","PHILOMENA","LUCILA","LEONORA","DOVIE","ROMONA","MIMI","JACQUELIN","GAYE","TONJA","MISTI","JOE","GENE","CHASTITY","STACIA","ROXANN","MICAELA","NIKITA","MEI","VELDA","MARLYS","JOHNNA","AURA","LAVERN","IVONNE","HAYLEY","NICKI","MAJORIE","HERLINDA","GEORGE","ALPHA","YADIRA","PERLA","GREGORIA","DANIEL","ANTONETTE","SHELLI","MOZELLE","MARIAH","JOELLE","CORDELIA","JOSETTE","CHIQUITA","TRISTA","LOUIS","LAQUITA","GEORGIANA","CANDI","SHANON","LONNIE","HILDEGARD","CECIL","VALENTINA","STEPHANY","MAGDA","KAROL","GERRY","GABRIELLA","TIANA","ROMA","RICHELLE","RAY","PRINCESS","OLETA","JACQUE","IDELLA","ALAINA","SUZANNA","JOVITA","BLAIR","TOSHA","RAVEN","NEREIDA","MARLYN","KYLA","JOSEPH","DELFINA","TENA","STEPHENIE","SABINA","NATHALIE","MARCELLE","GERTIE","DARLEEN","THEA","SHARONDA","SHANTEL","BELEN","VENESSA","ROSALINA","ONA","GENOVEVA","COREY","CLEMENTINE","ROSALBA","RENATE","RENATA","MI","IVORY","GEORGIANNA","FLOY","DORCAS","ARIANA","TYRA","THEDA","MARIAM","JULI","JESICA","DONNIE","VIKKI","VERLA","ROSELYN","MELVINA","JANNETTE","GINNY","DEBRAH","CORRIE","ASIA","VIOLETA","MYRTIS","LATRICIA","COLLETTE","CHARLEEN","ANISSA","VIVIANA","TWYLA","PRECIOUS","NEDRA","LATONIA","LAN","HELLEN","FABIOLA","ANNAMARIE","ADELL","SHARYN","CHANTAL","NIKI","MAUD","LIZETTE","LINDY","KIA","KESHA","JEANA","DANELLE","CHARLINE","CHANEL","CARROL","VALORIE","LIA","DORTHA","CRISTAL","SUNNY","LEONE","LEILANI","GERRI","DEBI","ANDRA","KESHIA","IMA","EULALIA","EASTER","DULCE","NATIVIDAD","LINNIE","KAMI","GEORGIE","CATINA","BROOK","ALDA","WINNIFRED","SHARLA","RUTHANN","MEAGHAN","MAGDALENE","LISSETTE","ADELAIDA","VENITA","TRENA","SHIRLENE","SHAMEKA","ELIZEBETH","DIAN","SHANTA","MICKEY","LATOSHA","CARLOTTA","WINDY","SOON","ROSINA","MARIANN","LEISA","JONNIE","DAWNA","CATHIE","BILLY","ASTRID","SIDNEY","LAUREEN","JANEEN","HOLLI","FAWN","VICKEY","TERESSA","SHANTE","RUBYE","MARCELINA","CHANDA","CARY","TERESE","SCARLETT","MARTY","MARNIE","LULU","LISETTE","JENIFFER","ELENOR","DORINDA","DONITA","CARMAN","BERNITA","ALTAGRACIA","ALETA","ADRIANNA","ZORAIDA","RONNIE","NICOLA","LYNDSEY","KENDALL","JANINA","CHRISSY","AMI","STARLA","PHYLIS","PHUONG","KYRA","CHARISSE","BLANCH","SANJUANITA","RONA","NANCI","MARILEE","MARANDA","CORY","BRIGETTE","SANJUANA","MARITA","KASSANDRA","JOYCELYN","IRA","FELIPA","CHELSIE","BONNY","MIREYA","LORENZA","KYONG","ILEANA","CANDELARIA","TONY","TOBY","SHERIE","OK","MARK","LUCIE","LEATRICE","LAKESHIA","GERDA","EDIE","BAMBI","MARYLIN","LAVON","HORTENSE","GARNET","EVIE","TRESSA","SHAYNA","LAVINA","KYUNG","JEANETTA","SHERRILL","SHARA","PHYLISS","MITTIE","ANABEL","ALESIA","THUY","TAWANDA","RICHARD","JOANIE","TIFFANIE","LASHANDA","KARISSA","ENRIQUETA","DARIA","DANIELLA","CORINNA","ALANNA","ABBEY","ROXANE","ROSEANNA","MAGNOLIA","LIDA","KYLE","JOELLEN","ERA","CORAL","CARLEEN","TRESA","PEGGIE","NOVELLA","NILA","MAYBELLE","JENELLE","CARINA","NOVA","MELINA","MARQUERITE","MARGARETTE","JOSEPHINA","EVONNE","DEVIN","CINTHIA","ALBINA","TOYA","TAWNYA","SHERITA","SANTOS","MYRIAM","LIZABETH","LISE","KEELY","JENNI","GISELLE","CHERYLE","ARDITH","ARDIS","ALESHA","ADRIANE","SHAINA","LINNEA","KAROLYN","HONG","FLORIDA","FELISHA","DORI","DARCI","ARTIE","ARMIDA","ZOLA","XIOMARA","VERGIE","SHAMIKA","NENA","NANNETTE","MAXIE","LOVIE","JEANE","JAIMIE","INGE","FARRAH","ELAINA","CAITLYN","STARR","FELICITAS","CHERLY","CARYL","YOLONDA","YASMIN","TEENA","PRUDENCE","PENNIE","NYDIA","MACKENZIE","ORPHA","MARVEL","LIZBETH","LAURETTE","JERRIE","HERMELINDA","CAROLEE","TIERRA","MIRIAN","META","MELONY","KORI","JENNETTE","JAMILA","ENA","ANH","YOSHIKO","SUSANNAH","SALINA","RHIANNON","JOLEEN","CRISTINE","ASHTON","ARACELY","TOMEKA","SHALONDA","MARTI","LACIE","KALA","JADA","ILSE","HAILEY","BRITTANI","ZONA","SYBLE","SHERRYL","RANDY","NIDIA","MARLO","KANDICE","KANDI","DEB","DEAN","AMERICA","ALYCIA","TOMMY","RONNA","NORENE","MERCY","JOSE","INGEBORG","GIOVANNA","GEMMA","CHRISTEL","AUDRY","ZORA","VITA","VAN","TRISH","STEPHAINE","SHIRLEE","SHANIKA","MELONIE","MAZIE","JAZMIN","INGA","HOA","HETTIE","GERALYN","FONDA","ESTRELLA","ADELLA","SU","SARITA","RINA","MILISSA","MARIBETH","GOLDA","EVON","ETHELYN","ENEDINA","CHERISE","CHANA","VELVA","TAWANNA","SADE","MIRTA","LI","KARIE","JACINTA","ELNA","DAVINA","CIERRA","ASHLIE","ALBERTHA","TANESHA","STEPHANI","NELLE","MINDI","LU","LORINDA","LARUE","FLORENE","DEMETRA","DEDRA","CIARA","CHANTELLE","ASHLY","SUZY","ROSALVA","NOELIA","LYDA","LEATHA","KRYSTYNA","KRISTAN","KARRI","DARLINE","DARCIE","CINDA","CHEYENNE","CHERRIE","AWILDA","ALMEDA","ROLANDA","LANETTE","JERILYN","GISELE","EVALYN","CYNDI","CLETA","CARIN","ZINA","ZENA","VELIA","TANIKA","PAUL","CHARISSA","THOMAS","TALIA","MARGARETE","LAVONDA","KAYLEE","KATHLENE","JONNA","IRENA","ILONA","IDALIA","CANDIS","CANDANCE","BRANDEE","ANITRA","ALIDA","SIGRID","NICOLETTE","MARYJO","LINETTE","HEDWIG","CHRISTIANA","CASSIDY","ALEXIA","TRESSIE","MODESTA","LUPITA","LITA","GLADIS","EVELIA","DAVIDA","CHERRI","CECILY","ASHELY","ANNABEL","AGUSTINA","WANITA","SHIRLY","ROSAURA","HULDA","EUN","BAILEY","YETTA","VERONA","THOMASINA","SIBYL","SHANNAN","MECHELLE","LUE","LEANDRA","LANI","KYLEE","KANDY","JOLYNN","FERNE","EBONI","CORENE","ALYSIA","ZULA","NADA","MOIRA","LYNDSAY","LORRETTA","JUAN","JAMMIE","HORTENSIA","GAYNELL","CAMERON","ADRIA","VINA","VICENTA","TANGELA","STEPHINE","NORINE","NELLA","LIANA","LESLEE","KIMBERELY","ILIANA","GLORY","FELICA","EMOGENE","ELFRIEDE","EDEN","EARTHA","CARMA","BEA","OCIE","MARRY","LENNIE","KIARA","JACALYN","CARLOTA","ARIELLE","YU","STAR","OTILIA","KIRSTIN","KACEY","JOHNETTA","JOEY","JOETTA","JERALDINE","JAUNITA","ELANA","DORTHEA","CAMI","AMADA","ADELIA","VERNITA","TAMAR","SIOBHAN","RENEA","RASHIDA","OUIDA","ODELL","NILSA","MERYL","KRISTYN","JULIETA","DANICA","BREANNE","AUREA","ANGLEA","SHERRON","ODETTE","MALIA","LORELEI","LIN","LEESA","KENNA","KATHLYN","FIONA","CHARLETTE","SUZIE","SHANTELL","SABRA","RACQUEL","MYONG","MIRA","MARTINE","LUCIENNE","LAVADA","JULIANN","JOHNIE","ELVERA","DELPHIA","CLAIR","CHRISTIANE","CHAROLETTE","CARRI","AUGUSTINE","ASHA","ANGELLA","PAOLA","NINFA","LEDA","LAI","EDA","SUNSHINE","STEFANI","SHANELL","PALMA","MACHELLE","LISSA","KECIA","KATHRYNE","KARLENE","JULISSA","JETTIE","JENNIFFER","HUI","CORRINA","CHRISTOPHER","CAROLANN","ALENA","TESS","ROSARIA","MYRTICE","MARYLEE","LIANE","KENYATTA","JUDIE","JANEY","IN","ELMIRA","ELDORA","DENNA","CRISTI","CATHI","ZAIDA","VONNIE","VIVA","VERNIE","ROSALINE","MARIELA","LUCIANA","LESLI","KARAN","FELICE","DENEEN","ADINA","WYNONA","TARSHA","SHERON","SHASTA","SHANITA","SHANI","SHANDRA","RANDA","PINKIE","PARIS","NELIDA","MARILOU","LYLA","LAURENE","LACI","JOI","JANENE","DOROTHA","DANIELE","DANI","CAROLYNN","CARLYN","BERENICE","AYESHA","ANNELIESE","ALETHEA","THERSA","TAMIKO","RUFINA","OLIVA","MOZELL","MARYLYN","MADISON","KRISTIAN","KATHYRN","KASANDRA","KANDACE","JANAE","GABRIEL","DOMENICA","DEBBRA","DANNIELLE","CHUN","BUFFY","BARBIE","ARCELIA","AJA","ZENOBIA","SHAREN","SHAREE","PATRICK","PAGE","MY","LAVINIA","KUM","KACIE","JACKELINE","HUONG","FELISA","EMELIA","ELEANORA","CYTHIA","CRISTIN","CLYDE","CLARIBEL","CARON","ANASTACIA","ZULMA","ZANDRA","YOKO","TENISHA","SUSANN","SHERILYN","SHAY","SHAWANDA","SABINE","ROMANA","MATHILDA","LINSEY","KEIKO","JOANA","ISELA","GRETTA","GEORGETTA","EUGENIE","DUSTY","DESIRAE","DELORA","CORAZON","ANTONINA","ANIKA","WILLENE","TRACEE","TAMATHA","REGAN","NICHELLE","MICKIE","MAEGAN","LUANA","LANITA","KELSIE","EDELMIRA","BREE","AFTON","TEODORA","TAMIE","SHENA","MEG","LINH","KELI","KACI","DANYELLE","BRITT","ARLETTE","ALBERTINE","ADELLE","TIFFINY","STORMY","SIMONA","NUMBERS","NICOLASA","NICHOL","NIA","NAKISHA","MEE","MAIRA","LOREEN","KIZZY","JOHNNY","JAY","FALLON","CHRISTENE","BOBBYE","ANTHONY","YING","VINCENZA","TANJA","RUBIE","RONI","QUEENIE","MARGARETT","KIMBERLI","IRMGARD","IDELL","HILMA","EVELINA","ESTA","EMILEE","DENNISE","DANIA","CARL","CARIE","ANTONIO","WAI","SANG","RISA","RIKKI","PARTICIA","MUI","MASAKO","MARIO","LUVENIA","LOREE","LONI","LIEN","KEVIN","GIGI","FLORENCIA","DORIAN","DENITA","DALLAS","CHI","BILLYE","ALEXANDER","TOMIKA","SHARITA","RANA","NIKOLE","NEOMA","MARGARITE","MADALYN","LUCINA","LAILA","KALI","JENETTE","GABRIELE","EVELYNE","ELENORA","CLEMENTINA","ALEJANDRINA","ZULEMA","VIOLETTE","VANNESSA","THRESA","RETTA","PIA","PATIENCE","NOELLA","NICKIE","JONELL","DELTA","CHUNG","CHAYA","CAMELIA","BETHEL","ANYA","ANDREW","THANH","SUZANN","SPRING","SHU","MILA","LILLA","LAVERNA","KEESHA","KATTIE","GIA","GEORGENE","EVELINE","ESTELL","ELIZBETH","VIVIENNE","VALLIE","TRUDIE","STEPHANE","MICHEL","MAGALY","MADIE","KENYETTA","KARREN","JANETTA","HERMINE","HARMONY","DRUCILLA","DEBBI","CELESTINA","CANDIE","BRITNI","BECKIE","AMINA","ZITA","YUN","YOLANDE","VIVIEN","VERNETTA","TRUDI","SOMMER","PEARLE","PATRINA","OSSIE","NICOLLE","LOYCE","LETTY","LARISA","KATHARINA","JOSELYN","JONELLE","JENELL","IESHA","HEIDE","FLORINDA","FLORENTINA","FLO","ELODIA","DORINE","BRUNILDA","BRIGID","ASHLI","ARDELLA","TWANA","THU","TARAH","SUNG","SHEA","SHAVON","SHANE","SERINA","RAYNA","RAMONITA","NGA","MARGURITE","LUCRECIA","KOURTNEY","KATI","JESUS","JESENIA","DIAMOND","CRISTA","AYANA","ALICA","ALIA","VINNIE","SUELLEN","ROMELIA","RACHELL","PIPER","OLYMPIA","MICHIKO","KATHALEEN","JOLIE","JESSI","JANESSA","HANA","HA","ELEASE","CARLETTA","BRITANY","SHONA","SALOME","ROSAMOND","REGENA","RAINA","NGOC","NELIA","LOUVENIA","LESIA","LATRINA","LATICIA","LARHONDA","JINA","JACKI","HOLLIS","HOLLEY","EMMY","DEEANN","CORETTA","ARNETTA","VELVET","THALIA","SHANICE","NETA","MIKKI","MICKI","LONNA","LEANA","LASHUNDA","KILEY","JOYE","JACQULYN","IGNACIA","HYUN","HIROKO","HENRY","HENRIETTE","ELAYNE","DELINDA","DARNELL","DAHLIA","COREEN","CONSUELA","CONCHITA","CELINE","BABETTE","AYANNA","ANETTE","ALBERTINA","SKYE","SHAWNEE","SHANEKA","QUIANA","PAMELIA","MIN","MERRI","MERLENE","MARGIT","KIESHA","KIERA","KAYLENE","JODEE","JENISE","ERLENE","EMMIE","ELSE","DARYL","DALILA","DAISEY","CODY","CASIE","BELIA","BABARA","VERSIE","VANESA","SHELBA","SHAWNDA","SAM","NORMAN","NIKIA","NAOMA","MARNA","MARGERET","MADALINE","LAWANA","KINDRA","JUTTA","JAZMINE","JANETT","HANNELORE","GLENDORA","GERTRUD","GARNETT","FREEDA","FREDERICA","FLORANCE","FLAVIA","DENNIS","CARLINE","BEVERLEE","ANJANETTE","VALDA","TRINITY","TAMALA","STEVIE","SHONNA","SHA","SARINA","ONEIDA","MICAH","MERILYN","MARLEEN","LURLINE","LENNA","KATHERIN","JIN","JENI","HAE","GRACIA","GLADY","FARAH","ERIC","ENOLA","EMA","DOMINQUE","DEVONA","DELANA","CECILA","CAPRICE","ALYSHA","ALI","ALETHIA","VENA","THERESIA","TAWNY","SONG","SHAKIRA","SAMARA","SACHIKO","RACHELE","PAMELLA","NICKY","MARNI","MARIEL","MAREN","MALISA","LIGIA","LERA","LATORIA","LARAE","KIMBER","KATHERN","KAREY","JENNEFER","JANETH","HALINA","FREDIA","DELISA","DEBROAH","CIERA","CHIN","ANGELIKA","ANDREE","ALTHA","YEN","VIVAN","TERRESA","TANNA","SUK","SUDIE","SOO","SIGNE","SALENA","RONNI","REBBECCA","MYRTIE","MCKENZIE","MALIKA","MAIDA","LOAN","LEONARDA","KAYLEIGH","FRANCE","ETHYL","ELLYN","DAYLE","CAMMIE","BRITTNI","BIRGIT","AVELINA","ASUNCION","ARIANNA","AKIKO","VENICE","TYESHA","TONIE","TIESHA","TAKISHA","STEFFANIE","SINDY","SANTANA","MEGHANN","MANDA","MACIE","LADY","KELLYE","KELLEE","JOSLYN","JASON","INGER","INDIRA","GLINDA","GLENNIS","FERNANDA","FAUSTINA","ENEIDA","ELICIA","DOT","DIGNA","DELL","ARLETTA","ANDRE","WILLIA","TAMMARA","TABETHA","SHERRELL","SARI","REFUGIO","REBBECA","PAULETTA","NIEVES","NATOSHA","NAKITA","MAMMIE","KENISHA","KAZUKO","KASSIE","GARY","EARLEAN","DAPHINE","CORLISS","CLOTILDE","CAROLYNE","BERNETTA","AUGUSTINA","AUDREA","ANNIS","ANNABELL","YAN","TENNILLE","TAMICA","SELENE","SEAN","ROSANA","REGENIA","QIANA","MARKITA","MACY","LEEANNE","LAURINE","KYM","JESSENIA","JANITA","GEORGINE","GENIE","EMIKO","ELVIE","DEANDRA","DAGMAR","CORIE","COLLEN","CHERISH","ROMAINE","PORSHA","PEARLENE","MICHELINE","MERNA","MARGORIE","MARGARETTA","LORE","KENNETH","JENINE","HERMINA","FREDERICKA","ELKE","DRUSILLA","DORATHY","DIONE","DESIRE","CELENA","BRIGIDA","ANGELES","ALLEGRA","THEO","TAMEKIA","SYNTHIA","STEPHEN","SOOK","SLYVIA","ROSANN","REATHA","RAYE","MARQUETTA","MARGART","LING","LAYLA","KYMBERLY","KIANA","KAYLEEN","KATLYN","KARMEN","JOELLA","IRINA","EMELDA","ELENI","DETRA","CLEMMIE","CHERYLL","CHANTELL","CATHEY","ARNITA","ARLA","ANGLE","ANGELIC","ALYSE","ZOFIA","THOMASINE","TENNIE","SON","SHERLY","SHERLEY","SHARYL","REMEDIOS","PETRINA","NICKOLE","MYUNG","MYRLE","MOZELLA","LOUANNE","LISHA","LATIA","LANE","KRYSTA","JULIENNE","JOEL","JEANENE","JACQUALINE","ISAURA","GWENDA","EARLEEN","DONALD","CLEOPATRA","CARLIE","AUDIE","ANTONIETTA","ALISE","ALEX","VERDELL","VAL","TYLER","TOMOKO","THAO","TALISHA","STEVEN","SO","SHEMIKA","SHAUN","SCARLET","SAVANNA","SANTINA","ROSIA","RAEANN","ODILIA","NANA","MINNA","MAGAN","LYNELLE","LE","KARMA","JOEANN","IVANA","INELL","ILANA","HYE","HONEY","HEE","GUDRUN","FRANK","DREAMA","CRISSY","CHANTE","CARMELINA","ARVILLA","ARTHUR","ANNAMAE","ALVERA","ALEIDA","AARON","YEE","YANIRA","VANDA","TIANNA","TAM","STEFANIA","SHIRA","PERRY","NICOL","NANCIE","MONSERRATE","MINH","MELYNDA","MELANY","MATTHEW","LOVELLA","LAURE","KIRBY","KACY","JACQUELYNN","HYON","GERTHA","FRANCISCO","ELIANA","CHRISTENA","CHRISTEEN","CHARISE","CATERINA","CARLEY","CANDYCE","ARLENA","AMMIE","YANG","WILLETTE","VANITA","TUYET","TINY","SYREETA","SILVA","SCOTT","RONALD","PENNEY","NYLA","MICHAL","MAURICE","MARYAM","MARYA","MAGEN","LUDIE","LOMA","LIVIA","LANELL","KIMBERLIE","JULEE","DONETTA","DIEDRA","DENISHA","DEANE","DAWNE","CLARINE","CHERRYL","BRONWYN","BRANDON","ALLA","VALERY","TONDA","SUEANN","SORAYA","SHOSHANA","SHELA","SHARLEEN","SHANELLE","NERISSA","MICHEAL","MERIDITH","MELLIE","MAYE","MAPLE","MAGARET","LUIS","LILI","LEONILA","LEONIE","LEEANNA","LAVONIA","LAVERA","KRISTEL","KATHEY","KATHE","JUSTIN","JULIAN","JIMMY","JANN","ILDA","HILDRED","HILDEGARDE","GENIA","FUMIKO","EVELIN","ERMELINDA","ELLY","DUNG","DOLORIS","DIONNA","DANAE","BERNEICE","ANNICE","ALIX","VERENA","VERDIE","TRISTAN","SHAWNNA","SHAWANA","SHAUNNA","ROZELLA","RANDEE","RANAE","MILAGRO","LYNELL","LUISE","LOUIE","LOIDA","LISBETH","KARLEEN","JUNITA","JONA","ISIS","HYACINTH","HEDY","GWENN","ETHELENE","ERLINE","EDWARD","DONYA","DOMONIQUE","DELICIA","DANNETTE","CICELY","BRANDA","BLYTHE","BETHANN","ASHLYN","ANNALEE","ALLINE","YUKO","VELLA","TRANG","TOWANDA","TESHA","SHERLYN","NARCISA","MIGUELINA","MERI","MAYBELL","MARLANA","MARGUERITA","MADLYN","LUNA","LORY","LORIANN","LIBERTY","LEONORE","LEIGHANN","LAURICE","LATESHA","LARONDA","KATRICE","KASIE","KARL","KALEY","JADWIGA","GLENNIE","GEARLDINE","FRANCINA","EPIFANIA","DYAN","DORIE","DIEDRE","DENESE","DEMETRICE","DELENA","DARBY","CRISTIE","CLEORA","CATARINA","CARISA","BERNIE","BARBERA","ALMETA","TRULA","TEREASA","SOLANGE","SHEILAH","SHAVONNE","SANORA","ROCHELL","MATHILDE","MARGARETA","MAIA","LYNSEY","LAWANNA","LAUNA","KENA","KEENA","KATIA","JAMEY","GLYNDA","GAYLENE","ELVINA","ELANOR","DANUTA","DANIKA","CRISTEN","CORDIE","COLETTA","CLARITA","CARMON","BRYNN","AZUCENA","AUNDREA","ANGELE","YI","WALTER","VERLIE","VERLENE","TAMESHA","SILVANA","SEBRINA","SAMIRA","REDA","RAYLENE","PENNI","PANDORA","NORAH","NOMA","MIREILLE","MELISSIA","MARYALICE","LARAINE","KIMBERY","KARYL","KARINE","KAM","JOLANDA","JOHANA","JESUSA","JALEESA","JAE","JACQUELYNE","IRISH","ILUMINADA","HILARIA","HANH","GENNIE","FRANCIE","FLORETTA","EXIE","EDDA","DREMA","DELPHA","BEV","BARBAR","ASSUNTA","ARDELL","ANNALISA","ALISIA","YUKIKO","YOLANDO","WONDA","WEI","WALTRAUD","VETA","TEQUILA","TEMEKA","TAMEIKA","SHIRLEEN","SHENITA","PIEDAD","OZELLA","MIRTHA","MARILU","KIMIKO","JULIANE","JENICE","JEN","JANAY","JACQUILINE","HILDE","FE","FAE","EVAN","EUGENE","ELOIS","ECHO","DEVORAH","CHAU","BRINDA","BETSEY","ARMINDA","ARACELIS","APRYL","ANNETT","ALISHIA","VEOLA","USHA","TOSHIKO","THEOLA","TASHIA","TALITHA","SHERY","RUDY","RENETTA","REIKO","RASHEEDA","OMEGA","OBDULIA","MIKA","MELAINE","MEGGAN","MARTIN","MARLEN","MARGET","MARCELINE","MANA","MAGDALEN","LIBRADA","LEZLIE","LEXIE","LATASHIA","LASANDRA","KELLE","ISIDRA","ISA","INOCENCIA","GWYN","FRANCOISE","ERMINIA","ERINN","DIMPLE","DEVORA","CRISELDA","ARMANDA","ARIE","ARIANE","ANGELO","ANGELENA","ALLEN","ALIZA","ADRIENE","ADALINE","XOCHITL","TWANNA","TRAN","TOMIKO","TAMISHA","TAISHA","SUSY","SIU","RUTHA","ROXY","RHONA","RAYMOND","OTHA","NORIKO","NATASHIA","MERRIE","MELVIN","MARINDA","MARIKO","MARGERT","LORIS","LIZZETTE","LEISHA","KAILA","KA","JOANNIE","JERRICA","JENE","JANNET","JANEE","JACINDA","HERTA","ELENORE","DORETTA","DELAINE","DANIELL","CLAUDIE","CHINA","BRITTA","APOLONIA","AMBERLY","ALEASE","YURI","YUK","WEN","WANETA","UTE","TOMI","SHARRI","SANDIE","ROSELLE","REYNALDA","RAGUEL","PHYLICIA","PATRIA","OLIMPIA","ODELIA","MITZIE","MITCHELL","MISS","MINDA","MIGNON","MICA","MENDY","MARIVEL","MAILE","LYNETTA","LAVETTE","LAURYN","LATRISHA","LAKIESHA","KIERSTEN","KARY","JOSPHINE","JOLYN","JETTA","JANISE","JACQUIE","IVELISSE","GLYNIS","GIANNA","GAYNELLE","EMERALD","DEMETRIUS","DANYELL","DANILLE","DACIA","CORALEE","CHER","CEOLA","BRETT","BELL","ARIANNE","ALESHIA","YUNG","WILLIEMAE","TROY","TRINH","THORA","TAI","SVETLANA","SHERIKA","SHEMEKA","SHAUNDA","ROSELINE","RICKI","MELDA","MALLIE","LAVONNA","LATINA","LARRY","LAQUANDA","LALA","LACHELLE","KLARA","KANDIS","JOHNA","JEANMARIE","JAYE","HANG","GRAYCE","GERTUDE","EMERITA","EBONIE","CLORINDA","CHING","CHERY","CAROLA","BREANN","BLOSSOM","BERNARDINE","BECKI","ARLETHA","ARGELIA","ARA","ALITA","YULANDA","YON","YESSENIA","TOBI","TASIA","SYLVIE","SHIRL","SHIRELY","SHERIDAN","SHELLA","SHANTELLE","SACHA","ROYCE","REBECKA","REAGAN","PROVIDENCIA","PAULENE","MISHA","MIKI","MARLINE","MARICA","LORITA","LATOYIA","LASONYA","KERSTIN","KENDA","KEITHA","KATHRIN","JAYMIE","JACK","GRICELDA","GINETTE","ERYN","ELINA","ELFRIEDA","DANYEL","CHEREE","CHANELLE","BARRIE","AVERY","AURORE","ANNAMARIA","ALLEEN","AILENE","AIDE","YASMINE","VASHTI","VALENTINE","TREASA","TORY","TIFFANEY","SHERYLL","SHARIE","SHANAE","SAU","RAISA","PA","NEDA","MITSUKO","MIRELLA","MILDA","MARYANNA","MARAGRET","MABELLE","LUETTA","LORINA","LETISHA","LATARSHA","LANELLE","LAJUANA","KRISSY","KARLY","KARENA","JON","JESSIKA","JERICA","JEANELLE","JANUARY","JALISA","JACELYN","IZOLA","IVEY","GREGORY","EUNA","ETHA","DREW","DOMITILA","DOMINICA","DAINA","CREOLA","CARLI","CAMIE","BUNNY","BRITTNY","ASHANTI","ANISHA","ALEEN","ADAH","YASUKO","WINTER","VIKI","VALRIE","TONA","TINISHA","THI","TERISA","TATUM","TANEKA","SIMONNE","SHALANDA","SERITA","RESSIE","REFUGIA","PAZ","OLENE","NA","MERRILL","MARGHERITA","MANDIE","MAN","MAIRE","LYNDIA","LUCI","LORRIANE","LORETA","LEONIA","LAVONA","LASHAWNDA","LAKIA","KYOKO","KRYSTINA","KRYSTEN","KENIA","KELSI","JUDE","JEANICE","ISOBEL","GEORGIANN","GENNY","FELICIDAD","EILENE","DEON","DELOISE","DEEDEE","DANNIE","CONCEPTION","CLORA","CHERILYN","CHANG","CALANDRA","BERRY","ARMANDINA","ANISA","ULA","TIMOTHY","TIERA","THERESSA","STEPHANIA","SIMA","SHYLA","SHONTA","SHERA","SHAQUITA","SHALA","SAMMY","ROSSANA","NOHEMI","NERY","MORIAH","MELITA","MELIDA","MELANI","MARYLYNN","MARISHA","MARIETTE","MALORIE","MADELENE","LUDIVINA","LORIA","LORETTE","LORALEE","LIANNE","LEON","LAVENIA","LAURINDA","LASHON","KIT","KIMI","KEILA","KATELYNN","KAI","JONE","JOANE","JI","JAYNA","JANELLA","JA","HUE","HERTHA","FRANCENE","ELINORE","DESPINA","DELSIE","DEEDRA","CLEMENCIA","CARRY","CAROLIN","CARLOS","BULAH","BRITTANIE","BOK","BLONDELL","BIBI","BEAULAH","BEATA","ANNITA","AGRIPINA","VIRGEN","VALENE","UN","TWANDA","TOMMYE","TOI","TARRA","TARI","TAMMERA","SHAKIA","SADYE","RUTHANNE","ROCHEL","RIVKA","PURA","NENITA","NATISHA","MING","MERRILEE","MELODEE","MARVIS","LUCILLA","LEENA","LAVETA","LARITA","LANIE","KEREN","ILEEN","GEORGEANN","GENNA","GENESIS","FRIDA","EWA","EUFEMIA","EMELY","ELA","EDYTH","DEONNA","DEADRA","DARLENA","CHANELL","CHAN","CATHERN","CASSONDRA","CASSAUNDRA","BERNARDA","BERNA","ARLINDA","ANAMARIA","ALBERT","WESLEY","VERTIE","VALERI","TORRI","TATYANA","STASIA","SHERISE","SHERILL","SEASON","SCOTTIE","SANDA","RUTHE","ROSY","ROBERTO","ROBBI","RANEE","QUYEN","PEARLY","PALMIRA","ONITA","NISHA","NIESHA","NIDA","NEVADA","NAM","MERLYN","MAYOLA","MARYLOUISE","MARYLAND","MARX","MARTH","MARGENE","MADELAINE","LONDA","LEONTINE","LEOMA","LEIA","LAWRENCE","LAURALEE","LANORA","LAKITA","KIYOKO","KETURAH","KATELIN","KAREEN","JONIE","JOHNETTE","JENEE","JEANETT","IZETTA","HIEDI","HEIKE","HASSIE","HAROLD","GIUSEPPINA","GEORGANN","FIDELA","FERNANDE","ELWANDA","ELLAMAE","ELIZ","DUSTI","DOTTY","CYNDY","CORALIE","CELESTA","ARGENTINA","ALVERTA","XENIA","WAVA","VANETTA","TORRIE","TASHINA","TANDY","TAMBRA","TAMA","STEPANIE","SHILA","SHAUNTA","SHARAN","SHANIQUA","SHAE","SETSUKO","SERAFINA","SANDEE","ROSAMARIA","PRISCILA","OLINDA","NADENE","MUOI","MICHELINA","MERCEDEZ","MARYROSE","MARIN","MARCENE","MAO","MAGALI","MAFALDA","LOGAN","LINN","LANNIE","KAYCE","KAROLINE","KAMILAH","KAMALA","JUSTA","JOLINE","JENNINE","JACQUETTA","IRAIDA","GERALD","GEORGEANNA","FRANCHESCA","FAIRY","EMELINE","ELANE","EHTEL","EARLIE","DULCIE","DALENE","CRIS","CLASSIE","CHERE","CHARIS","CAROYLN","CARMINA","CARITA","BRIAN","BETHANIE","AYAKO","ARICA","AN","ALYSA","ALESSANDRA","AKILAH","ADRIEN","ZETTA","YOULANDA","YELENA","YAHAIRA","XUAN","WENDOLYN","VICTOR","TIJUANA","TERRELL","TERINA","TERESIA","SUZI","SUNDAY","SHERELL","SHAVONDA","SHAUNTE","SHARDA","SHAKITA","SENA","RYANN","RUBI","RIVA","REGINIA","REA","RACHAL","PARTHENIA","PAMULA","MONNIE","MONET","MICHAELE","MELIA","MARINE","MALKA","MAISHA","LISANDRA","LEO","LEKISHA","LEAN","LAURENCE","LAKENDRA","KRYSTIN","KORTNEY","KIZZIE","KITTIE","KERA","KENDAL","KEMBERLY","KANISHA","JULENE","JULE","JOSHUA","JOHANNE","JEFFREY","JAMEE","HAN","HALLEY","GIDGET","GALINA","FREDRICKA","FLETA","FATIMAH","EUSEBIA","ELZA","ELEONORE","DORTHEY","DORIA","DONELLA","DINORAH","DELORSE","CLARETHA","CHRISTINIA","CHARLYN","BONG","BELKIS","AZZIE","ANDERA","AIKO","ADENA","YER","YAJAIRA","WAN","VANIA","ULRIKE","TOSHIA","TIFANY","STEFANY","SHIZUE","SHENIKA","SHAWANNA","SHAROLYN","SHARILYN","SHAQUANA","SHANTAY","SEE","ROZANNE","ROSELEE","RICKIE","REMONA","REANNA","RAELENE","QUINN","PHUNG","PETRONILA","NATACHA","NANCEY","MYRL","MIYOKO","MIESHA","MERIDETH","MARVELLA","MARQUITTA","MARHTA","MARCHELLE","LIZETH","LIBBIE","LAHOMA","LADAWN","KINA","KATHELEEN","KATHARYN","KARISA","KALEIGH","JUNIE","JULIEANN","JOHNSIE","JANEAN","JAIMEE","JACKQUELINE","HISAKO","HERMA","HELAINE","GWYNETH","GLENN","GITA","EUSTOLIA","EMELINA","ELIN","EDRIS","DONNETTE","DONNETTA","DIERDRE","DENAE","DARCEL","CLAUDE","CLARISA","CINDERELLA","CHIA","CHARLESETTA","CHARITA","CELSA","CASSY","CASSI","CARLEE","BRUNA","BRITTANEY","BRANDE","BILLI","BAO","ANTONETTA","ANGLA","ANGELYN","ANALISA","ALANE","WENONA","WENDIE","VERONIQUE","VANNESA","TOBIE","TEMPIE","SUMIKO","SULEMA","SPARKLE","SOMER","SHEBA","SHAYNE","SHARICE","SHANEL","SHALON","SAGE","ROY","ROSIO","ROSELIA","RENAY","REMA","REENA","PORSCHE","PING","PEG","OZIE","ORETHA","ORALEE","ODA","NU","NGAN","NAKESHA","MILLY","MARYBELLE","MARLIN","MARIS","MARGRETT","MARAGARET","MANIE","LURLENE","LILLIA","LIESELOTTE","LAVELLE","LASHAUNDA","LAKEESHA","KEITH","KAYCEE","KALYN","JOYA","JOETTE","JENAE","JANIECE","ILLA","GRISEL","GLAYDS","GENEVIE","GALA","FREDDA","FRED","ELMER","ELEONOR","DEBERA","DEANDREA","DAN","CORRINNE","CORDIA","CONTESSA","COLENE","CLEOTILDE","CHARLOTT","CHANTAY","CECILLE","BEATRIS","AZALEE","ARLEAN","ARDATH","ANJELICA","ANJA","ALFREDIA","ALEISHA","ADAM","ZADA","YUONNE","XIAO","WILLODEAN","WHITLEY","VENNIE","VANNA","TYISHA","TOVA","TORIE","TONISHA","TILDA","TIEN","TEMPLE","SIRENA","SHERRIL","SHANTI","SHAN","SENAIDA","SAMELLA","ROBBYN","RENDA","REITA","PHEBE","PAULITA","NOBUKO","NGUYET","NEOMI","MOON","MIKAELA","MELANIA","MAXIMINA","MARG","MAISIE","LYNNA","LILLI","LAYNE","LASHAUN","LAKENYA","LAEL","KIRSTIE","KATHLINE","KASHA","KARLYN","KARIMA","JOVAN","JOSEFINE","JENNELL","JACQUI","JACKELYN","HYO","HIEN","GRAZYNA","FLORRIE","FLORIA","ELEONORA","DWANA","DORLA","DONG","DELMY","DEJA","DEDE","DANN","CRYSTA","CLELIA","CLARIS","CLARENCE","CHIEKO","CHERLYN","CHERELLE","CHARMAIN","CHARA","CAMMY","BEE","ARNETTE","ARDELLE","ANNIKA","AMIEE","AMEE","ALLENA","YVONE","YUKI","YOSHIE","YEVETTE","YAEL","WILLETTA","VONCILE","VENETTA","TULA","TONETTE","TIMIKA","TEMIKA","TELMA","TEISHA","TAREN","TA","STACEE","SHIN","SHAWNTA","SATURNINA","RICARDA","POK","PASTY","ONIE","NUBIA","MORA","MIKE","MARIELLE","MARIELLA","MARIANELA","MARDELL","MANY","LUANNA","LOISE","LISABETH","LINDSY","LILLIANA","LILLIAM","LELAH","LEIGHA","LEANORA","LANG","KRISTEEN","KHALILAH","KEELEY","KANDRA","JUNKO","JOAQUINA","JERLENE","JANI","JAMIKA","JAME","HSIU","HERMILA","GOLDEN","GENEVIVE","EVIA","EUGENA","EMMALINE","ELFREDA","ELENE","DONETTE","DELCIE","DEEANNA","DARCEY","CUC","CLARINDA","CIRA","CHAE","CELINDA","CATHERYN","CATHERIN","CASIMIRA","CARMELIA","CAMELLIA","BREANA","BOBETTE","BERNARDINA","BEBE","BASILIA","ARLYNE","AMAL","ALAYNA","ZONIA","ZENIA","YURIKO","YAEKO","WYNELL","WILLOW","WILLENA","VERNIA","TU","TRAVIS","TORA","TERRILYN","TERICA","TENESHA","TAWNA","TAJUANA","TAINA","STEPHNIE","SONA","SOL","SINA","SHONDRA","SHIZUKO","SHERLENE","SHERICE","SHARIKA","ROSSIE","ROSENA","RORY","RIMA","RIA","RHEBA","RENNA","PETER","NATALYA","NANCEE","MELODI","MEDA","MAXIMA","MATHA","MARKETTA","MARICRUZ","MARCELENE","MALVINA","LUBA","LOUETTA","LEIDA","LECIA","LAURAN","LASHAWNA","LAINE","KHADIJAH","KATERINE","KASI","KALLIE","JULIETTA","JESUSITA","JESTINE","JESSIA","JEREMY","JEFFIE","JANYCE","ISADORA","GEORGIANNE","FIDELIA","EVITA","EURA","EULAH","ESTEFANA","ELSY","ELIZABET","ELADIA","DODIE","DION","DIA","DENISSE","DELORAS","DELILA","DAYSI","DAKOTA","CURTIS","CRYSTLE","CONCHA","COLBY","CLARETTA","CHU","CHRISTIA","CHARLSIE","CHARLENA","CARYLON","BETTYANN","ASLEY","ASHLEA","AMIRA","AI","AGUEDA","AGNUS","YUETTE","VINITA","VICTORINA","TYNISHA","TREENA","TOCCARA","TISH","THOMASENA","TEGAN","SOILA","SHILOH","SHENNA","SHARMAINE","SHANTAE","SHANDI","SEPTEMBER","SARAN","SARAI","SANA","SAMUEL","SALLEY","ROSETTE","ROLANDE","REGINE","OTELIA","OSCAR","OLEVIA","NICHOLLE","NECOLE","NAIDA","MYRTA","MYESHA","MITSUE","MINTA","MERTIE","MARGY","MAHALIA","MADALENE","LOVE","LOURA","LOREAN","LEWIS","LESHA","LEONIDA","LENITA","LAVONE","LASHELL","LASHANDRA","LAMONICA","KIMBRA","KATHERINA","KARRY","KANESHA","JULIO","JONG","JENEVA","JAQUELYN","HWA","GILMA","GHISLAINE","GERTRUDIS","FRANSISCA","FERMINA","ETTIE","ETSUKO","ELLIS","ELLAN","ELIDIA","EDRA","DORETHEA","DOREATHA","DENYSE","DENNY","DEETTA","DAINE","CYRSTAL","CORRIN","CAYLA","CARLITA","CAMILA","BURMA","BULA","BUENA","BLAKE","BARABARA","AVRIL","AUSTIN","ALAINE","ZANA","WILHEMINA","WANETTA","VIRGIL","VI","VERONIKA","VERNON","VERLINE","VASILIKI","TONITA","TISA","TEOFILA","TAYNA","TAUNYA","TANDRA","TAKAKO","SUNNI","SUANNE","SIXTA","SHARELL","SEEMA","RUSSELL","ROSENDA","ROBENA","RAYMONDE","PEI","PAMILA","OZELL","NEIDA","NEELY","MISTIE","MICHA","MERISSA","MAURITA","MARYLN","MARYETTA","MARSHALL","MARCELL","MALENA","MAKEDA","MADDIE","LOVETTA","LOURIE","LORRINE","LORILEE","LESTER","LAURENA","LASHAY","LARRAINE","LAREE","LACRESHA","KRISTLE","KRISHNA","KEVA","KEIRA","KAROLE","JOIE","JINNY","JEANNETTA","JAMA","HEIDY","GILBERTE","GEMA","FAVIOLA","EVELYNN","ENDA","ELLI","ELLENA","DIVINA","DAGNY","COLLENE","CODI","CINDIE","CHASSIDY","CHASIDY","CATRICE","CATHERINA","CASSEY","CAROLL","CARLENA","CANDRA","CALISTA","BRYANNA","BRITTENY","BEULA","BARI","AUDRIE","AUDRIA","ARDELIA","ANNELLE","ANGILA","ALONA","ALLYN","DOUGLAS","ROGER","JONATHAN","RALPH","NICHOLAS","BENJAMIN","BRUCE","HARRY","WAYNE","STEVE","HOWARD","ERNEST","PHILLIP","TODD","CRAIG","ALAN","PHILIP","EARL","DANNY","BRYAN","STANLEY","LEONARD","NATHAN","MANUEL","RODNEY","MARVIN","VINCENT","JEFFERY","JEFF","CHAD","JACOB","ALFRED","BRADLEY","HERBERT","FREDERICK","EDWIN","DON","RICKY","RANDALL","BARRY","BERNARD","LEROY","MARCUS","THEODORE","CLIFFORD","MIGUEL","JIM","TOM","CALVIN","BILL","LLOYD","DEREK","WARREN","DARRELL","JEROME","FLOYD","ALVIN","TIM","GORDON","GREG","JORGE","DUSTIN","PEDRO","DERRICK","ZACHARY","HERMAN","GLEN","HECTOR","RICARDO","RICK","BRENT","RAMON","GILBERT","MARC","REGINALD","RUBEN","NATHANIEL","RAFAEL","EDGAR","MILTON","RAUL","BEN","CHESTER","DUANE","FRANKLIN","BRAD","RON","ROLAND","ARNOLD","HARVEY","JARED","ERIK","DARRYL","NEIL","JAVIER","FERNANDO","CLINTON","TED","MATHEW","TYRONE","DARREN","LANCE","KURT","ALLAN","NELSON","GUY","CLAYTON","HUGH","MAX","DWAYNE","DWIGHT","ARMANDO","FELIX","EVERETT","IAN","WALLACE","KEN","BOB","ALFREDO","ALBERTO","DAVE","IVAN","BYRON","ISAAC","MORRIS","CLIFTON","WILLARD","ROSS","ANDY","SALVADOR","KIRK","SERGIO","SETH","KENT","TERRANCE","EDUARDO","TERRENCE","ENRIQUE","WADE","STUART","FREDRICK","ARTURO","ALEJANDRO","NICK","LUTHER","WENDELL","JEREMIAH","JULIUS","OTIS","TREVOR","OLIVER","LUKE","HOMER","GERARD","DOUG","KENNY","HUBERT","LYLE","MATT","ALFONSO","ORLANDO","REX","CARLTON","ERNESTO","NEAL","PABLO","LORENZO","OMAR","WILBUR","GRANT","HORACE","RODERICK","ABRAHAM","WILLIS","RICKEY","ANDRES","CESAR","JOHNATHAN","MALCOLM","RUDOLPH","DAMON","KELVIN","PRESTON","ALTON","ARCHIE","MARCO","WM","PETE","RANDOLPH","GARRY","GEOFFREY","JONATHON","FELIPE","GERARDO","ED","DOMINIC","DELBERT","COLIN","GUILLERMO","EARNEST","LUCAS","BENNY","SPENCER","RODOLFO","MYRON","EDMUND","GARRETT","SALVATORE","CEDRIC","LOWELL","GREGG","SHERMAN","WILSON","SYLVESTER","ROOSEVELT","ISRAEL","JERMAINE","FORREST","WILBERT","LELAND","SIMON","CLARK","IRVING","BRYANT","OWEN","RUFUS","WOODROW","KRISTOPHER","MACK","LEVI","MARCOS","GUSTAVO","JAKE","LIONEL","GILBERTO","CLINT","NICOLAS","ISMAEL","ORVILLE","ERVIN","DEWEY","AL","WILFRED","JOSH","HUGO","IGNACIO","CALEB","TOMAS","SHELDON","ERICK","STEWART","DOYLE","DARREL","ROGELIO","TERENCE","SANTIAGO","ALONZO","ELIAS","BERT","ELBERT","RAMIRO","CONRAD","NOAH","GRADY","PHIL","CORNELIUS","LAMAR","ROLANDO","CLAY","PERCY","DEXTER","BRADFORD","DARIN","AMOS","MOSES","IRVIN","SAUL","ROMAN","RANDAL","TIMMY","DARRIN","WINSTON","BRENDAN","ABEL","DOMINICK","BOYD","EMILIO","ELIJAH","DOMINGO","EMMETT","MARLON","EMANUEL","JERALD","EDMOND","EMIL","DEWAYNE","WILL","OTTO","TEDDY","REYNALDO","BRET","JESS","TRENT","HUMBERTO","EMMANUEL","STEPHAN","VICENTE","LAMONT","GARLAND","MILES","EFRAIN","HEATH","RODGER","HARLEY","ETHAN","ELDON","ROCKY","PIERRE","JUNIOR","FREDDY","ELI","BRYCE","ANTOINE","STERLING","CHASE","GROVER","ELTON","CLEVELAND","DYLAN","CHUCK","DAMIAN","REUBEN","STAN","AUGUST","LEONARDO","JASPER","RUSSEL","ERWIN","BENITO","HANS","MONTE","BLAINE","ERNIE","CURT","QUENTIN","AGUSTIN","MURRAY","JAMAL","ADOLFO","HARRISON","TYSON","BURTON","BRADY","ELLIOTT","WILFREDO","BART","JARROD","VANCE","DENIS","DAMIEN","JOAQUIN","HARLAN","DESMOND","ELLIOT","DARWIN","GREGORIO","BUDDY","XAVIER","KERMIT","ROSCOE","ESTEBAN","ANTON","SOLOMON","SCOTTY","NORBERT","ELVIN","WILLIAMS","NOLAN","ROD","QUINTON","HAL","BRAIN","ROB","ELWOOD","KENDRICK","DARIUS","MOISES","FIDEL","THADDEUS","CLIFF","MARCEL","JACKSON","RAPHAEL","BRYON","ARMAND","ALVARO","JEFFRY","DANE","JOESPH","THURMAN","NED","RUSTY","MONTY","FABIAN","REGGIE","MASON","GRAHAM","ISAIAH","VAUGHN","GUS","LOYD","DIEGO","ADOLPH","NORRIS","MILLARD","ROCCO","GONZALO","DERICK","RODRIGO","WILEY","RIGOBERTO","ALPHONSO","TY","NOE","VERN","REED","JEFFERSON","ELVIS","BERNARDO","MAURICIO","HIRAM","DONOVAN","BASIL","RILEY","NICKOLAS","MAYNARD","SCOT","VINCE","QUINCY","EDDY","SEBASTIAN","FEDERICO","ULYSSES","HERIBERTO","DONNELL","COLE","DAVIS","GAVIN","EMERY","WARD","ROMEO","JAYSON","DANTE","CLEMENT","COY","MAXWELL","JARVIS","BRUNO","ISSAC","DUDLEY","BROCK","SANFORD","CARMELO","BARNEY","NESTOR","STEFAN","DONNY","ART","LINWOOD","BEAU","WELDON","GALEN","ISIDRO","TRUMAN","DELMAR","JOHNATHON","SILAS","FREDERIC","DICK","IRWIN","MERLIN","CHARLEY","MARCELINO","HARRIS","CARLO","TRENTON","KURTIS","HUNTER","AURELIO","WINFRED","VITO","COLLIN","DENVER","CARTER","LEONEL","EMORY","PASQUALE","MOHAMMAD","MARIANO","DANIAL","LANDON","DIRK","BRANDEN","ADAN","BUFORD","GERMAN","WILMER","EMERSON","ZACHERY","FLETCHER","JACQUES","ERROL","DALTON","MONROE","JOSUE","EDWARDO","BOOKER","WILFORD","SONNY","SHELTON","CARSON","THERON","RAYMUNDO","DAREN","HOUSTON","ROBBY","LINCOLN","GENARO","BENNETT","OCTAVIO","CORNELL","HUNG","ARRON","ANTONY","HERSCHEL","GIOVANNI","GARTH","CYRUS","CYRIL","RONNY","LON","FREEMAN","DUNCAN","KENNITH","CARMINE","ERICH","CHADWICK","WILBURN","RUSS","REID","MYLES","ANDERSON","MORTON","JONAS","FOREST","MITCHEL","MERVIN","ZANE","RICH","JAMEL","LAZARO","ALPHONSE","RANDELL","MAJOR","JARRETT","BROOKS","ABDUL","LUCIANO","SEYMOUR","EUGENIO","MOHAMMED","VALENTIN","CHANCE","ARNULFO","LUCIEN","FERDINAND","THAD","EZRA","ALDO","RUBIN","ROYAL","MITCH","EARLE","ABE","WYATT","MARQUIS","LANNY","KAREEM","JAMAR","BORIS","ISIAH","EMILE","ELMO","ARON","LEOPOLDO","EVERETTE","JOSEF","ELOY","RODRICK","REINALDO","LUCIO","JERROD","WESTON","HERSHEL","BARTON","PARKER","LEMUEL","BURT","JULES","GIL","ELISEO","AHMAD","NIGEL","EFREN","ANTWAN","ALDEN","MARGARITO","COLEMAN","DINO","OSVALDO","LES","DEANDRE","NORMAND","KIETH","TREY","NORBERTO","NAPOLEON","JEROLD","FRITZ","ROSENDO","MILFORD","CHRISTOPER","ALFONZO","LYMAN","JOSIAH","BRANT","WILTON","RICO","JAMAAL","DEWITT","BRENTON","OLIN","FOSTER","FAUSTINO","CLAUDIO","JUDSON","GINO","EDGARDO","ALEC","TANNER","JARRED","DONN","TAD","PRINCE","PORFIRIO","ODIS","LENARD","CHAUNCEY","TOD","MEL","MARCELO","KORY","AUGUSTUS","KEVEN","HILARIO","BUD","SAL","ORVAL","MAURO","ZACHARIAH","OLEN","ANIBAL","MILO","JED","DILLON","AMADO","NEWTON","LENNY","RICHIE","HORACIO","BRICE","MOHAMED","DELMER","DARIO","REYES","MAC","JONAH","JERROLD","ROBT","HANK","RUPERT","ROLLAND","KENTON","DAMION","ANTONE","WALDO","FREDRIC","BRADLY","KIP","BURL","WALKER","TYREE","JEFFEREY","AHMED","WILLY","STANFORD","OREN","NOBLE","MOSHE","MIKEL","ENOCH","BRENDON","QUINTIN","JAMISON","FLORENCIO","DARRICK","TOBIAS","HASSAN","GIUSEPPE","DEMARCUS","CLETUS","TYRELL","LYNDON","KEENAN","WERNER","GERALDO","COLUMBUS","CHET","BERTRAM","MARKUS","HUEY","HILTON","DWAIN","DONTE","TYRON","OMER","ISAIAS","HIPOLITO","FERMIN","ADALBERTO","BO","BARRETT","TEODORO","MCKINLEY","MAXIMO","GARFIELD","RALEIGH","LAWERENCE","ABRAM","RASHAD","KING","EMMITT","DARON","SAMUAL","MIQUEL","EUSEBIO","DOMENIC","DARRON","BUSTER","WILBER","RENATO","JC","HOYT","HAYWOOD","EZEKIEL","CHAS","FLORENTINO","ELROY","CLEMENTE","ARDEN","NEVILLE","EDISON","DESHAWN","NATHANIAL","JORDON","DANILO","CLAUD","SHERWOOD","RAYMON","RAYFORD","CRISTOBAL","AMBROSE","TITUS","HYMAN","FELTON","EZEQUIEL","ERASMO","STANTON","LONNY","LEN","IKE","MILAN","LINO","JAROD","HERB","ANDREAS","WALTON","RHETT","PALMER","DOUGLASS","CORDELL","OSWALDO","ELLSWORTH","VIRGILIO","TONEY","NATHANAEL","DEL","BENEDICT","MOSE","JOHNSON","ISREAL","GARRET","FAUSTO","ASA","ARLEN","ZACK","WARNER","MODESTO","FRANCESCO","MANUAL","GAYLORD","GASTON","FILIBERTO","DEANGELO","MICHALE","GRANVILLE","WES","MALIK","ZACKARY","TUAN","ELDRIDGE","CRISTOPHER","CORTEZ","ANTIONE","MALCOM","LONG","KOREY","JOSPEH","COLTON","WAYLON","VON","HOSEA","SHAD","SANTO","RUDOLF","ROLF","REY","RENALDO","MARCELLUS","LUCIUS","KRISTOFER","BOYCE","BENTON","HAYDEN","HARLAND","ARNOLDO","RUEBEN","LEANDRO","KRAIG","JERRELL","JEROMY","HOBERT","CEDRICK","ARLIE","WINFORD","WALLY","LUIGI","KENETH","JACINTO","GRAIG","FRANKLYN","EDMUNDO","SID","PORTER","LEIF","JERAMY","BUCK","WILLIAN","VINCENZO","SHON","LYNWOOD","JERE","HAI","ELDEN","DORSEY","DARELL","BRODERICK","ALONSO"};
+	set<string> s;
+	for(int i=0; i < sizeof(tmp)/sizeof(char*); ++i)
+		s.insert(string(tmp[i]));
+	auto name = s.begin();
+	int res = 0;
+	for(int i = 1; name != s.end(); ++i, ++name){
+		int k = 0;
+		for(auto n = name->begin (); n != name->end(); ++n)
+			k += *n-'A'+1;
+		res += i*k;
+	}
+	return res;
+}
+
+long long task23()
+{
+	long long sum=0;
+	set<int> abundant;
+	for(int i = 2; i <= 28123; ++i)
+		if( i < SumOfDivisors(i) )
+			abundant.insert(i);
+	for( int i = 1; i <= 28123; ++i){
+		bool not_found = true;
+		for(auto k = abundant.begin(); not_found && *k < i && k != abundant.end(); ++k){
+			int second = i - *k;
+			auto fnd = abundant.find(second);
+			if ( fnd != abundant.end() ) not_found = false;
+		}
+		if ( not_found ) sum += i;
+	}
+	return sum;
+}
+
+string task24()
+{
+	vector<char> a;
+	for(int i =0; i <10; i++)
+		a.push_back('0'+i);
+	for(int i = 0; i < 1000000-1; ++i){
+		next_permutation(a.begin(), a.end());
+	}
+	string res;
+	for( auto i = a.begin(); i != a.end(); ++i)
+		res += *i;
+	return res;
+}
+
+int task25()
+{
+    LongNo f1("1"), f2("1");
+    int res = 2;
+    while( f1.Order() < 1000){
+        f2 += f1;
+        f2.Swap(f1);
+        res++;
+    }
+    return res;
+}
+
+int task26()
+{
+    int res=0, reslen=0;
+
+    for(int i = 2; i < 1000; ++i)
+    {
+        std::set<int> rests;
+        int rest = 1;
+        do{
+            while( rest < i ) rest *= 10;
+            rest = rest%i;
+            if ( rest ) 
+                if ( rests.find(rest) == rests.end() ) 
+                    rests.insert(rest);
+                else
+                    rest = 0;
+        }while(rest);
+        if( reslen < rests.size()){
+            res = i;
+            reslen = rests.size();
+        }
+    }
+    return res;
+}
+
+int task27()
+{
+    vector<long> primes;
+    PrimesUpTo(primes, 1000000);
+    int res = 0, nmax = 0;
+    for(int a = -999; a < 1000; a++)
+        for(size_t i = 0; primes[i] < 1000; i++){
+            int b = primes[i];
+            int n = 1;
+            for(; IsPrime(primes, n*n + a*n + b); )
+                ++n; 
+            if ( n > nmax ){
+                nmax = n;
+                res = a*b;
+            }
+    }
+    return res;
+}
+
+long long task28()
+{
+    const int msize = 1001;
+    //int mtx[msize][msize] = {};
+    vector<vector<int>> mtx(msize);
+    for(int i =0; i < msize; ++i ) mtx[i] = vector<int>(msize,0);
+    mtx[msize/2][msize/2] = 1;
+    long long sum = 0;
+    int i = msize/2, j = msize/2;
+    int no = 1;
+    auto Left =  [&](){ while(++j < msize) {mtx[i][j] = ++no; if ( !mtx[i+1][j] ) break;} };
+    auto Down =  [&](){ while(++i < msize) {mtx[i][j] = ++no; if ( !mtx[i][j-1] ) break;} };
+    auto Right = [&](){ while(--j >= 0) {mtx[i][j] = ++no; if ( !mtx[i-1][j] ) break;} };
+    auto Up =    [&](){ while(--i >= 0) {mtx[i][j] = ++no; if ( !mtx[i][j+1] ) break;} };
+
+    while( !(i == msize && j == msize) ){
+        Left();
+        if ( j == msize ) break;
+        Down();
+        Right();
+        Up();
+    }
+    for(int i = 0; i < msize; ++i ) 
+        sum += mtx[i][i] +mtx[i][msize-1-i];
+    return sum;
+}
+
+size_t task29()
+{
+	set<map<int,int> > res;
+	vector<long> primes;
+	PrimesUpTo(primes,101);
+	vector<map<int,int>> factors;
+
+	for(int a =2; a <=100; a++){
+		int probe = a;
+		map<int,int> tmp;
+		for(auto i = primes.begin(); probe != 1 && *i <= probe;){
+			if ( !(probe%*i) ){
+				probe /= *i;
+				tmp[*i] += 1;
+				continue;
+			}
+			++i;
+		}
+		factors.push_back(tmp);
+	}
+	for(int b = 2; b <= 100; ++b)
+		for(size_t i = 0; i < factors.size(); i++){
+			map<int,int> tmp = factors[i];
+			for(auto j = tmp.begin(); j != tmp.end(); ++j)
+				j->second *= b;
+			res.insert(tmp);
+		}
+
+	return res.size();
+}
+
+
+long long task30()
+{
+    long long sum = 0;
+    bool find = true;
+    auto p5 = [](int n){ int tmp = n*n; return tmp*tmp*n;};
+    for(int i = 0; find && i < 10; ++i)
+        for(int j = 0; find && j < 10; ++j)
+            for(int k =0; find && k < 10; ++k)
+                for(int l =0; find && l < 10; ++l)
+                    for(int m =0; find && m < 10; ++m)
+                        for(int n =0; find && n < 10; ++n){
+                            int is_sum = (i ? 1:0) + (j ? 1:0) + (k ? 1:0) + (l ? 1:0) + (m ? 1:0) + (n ? 1:0);
+                            if( is_sum <= 1) continue;
+                            int no = ((((i*10 + j)*10 + k)*10 + l)*10 + m)*10 + n;
+                            if ( no == p5(i) + p5(j) + p5(k) + p5(l) + p5(m) + p5(n))
+                                sum += no;
+                        }
+    return sum;
+}
+
+
+int task31()
+{
+    int res = 0;
+    int i,j,k,l,m,n,o;
+    for( i = 0; i <= 2; ++i ){
+        if ( 100*i == 200 ){ 
+            ++res; 
+            break;
+        }
+        for(j = 0; j <= 4; ++j){
+            if ( 100*i + 50*j == 200 ){ 
+                ++res; 
+                break;
+            }
+            for(k = 0; k <= 10; ++k){
+                if ( 100*i + 50*j + 20*k == 200 ){ 
+                    ++res; 
+                    break;
+                }
+                for(l = 0; l <= 20; ++l){
+                    if ( 100*i + 50*j + 20*k + 10*l == 200 ){ 
+                        ++res; 
+                        break;
+                    }
+                    for(m = 0; m <= 40; ++m){
+                        if ( 100*i + 50*j + 20*k + 10*l + 5*m == 200 ){ 
+                            ++res; 
+                            break;
+                        }
+                        for(n = 0; n <= 100; ++n){
+                            if ( 100*i + 50*j + 20*k + 10*l  + 5*m + 2*n == 200 ){ 
+                                ++res; 
+                                break;
+                            }
+                                for(o = 0; o <= 200; ++o)
+                                    if ( 100*i + 50*j + 20*k + 10*l  + 5*m + 2*n + o == 200 ){ 
+                                        ++res; 
+                                        break;
+                                    }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return res;
+}
+
+int task32()
+{
+    int sum = 0;
+    int l[] = {1,2,3,4,5,6,7,8,9};
+    vector<int> v(l, l+9);
+    bool find = true;
+    set<int> res;
+    while(find){
+        int a = v[0]*10 + v[1],
+            b = v[2]*100 + v[3]*10 + v[4],
+            d = v[0],
+            e = v[1]*1000 + v[2]*100 + v[3]*10 +v[4],
+            c = v[5]*1000 + v[6]*100 + v[7]*10 + v[8];
+        if ( a*b == c || d*e == c)
+            res.insert(c);
+        find = next_permutation(v.begin(),v.end());
+    }
+    for(auto i = res.begin(); i != res.end(); ++i)
+        sum += *i;
+    return sum;
+}
+
+int task33()
+{
+    int denproduct = 1;
+    int nomproduct = 1;
+
+    for (int i = 1; i < 10; i++) 
+        for (int j =2; j < 10; j++) 
+            for(int k = 1; k < 10; k++){
+                int num = 10*i + j;
+                int den = 10*j + k;
+                if ( num >= den) continue;
+                if ( num % j || den % j) continue;
+                std::wcout<<num<<'\t'<<den<<endl;
+            }
+    
+    return denproduct;
+}
+
+int task34()
+{
+    int sum = 0;
+    //362880
+    int fct[10] = {1,1,2,6,24,120,720,5040,40320,362880};
+    for(int i = 0; i < 10; ++i)
+        for(int j = 0; j < 10; ++j)
+            for(int k =0; k < 10; ++k)
+                for(int l =0; l < 10; ++l)
+                    for(int m =0; m < 10; ++m)
+                        for(int n =0; n < 10; ++n){
+                            int no = ((((i*10 + j)*10 + k)*10 + l)*10 + m)*10 + n;
+                            if ( no <= 2) continue;
+                            int no1 = 0;
+                            int no2 = no;
+                            while( no2 ){ no1 += fct[no2%10]; no2 /= 10;}
+                            if ( no == no1)
+                                sum += no;
+                        }
+    return sum;
+}
+
+int task35()
+{
+    vector<long> primes;
+    int res = 0;
+    set<int> circular;
+    PrimesUpTo(primes,1000000);
+    for(auto i = primes.begin(); i != primes.end(); ++i){
+        int n = *i;
+        vector<int> no;
+        bool is_prime = true;
+        while( is_prime && n ) {
+            int k = n%10;
+            is_prime = k && (k%2);
+            no.insert(no.begin(), k);
+            n /= 10;
+        }
+        for( int j = 1; is_prime && j < no.size(); ++j){
+            no.push_back(no[0]);
+            no.erase(no.begin());
+            auto it = no.begin();
+            n = *it++;
+            while( it != no.end() )
+                n = n*10 + *it++;
+            is_prime = binary_search(primes.begin(), primes.end(), n);
+        }
+        if ( is_prime ) circular.insert(*i);
+    }
+    return circular.size();
+}
+
+int task36()
+{
+    int res=0;
+    for(int i = 1; i <1000000; ++i)
+    {
+        std::string s = boost::lexical_cast<string>(i);
+        std::string r;
+        for(std::string::reverse_iterator ri = s.rbegin(); ri != s.rend(); ++ri) r += *ri;
+        if ( s != r) continue;
+        int dig = i;
+        s = "";
+        while( dig ){
+            s += (dig&1 ? '1':'0');
+            dig >>=1;
+        }
+        r = "";
+        for(std::string::reverse_iterator ri = s.rbegin(); ri != s.rend(); ++ri) r += *ri;
+        if ( s != r) continue;
+        res += i;
+    }
+    return res;
+}
+
+
+int task37()
+{
+    vector<long> primes;
+    int res = 0, count = 0;
+    PrimesUpTo(primes,4000000);
+    for(auto i = primes.begin()+5; count != 11 && i != primes.end(); ++i){
+        int n = *i;
+        vector<int> no;
+        bool is_prime = true;
+        while( n ) {
+            no.insert(no.begin(), n%10);
+            n /= 10;
+        }
+        vector<int> tmp(no);
+        for( int j = 1; is_prime && tmp.size() > 1 ; ++j){
+            tmp.erase(tmp.end()-1);
+            auto it = tmp.begin();
+            n = *it++;
+            while( it != tmp.end() )
+                n = n*10 + *it++;
+            is_prime = binary_search(primes.begin(), primes.end(), n);
+        }
+        tmp = no;
+        for( int j = 1; is_prime && tmp.size() > 1 ; ++j){
+            tmp.erase(tmp.begin());
+            auto it = tmp.begin();
+            n = *it++;
+            while( it != tmp.end() )
+                n = n*10 + *it++;
+            is_prime = binary_search(primes.begin(), primes.end(), n);
+        }
+        if ( is_prime ) {
+            count++;
+            res += *i;
+        }
+    }
+    return res;
+}
+
+int task39()
+{
+    size_t maxsize = 0;
+    int    maxp;
+    for(int p = 12; p <= 1000; ++p){
+        set<int> sides;
+        for(int a = 1; a < p-2; ++a)
+            for(int b = 1; b + a < p-1; ++b ){
+                int c = p - b -a;
+                if ( c*c == b*b + a*a) 
+                    sides.insert(a*b*c);
+            }
+        if ( maxsize < sides.size() ){
+            maxsize = sides.size();
+            maxp = p;
+        }
+    }
+    return maxp;
+}
+
+
+int task41()
+{
+    vector<long> primes;
+    long res;
+    PrimesUpTo(primes, 7654322);
+    for(auto i = primes.begin()+5; i != primes.end(); ++i){
+        int n = *i;
+        set<int> no;
+        int ord = 0;
+        while( n ) {
+            no.insert(no.begin(), n%10);
+            n /= 10;
+            ord++;
+        }
+        auto j = no.end(), k = no.begin();
+        if ( *--j != no.size() || !*k || no.size() != ord)continue;
+        res = *i;
+    }
+    return res;
+}
+
+int task42()
+{
+    char *words[] = {"A","ABILITY","ABLE","ABOUT","ABOVE","ABSENCE","ABSOLUTELY","ACADEMIC","ACCEPT","ACCESS","ACCIDENT","ACCOMPANY","ACCORDING","ACCOUNT","ACHIEVE","ACHIEVEMENT","ACID","ACQUIRE","ACROSS","ACT","ACTION","ACTIVE","ACTIVITY","ACTUAL","ACTUALLY","ADD","ADDITION","ADDITIONAL","ADDRESS","ADMINISTRATION","ADMIT","ADOPT","ADULT","ADVANCE","ADVANTAGE","ADVICE","ADVISE","AFFAIR","AFFECT","AFFORD","AFRAID","AFTER","AFTERNOON","AFTERWARDS","AGAIN","AGAINST","AGE","AGENCY","AGENT","AGO","AGREE","AGREEMENT","AHEAD","AID","AIM","AIR","AIRCRAFT","ALL","ALLOW","ALMOST","ALONE","ALONG","ALREADY","ALRIGHT","ALSO","ALTERNATIVE","ALTHOUGH","ALWAYS","AMONG","AMONGST","AMOUNT","AN","ANALYSIS","ANCIENT","AND","ANIMAL","ANNOUNCE","ANNUAL","ANOTHER","ANSWER","ANY","ANYBODY","ANYONE","ANYTHING","ANYWAY","APART","APPARENT","APPARENTLY","APPEAL","APPEAR","APPEARANCE","APPLICATION","APPLY","APPOINT","APPOINTMENT","APPROACH","APPROPRIATE","APPROVE","AREA","ARGUE","ARGUMENT","ARISE","ARM","ARMY","AROUND","ARRANGE","ARRANGEMENT","ARRIVE","ART","ARTICLE","ARTIST","AS","ASK","ASPECT","ASSEMBLY","ASSESS","ASSESSMENT","ASSET","ASSOCIATE","ASSOCIATION","ASSUME","ASSUMPTION","AT","ATMOSPHERE","ATTACH","ATTACK","ATTEMPT","ATTEND","ATTENTION","ATTITUDE","ATTRACT","ATTRACTIVE","AUDIENCE","AUTHOR","AUTHORITY","AVAILABLE","AVERAGE","AVOID","AWARD","AWARE","AWAY","AYE","BABY","BACK","BACKGROUND","BAD","BAG","BALANCE","BALL","BAND","BANK","BAR","BASE","BASIC","BASIS","BATTLE","BE","BEAR","BEAT","BEAUTIFUL","BECAUSE","BECOME","BED","BEDROOM","BEFORE","BEGIN","BEGINNING","BEHAVIOUR","BEHIND","BELIEF","BELIEVE","BELONG","BELOW","BENEATH","BENEFIT","BESIDE","BEST","BETTER","BETWEEN","BEYOND","BIG","BILL","BIND","BIRD","BIRTH","BIT","BLACK","BLOCK","BLOOD","BLOODY","BLOW","BLUE","BOARD","BOAT","BODY","BONE","BOOK","BORDER","BOTH","BOTTLE","BOTTOM","BOX","BOY","BRAIN","BRANCH","BREAK","BREATH","BRIDGE","BRIEF","BRIGHT","BRING","BROAD","BROTHER","BUDGET","BUILD","BUILDING","BURN","BUS","BUSINESS","BUSY","BUT","BUY","BY","CABINET","CALL","CAMPAIGN","CAN","CANDIDATE","CAPABLE","CAPACITY","CAPITAL","CAR","CARD","CARE","CAREER","CAREFUL","CAREFULLY","CARRY","CASE","CASH","CAT","CATCH","CATEGORY","CAUSE","CELL","CENTRAL","CENTRE","CENTURY","CERTAIN","CERTAINLY","CHAIN","CHAIR","CHAIRMAN","CHALLENGE","CHANCE","CHANGE","CHANNEL","CHAPTER","CHARACTER","CHARACTERISTIC","CHARGE","CHEAP","CHECK","CHEMICAL","CHIEF","CHILD","CHOICE","CHOOSE","CHURCH","CIRCLE","CIRCUMSTANCE","CITIZEN","CITY","CIVIL","CLAIM","CLASS","CLEAN","CLEAR","CLEARLY","CLIENT","CLIMB","CLOSE","CLOSELY","CLOTHES","CLUB","COAL","CODE","COFFEE","COLD","COLLEAGUE","COLLECT","COLLECTION","COLLEGE","COLOUR","COMBINATION","COMBINE","COME","COMMENT","COMMERCIAL","COMMISSION","COMMIT","COMMITMENT","COMMITTEE","COMMON","COMMUNICATION","COMMUNITY","COMPANY","COMPARE","COMPARISON","COMPETITION","COMPLETE","COMPLETELY","COMPLEX","COMPONENT","COMPUTER","CONCENTRATE","CONCENTRATION","CONCEPT","CONCERN","CONCERNED","CONCLUDE","CONCLUSION","CONDITION","CONDUCT","CONFERENCE","CONFIDENCE","CONFIRM","CONFLICT","CONGRESS","CONNECT","CONNECTION","CONSEQUENCE","CONSERVATIVE","CONSIDER","CONSIDERABLE","CONSIDERATION","CONSIST","CONSTANT","CONSTRUCTION","CONSUMER","CONTACT","CONTAIN","CONTENT","CONTEXT","CONTINUE","CONTRACT","CONTRAST","CONTRIBUTE","CONTRIBUTION","CONTROL","CONVENTION","CONVERSATION","COPY","CORNER","CORPORATE","CORRECT","COS","COST","COULD","COUNCIL","COUNT","COUNTRY","COUNTY","COUPLE","COURSE","COURT","COVER","CREATE","CREATION","CREDIT","CRIME","CRIMINAL","CRISIS","CRITERION","CRITICAL","CRITICISM","CROSS","CROWD","CRY","CULTURAL","CULTURE","CUP","CURRENT","CURRENTLY","CURRICULUM","CUSTOMER","CUT","DAMAGE","DANGER","DANGEROUS","DARK","DATA","DATE","DAUGHTER","DAY","DEAD","DEAL","DEATH","DEBATE","DEBT","DECADE","DECIDE","DECISION","DECLARE","DEEP","DEFENCE","DEFENDANT","DEFINE","DEFINITION","DEGREE","DELIVER","DEMAND","DEMOCRATIC","DEMONSTRATE","DENY","DEPARTMENT","DEPEND","DEPUTY","DERIVE","DESCRIBE","DESCRIPTION","DESIGN","DESIRE","DESK","DESPITE","DESTROY","DETAIL","DETAILED","DETERMINE","DEVELOP","DEVELOPMENT","DEVICE","DIE","DIFFERENCE","DIFFERENT","DIFFICULT","DIFFICULTY","DINNER","DIRECT","DIRECTION","DIRECTLY","DIRECTOR","DISAPPEAR","DISCIPLINE","DISCOVER","DISCUSS","DISCUSSION","DISEASE","DISPLAY","DISTANCE","DISTINCTION","DISTRIBUTION","DISTRICT","DIVIDE","DIVISION","DO","DOCTOR","DOCUMENT","DOG","DOMESTIC","DOOR","DOUBLE","DOUBT","DOWN","DRAW","DRAWING","DREAM","DRESS","DRINK","DRIVE","DRIVER","DROP","DRUG","DRY","DUE","DURING","DUTY","EACH","EAR","EARLY","EARN","EARTH","EASILY","EAST","EASY","EAT","ECONOMIC","ECONOMY","EDGE","EDITOR","EDUCATION","EDUCATIONAL","EFFECT","EFFECTIVE","EFFECTIVELY","EFFORT","EGG","EITHER","ELDERLY","ELECTION","ELEMENT","ELSE","ELSEWHERE","EMERGE","EMPHASIS","EMPLOY","EMPLOYEE","EMPLOYER","EMPLOYMENT","EMPTY","ENABLE","ENCOURAGE","END","ENEMY","ENERGY","ENGINE","ENGINEERING","ENJOY","ENOUGH","ENSURE","ENTER","ENTERPRISE","ENTIRE","ENTIRELY","ENTITLE","ENTRY","ENVIRONMENT","ENVIRONMENTAL","EQUAL","EQUALLY","EQUIPMENT","ERROR","ESCAPE","ESPECIALLY","ESSENTIAL","ESTABLISH","ESTABLISHMENT","ESTATE","ESTIMATE","EVEN","EVENING","EVENT","EVENTUALLY","EVER","EVERY","EVERYBODY","EVERYONE","EVERYTHING","EVIDENCE","EXACTLY","EXAMINATION","EXAMINE","EXAMPLE","EXCELLENT","EXCEPT","EXCHANGE","EXECUTIVE","EXERCISE","EXHIBITION","EXIST","EXISTENCE","EXISTING","EXPECT","EXPECTATION","EXPENDITURE","EXPENSE","EXPENSIVE","EXPERIENCE","EXPERIMENT","EXPERT","EXPLAIN","EXPLANATION","EXPLORE","EXPRESS","EXPRESSION","EXTEND","EXTENT","EXTERNAL","EXTRA","EXTREMELY","EYE","FACE","FACILITY","FACT","FACTOR","FACTORY","FAIL","FAILURE","FAIR","FAIRLY","FAITH","FALL","FAMILIAR","FAMILY","FAMOUS","FAR","FARM","FARMER","FASHION","FAST","FATHER","FAVOUR","FEAR","FEATURE","FEE","FEEL","FEELING","FEMALE","FEW","FIELD","FIGHT","FIGURE","FILE","FILL","FILM","FINAL","FINALLY","FINANCE","FINANCIAL","FIND","FINDING","FINE","FINGER","FINISH","FIRE","FIRM","FIRST","FISH","FIT","FIX","FLAT","FLIGHT","FLOOR","FLOW","FLOWER","FLY","FOCUS","FOLLOW","FOLLOWING","FOOD","FOOT","FOOTBALL","FOR","FORCE","FOREIGN","FOREST","FORGET","FORM","FORMAL","FORMER","FORWARD","FOUNDATION","FREE","FREEDOM","FREQUENTLY","FRESH","FRIEND","FROM","FRONT","FRUIT","FUEL","FULL","FULLY","FUNCTION","FUND","FUNNY","FURTHER","FUTURE","GAIN","GAME","GARDEN","GAS","GATE","GATHER","GENERAL","GENERALLY","GENERATE","GENERATION","GENTLEMAN","GET","GIRL","GIVE","GLASS","GO","GOAL","GOD","GOLD","GOOD","GOVERNMENT","GRANT","GREAT","GREEN","GREY","GROUND","GROUP","GROW","GROWING","GROWTH","GUEST","GUIDE","GUN","HAIR","HALF","HALL","HAND","HANDLE","HANG","HAPPEN","HAPPY","HARD","HARDLY","HATE","HAVE","HE","HEAD","HEALTH","HEAR","HEART","HEAT","HEAVY","HELL","HELP","HENCE","HER","HERE","HERSELF","HIDE","HIGH","HIGHLY","HILL","HIM","HIMSELF","HIS","HISTORICAL","HISTORY","HIT","HOLD","HOLE","HOLIDAY","HOME","HOPE","HORSE","HOSPITAL","HOT","HOTEL","HOUR","HOUSE","HOUSEHOLD","HOUSING","HOW","HOWEVER","HUGE","HUMAN","HURT","HUSBAND","I","IDEA","IDENTIFY","IF","IGNORE","ILLUSTRATE","IMAGE","IMAGINE","IMMEDIATE","IMMEDIATELY","IMPACT","IMPLICATION","IMPLY","IMPORTANCE","IMPORTANT","IMPOSE","IMPOSSIBLE","IMPRESSION","IMPROVE","IMPROVEMENT","IN","INCIDENT","INCLUDE","INCLUDING","INCOME","INCREASE","INCREASED","INCREASINGLY","INDEED","INDEPENDENT","INDEX","INDICATE","INDIVIDUAL","INDUSTRIAL","INDUSTRY","INFLUENCE","INFORM","INFORMATION","INITIAL","INITIATIVE","INJURY","INSIDE","INSIST","INSTANCE","INSTEAD","INSTITUTE","INSTITUTION","INSTRUCTION","INSTRUMENT","INSURANCE","INTEND","INTENTION","INTEREST","INTERESTED","INTERESTING","INTERNAL","INTERNATIONAL","INTERPRETATION","INTERVIEW","INTO","INTRODUCE","INTRODUCTION","INVESTIGATE","INVESTIGATION","INVESTMENT","INVITE","INVOLVE","IRON","IS","ISLAND","ISSUE","IT","ITEM","ITS","ITSELF","JOB","JOIN","JOINT","JOURNEY","JUDGE","JUMP","JUST","JUSTICE","KEEP","KEY","KID","KILL","KIND","KING","KITCHEN","KNEE","KNOW","KNOWLEDGE","LABOUR","LACK","LADY","LAND","LANGUAGE","LARGE","LARGELY","LAST","LATE","LATER","LATTER","LAUGH","LAUNCH","LAW","LAWYER","LAY","LEAD","LEADER","LEADERSHIP","LEADING","LEAF","LEAGUE","LEAN","LEARN","LEAST","LEAVE","LEFT","LEG","LEGAL","LEGISLATION","LENGTH","LESS","LET","LETTER","LEVEL","LIABILITY","LIBERAL","LIBRARY","LIE","LIFE","LIFT","LIGHT","LIKE","LIKELY","LIMIT","LIMITED","LINE","LINK","LIP","LIST","LISTEN","LITERATURE","LITTLE","LIVE","LIVING","LOAN","LOCAL","LOCATION","LONG","LOOK","LORD","LOSE","LOSS","LOT","LOVE","LOVELY","LOW","LUNCH","MACHINE","MAGAZINE","MAIN","MAINLY","MAINTAIN","MAJOR","MAJORITY","MAKE","MALE","MAN","MANAGE","MANAGEMENT","MANAGER","MANNER","MANY","MAP","MARK","MARKET","MARRIAGE","MARRIED","MARRY","MASS","MASTER","MATCH","MATERIAL","MATTER","MAY","MAYBE","ME","MEAL","MEAN","MEANING","MEANS","MEANWHILE","MEASURE","MECHANISM","MEDIA","MEDICAL","MEET","MEETING","MEMBER","MEMBERSHIP","MEMORY","MENTAL","MENTION","MERELY","MESSAGE","METAL","METHOD","MIDDLE","MIGHT","MILE","MILITARY","MILK","MIND","MINE","MINISTER","MINISTRY","MINUTE","MISS","MISTAKE","MODEL","MODERN","MODULE","MOMENT","MONEY","MONTH","MORE","MORNING","MOST","MOTHER","MOTION","MOTOR","MOUNTAIN","MOUTH","MOVE","MOVEMENT","MUCH","MURDER","MUSEUM","MUSIC","MUST","MY","MYSELF","NAME","NARROW","NATION","NATIONAL","NATURAL","NATURE","NEAR","NEARLY","NECESSARILY","NECESSARY","NECK","NEED","NEGOTIATION","NEIGHBOUR","NEITHER","NETWORK","NEVER","NEVERTHELESS","NEW","NEWS","NEWSPAPER","NEXT","NICE","NIGHT","NO","NOBODY","NOD","NOISE","NONE","NOR","NORMAL","NORMALLY","NORTH","NORTHERN","NOSE","NOT","NOTE","NOTHING","NOTICE","NOTION","NOW","NUCLEAR","NUMBER","NURSE","OBJECT","OBJECTIVE","OBSERVATION","OBSERVE","OBTAIN","OBVIOUS","OBVIOUSLY","OCCASION","OCCUR","ODD","OF","OFF","OFFENCE","OFFER","OFFICE","OFFICER","OFFICIAL","OFTEN","OIL","OKAY","OLD","ON","ONCE","ONE","ONLY","ONTO","OPEN","OPERATE","OPERATION","OPINION","OPPORTUNITY","OPPOSITION","OPTION","OR","ORDER","ORDINARY","ORGANISATION","ORGANISE","ORGANIZATION","ORIGIN","ORIGINAL","OTHER","OTHERWISE","OUGHT","OUR","OURSELVES","OUT","OUTCOME","OUTPUT","OUTSIDE","OVER","OVERALL","OWN","OWNER","PACKAGE","PAGE","PAIN","PAINT","PAINTING","PAIR","PANEL","PAPER","PARENT","PARK","PARLIAMENT","PART","PARTICULAR","PARTICULARLY","PARTLY","PARTNER","PARTY","PASS","PASSAGE","PAST","PATH","PATIENT","PATTERN","PAY","PAYMENT","PEACE","PENSION","PEOPLE","PER","PERCENT","PERFECT","PERFORM","PERFORMANCE","PERHAPS","PERIOD","PERMANENT","PERSON","PERSONAL","PERSUADE","PHASE","PHONE","PHOTOGRAPH","PHYSICAL","PICK","PICTURE","PIECE","PLACE","PLAN","PLANNING","PLANT","PLASTIC","PLATE","PLAY","PLAYER","PLEASE","PLEASURE","PLENTY","PLUS","POCKET","POINT","POLICE","POLICY","POLITICAL","POLITICS","POOL","POOR","POPULAR","POPULATION","POSITION","POSITIVE","POSSIBILITY","POSSIBLE","POSSIBLY","POST","POTENTIAL","POUND","POWER","POWERFUL","PRACTICAL","PRACTICE","PREFER","PREPARE","PRESENCE","PRESENT","PRESIDENT","PRESS","PRESSURE","PRETTY","PREVENT","PREVIOUS","PREVIOUSLY","PRICE","PRIMARY","PRIME","PRINCIPLE","PRIORITY","PRISON","PRISONER","PRIVATE","PROBABLY","PROBLEM","PROCEDURE","PROCESS","PRODUCE","PRODUCT","PRODUCTION","PROFESSIONAL","PROFIT","PROGRAM","PROGRAMME","PROGRESS","PROJECT","PROMISE","PROMOTE","PROPER","PROPERLY","PROPERTY","PROPORTION","PROPOSE","PROPOSAL","PROSPECT","PROTECT","PROTECTION","PROVE","PROVIDE","PROVIDED","PROVISION","PUB","PUBLIC","PUBLICATION","PUBLISH","PULL","PUPIL","PURPOSE","PUSH","PUT","QUALITY","QUARTER","QUESTION","QUICK","QUICKLY","QUIET","QUITE","RACE","RADIO","RAILWAY","RAIN","RAISE","RANGE","RAPIDLY","RARE","RATE","RATHER","REACH","REACTION","READ","READER","READING","READY","REAL","REALISE","REALITY","REALIZE","REALLY","REASON","REASONABLE","RECALL","RECEIVE","RECENT","RECENTLY","RECOGNISE","RECOGNITION","RECOGNIZE","RECOMMEND","RECORD","RECOVER","RED","REDUCE","REDUCTION","REFER","REFERENCE","REFLECT","REFORM","REFUSE","REGARD","REGION","REGIONAL","REGULAR","REGULATION","REJECT","RELATE","RELATION","RELATIONSHIP","RELATIVE","RELATIVELY","RELEASE","RELEVANT","RELIEF","RELIGION","RELIGIOUS","RELY","REMAIN","REMEMBER","REMIND","REMOVE","REPEAT","REPLACE","REPLY","REPORT","REPRESENT","REPRESENTATION","REPRESENTATIVE","REQUEST","REQUIRE","REQUIREMENT","RESEARCH","RESOURCE","RESPECT","RESPOND","RESPONSE","RESPONSIBILITY","RESPONSIBLE","REST","RESTAURANT","RESULT","RETAIN","RETURN","REVEAL","REVENUE","REVIEW","REVOLUTION","RICH","RIDE","RIGHT","RING","RISE","RISK","RIVER","ROAD","ROCK","ROLE","ROLL","ROOF","ROOM","ROUND","ROUTE","ROW","ROYAL","RULE","RUN","RURAL","SAFE","SAFETY","SALE","SAME","SAMPLE","SATISFY","SAVE","SAY","SCALE","SCENE","SCHEME","SCHOOL","SCIENCE","SCIENTIFIC","SCIENTIST","SCORE","SCREEN","SEA","SEARCH","SEASON","SEAT","SECOND","SECONDARY","SECRETARY","SECTION","SECTOR","SECURE","SECURITY","SEE","SEEK","SEEM","SELECT","SELECTION","SELL","SEND","SENIOR","SENSE","SENTENCE","SEPARATE","SEQUENCE","SERIES","SERIOUS","SERIOUSLY","SERVANT","SERVE","SERVICE","SESSION","SET","SETTLE","SETTLEMENT","SEVERAL","SEVERE","SEX","SEXUAL","SHAKE","SHALL","SHAPE","SHARE","SHE","SHEET","SHIP","SHOE","SHOOT","SHOP","SHORT","SHOT","SHOULD","SHOULDER","SHOUT","SHOW","SHUT","SIDE","SIGHT","SIGN","SIGNAL","SIGNIFICANCE","SIGNIFICANT","SILENCE","SIMILAR","SIMPLE","SIMPLY","SINCE","SING","SINGLE","SIR","SISTER","SIT","SITE","SITUATION","SIZE","SKILL","SKIN","SKY","SLEEP","SLIGHTLY","SLIP","SLOW","SLOWLY","SMALL","SMILE","SO","SOCIAL","SOCIETY","SOFT","SOFTWARE","SOIL","SOLDIER","SOLICITOR","SOLUTION","SOME","SOMEBODY","SOMEONE","SOMETHING","SOMETIMES","SOMEWHAT","SOMEWHERE","SON","SONG","SOON","SORRY","SORT","SOUND","SOURCE","SOUTH","SOUTHERN","SPACE","SPEAK","SPEAKER","SPECIAL","SPECIES","SPECIFIC","SPEECH","SPEED","SPEND","SPIRIT","SPORT","SPOT","SPREAD","SPRING","STAFF","STAGE","STAND","STANDARD","STAR","START","STATE","STATEMENT","STATION","STATUS","STAY","STEAL","STEP","STICK","STILL","STOCK","STONE","STOP","STORE","STORY","STRAIGHT","STRANGE","STRATEGY","STREET","STRENGTH","STRIKE","STRONG","STRONGLY","STRUCTURE","STUDENT","STUDIO","STUDY","STUFF","STYLE","SUBJECT","SUBSTANTIAL","SUCCEED","SUCCESS","SUCCESSFUL","SUCH","SUDDENLY","SUFFER","SUFFICIENT","SUGGEST","SUGGESTION","SUITABLE","SUM","SUMMER","SUN","SUPPLY","SUPPORT","SUPPOSE","SURE","SURELY","SURFACE","SURPRISE","SURROUND","SURVEY","SURVIVE","SWITCH","SYSTEM","TABLE","TAKE","TALK","TALL","TAPE","TARGET","TASK","TAX","TEA","TEACH","TEACHER","TEACHING","TEAM","TEAR","TECHNICAL","TECHNIQUE","TECHNOLOGY","TELEPHONE","TELEVISION","TELL","TEMPERATURE","TEND","TERM","TERMS","TERRIBLE","TEST","TEXT","THAN","THANK","THANKS","THAT","THE","THEATRE","THEIR","THEM","THEME","THEMSELVES","THEN","THEORY","THERE","THEREFORE","THESE","THEY","THIN","THING","THINK","THIS","THOSE","THOUGH","THOUGHT","THREAT","THREATEN","THROUGH","THROUGHOUT","THROW","THUS","TICKET","TIME","TINY","TITLE","TO","TODAY","TOGETHER","TOMORROW","TONE","TONIGHT","TOO","TOOL","TOOTH","TOP","TOTAL","TOTALLY","TOUCH","TOUR","TOWARDS","TOWN","TRACK","TRADE","TRADITION","TRADITIONAL","TRAFFIC","TRAIN","TRAINING","TRANSFER","TRANSPORT","TRAVEL","TREAT","TREATMENT","TREATY","TREE","TREND","TRIAL","TRIP","TROOP","TROUBLE","TRUE","TRUST","TRUTH","TRY","TURN","TWICE","TYPE","TYPICAL","UNABLE","UNDER","UNDERSTAND","UNDERSTANDING","UNDERTAKE","UNEMPLOYMENT","UNFORTUNATELY","UNION","UNIT","UNITED","UNIVERSITY","UNLESS","UNLIKELY","UNTIL","UP","UPON","UPPER","URBAN","US","USE","USED","USEFUL","USER","USUAL","USUALLY","VALUE","VARIATION","VARIETY","VARIOUS","VARY","VAST","VEHICLE","VERSION","VERY","VIA","VICTIM","VICTORY","VIDEO","VIEW","VILLAGE","VIOLENCE","VISION","VISIT","VISITOR","VITAL","VOICE","VOLUME","VOTE","WAGE","WAIT","WALK","WALL","WANT","WAR","WARM","WARN","WASH","WATCH","WATER","WAVE","WAY","WE","WEAK","WEAPON","WEAR","WEATHER","WEEK","WEEKEND","WEIGHT","WELCOME","WELFARE","WELL","WEST","WESTERN","WHAT","WHATEVER","WHEN","WHERE","WHEREAS","WHETHER","WHICH","WHILE","WHILST","WHITE","WHO","WHOLE","WHOM","WHOSE","WHY","WIDE","WIDELY","WIFE","WILD","WILL","WIN","WIND","WINDOW","WINE","WING","WINNER","WINTER","WISH","WITH","WITHDRAW","WITHIN","WITHOUT","WOMAN","WONDER","WONDERFUL","WOOD","WORD","WORK","WORKER","WORKING","WORKS","WORLD","WORRY","WORTH","WOULD","WRITE","WRITER","WRITING","WRONG","YARD","YEAH","YEAR","YES","YESTERDAY","YET","YOU","YOUNG","YOUR","YOURSELF","YOUTH"};
+    set<int> triangle;
+    for(int n = 1; n < 300; ++n)
+        triangle.insert(n*(n+1)/2);
+    int res = 0;
+    for(int i = 0; i < sizeof(words)/sizeof(char*); ++i){
+        int sum = 0;
+        for(char *cp = words[i]; *cp; ++cp ) sum += *cp-'A'+1;
+        if ( triangle.find(sum) != triangle.end()) res++;
+    }
+    return res;
+}
+
+long long task43()
+{
+    long long sum = 0;
+    for( int d10 = 0; d10 <= 9; ++d10){
+        vector<int> digit;
+        auto AlredyUsed = [&digit](int n){ auto i = find(digit.begin(),digit.end(),n); return i != digit.end(); };
+        auto Clear = [&digit](int n){ auto i = digit.begin()+n; if ( i != digit.end()) digit.erase(i, digit.end());};
+        digit.push_back(d10);
+        for( int d9 = 0; d9 <= 9; ++d9){
+            Clear(1);
+            if ( AlredyUsed(d9) ) continue;
+            digit.push_back(d9);
+                for( int d8 = 0; d8 <= 9; ++d8){
+                    Clear(2);
+                    if ( AlredyUsed(d8) || (d8*100+d9*10 + d10) % 17 ) continue;
+                    digit.push_back(d8);
+                    for(int d7 = 0; d7 <=9; ++d7){
+                        Clear(3);
+                        if ( AlredyUsed(d7) || (d7*100+d8*10 + d9) % 13 ) continue;
+                        digit.push_back(d7);
+                        for(int d6 = 0; d6 <=9; ++d6){
+                            Clear(4);
+                            if ( AlredyUsed(d6) || (d6*100+d7*10 + d8) % 11 ) continue;
+                            digit.push_back(d6);
+                            for(int d5 = 0; d5 <=9; ++d5){
+                                Clear(5);
+                                if ( AlredyUsed(d5) || (d5*100+d6*10 + d7) % 7 ) continue;
+                                digit.push_back(d5);
+                                for(int d4 = 0; d4 <=9; d4 += 2){
+                                    Clear(6);
+                                    if ( AlredyUsed(d4) || (d4*100+d5*10 + d6) % 5 ) continue;
+                                    digit.push_back(d4);
+                                    for(int d3 = 0; d3 <=9; ++d3){
+                                        Clear(7);
+                                        if ( AlredyUsed(d3) || (d3*100+d4*10 + d5) % 3 ) continue;
+                                        digit.push_back(d3);
+                                        for(int d2 = 0; d2 <=9; ++d2){
+                                            Clear(8);
+                                            if ( AlredyUsed(d2) ) continue;
+                                            digit.push_back(d2);
+                                            for( int i = 0; i <= 9; ++i)
+                                                if ( !AlredyUsed(i) ){
+                                                    long long tmp = i;
+                                                    for(int j = 8; j >= 0; --j) tmp = tmp*10 + digit[j];
+                                                    sum += tmp;
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    return sum;
+}
+
+long long task45()
+{
+    boost::timer::auto_cpu_timer t("\t%ws\n");
+    for(int n = 144; n < 100000; n++){
+        long long h = n*(2*n-1);
+        long long t=0, p = 0;
+        t = sqrt(2*h);
+        t = t*(t+1)/2;
+        if ( t != h ) continue;
+        p = (1+sqrt(1+24*h))/6;
+        p = p*(3*p-1)/2;
+        if ( t == p && t == h )
+            return h;
+    }
+    return 0;
+}
+
+long long task47()
+{
+    vector<long> primes;
+    PrimesUpTo(primes, 1000000);
+    bool notFound = true;
+    stack<long long> res;
+    for(long long n = 12; notFound; ++n ){
+        set<long> tmp;
+        long long p = n;
+        auto Div = [&p,&primes](){ for(auto i = primes.begin(); i != primes.end(); ++i) if ( !(p%*i) ){ p /= *i; return static_cast<long>(*i);} p = 0; return 1l;};
+        do{
+            tmp.insert(Div());
+        }while(p > 1);
+        if ( !p ) return 0;
+        if ( tmp.size() != 4 ) continue;
+        if ( !res.empty() && res.top() != n-1 )
+            while( !res.empty() ) res.pop();
+        res.push(n);
+        if ( res.size() == 4){
+            res.pop();res.pop();res.pop();
+            return res.top();
+        }
+    }
+}
+
+void task48()
+{
+    LongNo res(1);
+    for(int i = 2; i <1000; ++i){
+        LongNo tmp(i);
+        for(int j =1; j < i; ++j)
+            tmp *= i;
+        res += tmp;
+    }
+     res.Print(10);
+}
+
+
+void task49()
+{
+    vector<long> primes;
+    PrimesUpTo(primes, 10000);
+    map<set<int>, vector<int> > res;
+    for( int i =0; i < primes.size(); ++i ){
+        set<int> tmp;
+        if ( primes[i] < 1000 ) continue;
+        int n = primes[i];
+        tmp.insert(n%10);
+        n /= 10;
+        tmp.insert(n%10);
+        n /= 10;
+        tmp.insert(n%10);
+        n /= 10;
+        tmp.insert(n);
+        if ( tmp.size() == 4)
+            res[tmp].push_back(primes[i]);
+    }
+    for(auto i = res.begin(); i != res.end(); ++i)
+        if ( i->second.size() == 3) if ( i->second[1] - i->second[0] == i->second[2] - i->second[0])
+            cout<<i->second[0]<<i->second[1]<<i->second[2]<<endl;
+}
+
+
+//template<typename T> class noncopyable
+//{
+//    
+//protected:
+//    noncopyable() {}
+//    ~noncopyable() {}
+//private:  
+//    noncopyable( const noncopyable& );
+//    noncopyable& operator=( const noncopyable& );
+//};
+//
+//template<typename T>struct obj:private noncopyable<T>{
+//
+//    obj(T t):smth_(t){}
+//    obj(){}
+//    T smth_;
+//};
+//
+//template<typename T>struct useObj{
+//    useObj(T t):member_(t){}
+//    useObj():member_(0){}
+//    obj<T> member_;
+//
+//    obj<T> GetObj(){ return member_;}
+//
+//};
+//template<class T> struct Loop 
+//{ 
+//    Loop<T*> operator->(); 
+//};
+
+
+using namespace std;
+
+bool nex_permutation(string::iterator b, string::iterator e)
+{
+    if ( e-b <= 1) return false;
+    // abc acb
+    // cab cba
+    // 52341  52413
+    vector<char> v(b,e);
+    bool permutate = false;
+    for(int n = v.size()-1, m = v.size()-1; !permutate && n >=0; --n,--m )
+        if ( v[n] < v[m]){
+            swap(v[n],v[m]);
+            permutate = true;
+            sort(v.begin()+m, v.end());
+            for(int i =0; i < v.size(); ++i ) *b++ = v[i];
+        }
+        return permutate;
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+    std::string s = "ab";
+    cout<<next_permutation(s.begin(), s.end())<<' '<<s<<endl;
+    s = "bb";
+    cout<<next_permutation(s.begin(), s.end())<<' '<<s<<endl;
+    s = "hefg";
+    cout<<next_permutation(s.begin(), s.end())<<' '<<s<<endl;
+    s = "dhck";
+    cout<<next_permutation(s.begin(), s.end())<<' '<<s<<endl;
+    s = "dkhc";
+    cout<<next_permutation(s.begin(), s.end())<<' '<<s<<endl;
+
+
+    //Loop<int> i, j = i->hooray();
+    //useObj<int> a(10);
+    //obj<int> b;
+    ////b = a.GetObj();
+    //useObj<int> c = a;
+	//std::cout<<"task1 "<<task1()<<std::endl;
+	//std::cout<<std::endl<<"task2 "<<task2()<<std::endl;
+	//std::cout<<std::endl<<"task3 "<<task3()<<std::endl;
+	//std::cout<<std::endl<<"task4 "<<task4()<<std::endl;
+	//std::cout<<std::endl<<"*task5 "<<task5()<<std::endl;
+	//std::cout<<std::endl<<"task6 "<<task6()<<std::endl;
+	//std::cout<<std::endl<<"task7 "<<task7()<<' '<<104743<<std::endl;
+	//std::cout<<std::endl<<"task8 "<<task8()<<std::endl;
+	//std::cout<<std::endl<<"task9 "<<task9()<<std::endl;
+	//std::cout<<std::endl<<"task10 "<<task10()<<std::endl;
+	//std::cout<<std::endl<<"task11 "<<task11()<<" 51267216"<<std::endl;
+	//std::cout<<std::endl<<"task12 "<<task12(500)<<std::endl;
+	//std::cout<<std::endl<<"task13 "<<task13().c_str()<<std::endl;
+	//std::cout<<std::endl<<"task14 "<<task14()<<std::endl;
+    std::cout<<std::endl<<"task15!!!!!!!!!!!!! "<<std::endl;
+    //std::cout<<std::endl<<"task16 "<<task16()<<std::endl;
+    //std::cout<<std::endl<<"task17 "<<task17()<<std::endl;
+    //std::cout<<std::endl<<"task18 "<<task18()<<std::endl;
+    //std::cout<<std::endl<<"task19 "<<task19()<<std::endl;
+    //std::cout<<std::endl<<"task20 "<<task20()<<std::endl;
+	//std::cout<<std::endl<<"task21 "<<task21()<<std::endl;
+	//std::cout<<std::endl<<"task22 "<<task22()<<std::endl;
+	//std::cout<<std::endl<<"task23 "<<task23()<<std::endl;
+	//std::cout<<std::endl<<"task24 "<<task24().c_str()<<std::endl;
+    //std::cout<<std::endl<<"task25 "<<task25()<<std::endl;
+    //std::cout<<std::endl<<"task26 "<<task26()<<std::endl;
+    //std::cout<<std::endl<<"task27 "<<task27()<<std::endl;
+    //std::cout<<std::endl<<"task28 "<<task28()<<std::endl;
+	//std::cout<<std::endl<<"task29 "<<task29()<<std::endl;
+    //std::cout<<std::endl<<"task30 "<<task30()<<std::endl;
+    //std::cout<<std::endl<<"task31 "<<task31()<<std::endl;
+    //std::cout<<std::endl<<"task32 "<<task32()<<std::endl;
+//    std::cout<<std::endl<<"task33 "<<task33()<<std::endl;
+    //std::cout<<std::endl<<"task34 "<<task34()<<std::endl;
+    //std::cout<<std::endl<<"task35 "<<task35()<<std::endl;
+    std::cout<<std::endl<<"task36 "<<task36()<<std::endl;
+    //std::cout<<std::endl<<"task37 "<<task37()<<std::endl;
+    //std::cout<<std::endl<<"task39 "<<task39()<<std::endl;
+    //std::cout<<std::endl<<"task41 "<<task41()<<std::endl;
+    //std::cout<<std::endl<<"task42 "<<task42()<<std::endl;
+    //std::cout<<std::endl<<"task43 "<<task43()<<std::endl;
+    //std::cout<<std::endl<<"task45 "<<task45()<<std::endl;
+    //std::cout<<std::endl<<"task47 "<<task47()<<std::endl;
+//    std::cout<<std::endl<<"task48 ";
+//    task48();
+//    cout<<std::endl;
+    //std::cout<<std::endl<<"task49 ";
+    //task49();
+    //std::cout<<std::endl;
+
+    return 0;
+}
+

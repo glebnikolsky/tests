@@ -1,0 +1,491 @@
+<?xml version="1.0"?>
+<GenLockString>
+	<LockStringProject no="1">
+		<VCProject path="D:\use_2014_1\Projects\DBManager" include="D:\use_2014_1\Projects\DBManager\Resource.h" res="D:\use_2014_1\Projects\DBManager\DbManager.rc" proj="DbManager" />
+		<ProjecInfo prefix="" lock_string="" />
+		<Menu id="IDR_OPTIONS">
+			<MenuItem id="ID_IDR_COPY" text="IDR_OPTIONS\Скопировать в буфер" />
+			<MenuItem id="ID_IDR_COPY_FOR_QUERY" text="IDR_OPTIONS\Скопировать в буфер для запроса" />
+			<MenuItem id="ID_IDR_SAVE_AS" text="XML\Сохранить как..." />
+			<MenuItem id="ID_IDR_DELETE" text="XML\Удалить" />
+			<MenuItem id="IDR_DBCOMPARE" text="Поиск\Сравнить" />
+			<MenuItem id="IDR_TOTEMPTABLES" text="Поиск\Во временные таблицы" />
+			<MenuItem id="IDR_DELETE_TESTS" text="Поиск\Удалить тесты" />
+			<MenuItem id="IDR_DELETE_SHEETS" text="Поиск\Удалить бланки" />
+			<MenuItem id="IDR_DELETE_TESTS_AND_SHEETS" text="Поиск\Удалить тесты и бланки" />
+			<MenuItem id="IDR_DELETE_TEMPORARY" text="Поиск\Удалить временные таблицы" />
+		</Menu>
+		<Dialog id="IDD_ABOUT_DIALOG" caption="О программе DBManager" />
+		<Dialog id="IDD_DB_MANAGER_DIALOG" caption="Управление БД">
+			<Control id="IDC_MAIN_CONTROL" type="control" />
+		</Dialog>
+		<Dialog id="IDD_PARTICIPANT_PAGE">
+			<Control id="IDC_LIST" type="control" />
+			<Control id="IDC_ADD" type="button" caption="Добавить" />
+			<Control id="IDC_EDIT" type="button" caption="Изменить" />
+			<Control id="IDC_DELETE" type="button" caption="Удалить" />
+			<Control id="IDC_VIEW" type="button" caption="Просмотр" />
+			<Control id="IDC_EXPORT_DATA_PPOI" type="button" caption="Экспорт данных в ППОИ" />
+			<Control id="IDC_IMPORT_DATA_PPOI" type="button" caption="Импорт данных из ППОИ" />
+			<Control id="IDC_REPORT_PROTOCOLS" type="button" caption="Менеджер протоколов" />
+			<Control id="IDC_LOAD_PROTOCOLS" type="button" caption="Загрузка протоколов" />
+			<Control id="IDC_ROLLBACK_PROTOCOLS" type="button" caption="Откатка протоколов" />
+			<Control id="IDC_SELECT" type="button" caption="Выборка" />
+			<Control id="IDC_BLACK_BOX" type="button" caption="Чёрный ящик" />
+		</Dialog>
+		<Dialog id="IDD_PROCESS_PAGE">
+			<Control id="IDC_PROGRESS_PACKAGES" type="control" />
+			<Control id="IDC_PROGRESS_PACKAGE" type="control" />
+			<Control id="IDC_PROGRESS_SHEET" type="control" />
+			<Control id="IDC_LOG_TEXT" type="control" />
+			<Control id="IDC_START" type="button" caption="Запустить" />
+			<Control id="IDC_STOP" type="button" caption="Остановить" />
+			<Control id="IDC_CLEAR" type="button" caption="Очистить" />
+		</Dialog>
+		<Dialog id="IDD_PROCESSSTART_DIALOG" caption="Запуск процесса">
+			<Control id="IDC_PROCESS_TYPE" type="combo|list" />
+			<Control id="IDC_PACKAGE_AMOUNT" type="edit" />
+			<Control id="IDC_PACKAGE_MASK" type="edit" />
+			<Control id="IDC_SELECT_PACKAGE_MASK" type="button" caption="..." />
+			<Control id="IDC_GROUP_AMOUNT" type="edit" />
+			<Control id="IDC_CLEAR_DATABASE" type="control" caption="Очистить базу данных при загрузке" />
+			<Control id="IDC_INSERT_PACKAGES" type="control" caption="Добавить пакеты в базу данных при загрузке" />
+			<Control id="IDC_CSV_PROTOCOL" type="control" caption="CSV протокол" />
+			<Control id="IDC_XML_PROTOCOL" type="control" caption="XML протокол" />
+			<Control id="IDC_BIN_PROTOCOL" type="control" caption="BIN протокол" />
+			<Control id="IDC_DB_PROTOCOL" type="control" caption="DB протокол" />
+			<Control id="IDOK" type="button" caption="Запустить" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_COMPLECT_PAGE">
+			<Control id="IDC_UPLOAD_PDFFILE" type="button" caption="Загрузить данные PDF файла" />
+			<Control id="IDC_UPLOAD_BOXFILE" type="button" caption="Загрузить данные BOX файла" />
+			<Control id="IDC_UPLOAD_PACKFILE" type="button" caption="Загрузить данные PACK файла" />
+			<Control id="IDC_UPLOAD_KIMFILE" type="button" caption="Загрузить данные KIM файла" />
+			<Control id="IDC_ADD_COMPLECTS" type="button" caption="Добавить новые комплекты " />
+		</Dialog>
+		<Dialog id="IDD_SESSION_PAGE">
+			<Control id="IDC_SESSION_LIST" type="control" />
+			<Control id="IDC_FILTER_BUTTON" type="button" caption="Фильтр" />
+			<Control id="IDC_PING_BUTTON" type="button" caption="Пинг" />
+			<Control id="IDC_PINGALL_BUTTON" type="button" caption="Пинг все" />
+			<Control id="IDC_MSG_BUTTON" type="button" caption="Сообщ" />
+			<Control id="IDC_MSGALL_BUTTON" type="button" caption="Сообщ все" />
+			<Control id="IDC_CLOSE_BUTTON" type="button" caption="Закрыть" />
+			<Control id="IDC_FILTER_EDIT" type="edit" />
+		</Dialog>
+		<Dialog id="IDD_PROGRESS_DIALOG" caption="Процесс">
+			<Control id="IDC_BREAK_BUTTON" type="button" caption="Прервать" />
+			<Control id="IDC_PROGRESS_BAR" type="control" />
+		</Dialog>
+		<Dialog id="IDD_TEXT_SEND_DIALOG" caption="Сообщение">
+			<Control id="IDC_TEXT_EDIT" type="edit" />
+			<Control id="IDOK" type="button" caption="Отправить" />
+			<Control id="IDCANCEL" type="button" caption="Отмена" />
+		</Dialog>
+		<Dialog id="IDD_SESSION_SELECTOR_DIALOG" caption="Фильтр на выбор сессий">
+			<Control id="IDOK" type="button" caption="Применить" />
+			<Control id="IDCANCEL" type="button" caption="Отмена" />
+			<Control id="IDC_COMP_NAME_EDIT" type="edit" />
+			<Control id="IDC_STATION_COMBO" type="combo|list" />
+			<Control id="IDC_USER_COMBO" type="combo|list" />
+			<Control id="IDC_ACTIVE_COMBO" type="combo|list" />
+			<Control id="IDC_LISTSIZE_EDIT" type="edit" />
+			<Control id="IDC_REGION_COMBO" type="combo|list" />
+		</Dialog>
+		<Dialog id="IDD_PPOI_IMPORT_DIALOG" caption="Импорт данных">
+			<Control id="IDC_SHEET_PROGRESS" type="control" />
+			<Control id="IDC_PACKAGE_PROGRESS" type="control" />
+			<Control id="IDC_STATUS_EDIT" type="edit" />
+			<Control id="IDC_BREAK_BUTTON" type="button" caption="Прервать" />
+		</Dialog>
+		<Dialog id="IDD_EXAM_PAGE">
+			<Control id="IDC_EXAM_LIST" type="control" />
+			<Control id="IDC_FILTER_BUTTON" type="button" caption="Фильтр" />
+			<Control id="IDC_FINISHEXAM_BUTTON" type="button" caption="Завершить экзамен" />
+			<Control id="IDC_SHEETSINFO_BUTTON" type="button" caption="Несклейки" />
+			<Control id="IDC_EXAMOPEN_BUTTON" type="button" caption="Открыть экзамен" />
+		</Dialog>
+		<Dialog id="IDD_EXAM_SELECTOR_DIALOG" caption="Фильтр выбора экзаменов">
+			<Control id="IDOK" type="button" caption="Применить" />
+			<Control id="IDCANCEL" type="button" caption="Отмена" />
+			<Control id="IDC_TESTTYPE_COMBO" type="combo|list" />
+			<Control id="IDC_SUBJECT_COMBO" type="combo|list" />
+			<Control id="IDC_REGION_COMBO" type="combo|list" />
+			<Control id="IDC_EXAMDAY_COMBO" type="combo|list" />
+		</Dialog>
+		<Dialog id="IDD_EXAM_ERROR_DIALOG" caption="Несклейки">
+			<Control id="WS_TABSTOP" type="control" caption="Custom1&quot;,IDC_GRID_CONTROL,&quot;MFCGridCtrl" />
+			<Control id="IDC_SUBJECT_EDIT" type="edit" />
+			<Control id="IDC_EXAMDATE_EDIT" type="edit" />
+			<Control id="IDC_SHEET_TYPE_COMBO" type="combo|list" />
+			<Control id="WS_TABSTOP" type="control" caption="Custom1&quot;,IDC_FREESHEETS_LIST,&quot;MFCGridCtrl" />
+		</Dialog>
+		<Dialog id="IDD_SUMMARY_DIALOG" caption="Свойства">
+			<Control id="IDC_YES_BUTTON" type="button" caption="Да" />
+			<Control id="IDC_NO_BUTTON" type="button" caption="Нет" />
+			<Control id="IDC_SUMMARY_EDIT" type="edit" />
+			<Control id="IDC_FULL_REVISER_CHECK" type="control" caption="Проверять паспортные данные участников" />
+		</Dialog>
+		<Dialog id="IDD_PACKAGE_PAGE">
+			<Control id="IDC_LIST" type="control" />
+			<Control id="IDC_BACK_HUMANTESTS" type="button" caption="Откатка\nтестов" />
+			<Control id="IDC_DELETE" type="button" caption="Удаление" />
+			<Control id="IDC_EXPORT" type="button" caption="Экспорт" />
+			<Control id="IDC_REEXPORT" type="button" caption="Повторный экспорт" />
+			<Control id="IDC_SELECT" type="button" caption="Выборка" />
+			<Control id="IDC_VIEW" type="button" caption="Просмотр" />
+		</Dialog>
+		<Dialog id="IDD_EXPORT_FOLDER_DIALOG" caption="Выбор папки">
+			<Control id="IDC_FOLDER_PATH" type="edit" />
+			<Control id="IDC_BROWSE_FOLDER" type="button" caption="..." />
+			<Control id="IDOK" type="button" caption="Продолжить" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_LOAD_PROTOCOL_DIALOG" caption="Загрузка протоколов...">
+			<Control id="IDC_FOLDER1" type="edit" />
+			<Control id="IDC_BROWSE_FOLDER1" type="button" caption="..." />
+			<Control id="IDC_FOLDER2" type="edit" />
+			<Control id="IDC_BROWSE_FOLDER2" type="button" caption="..." />
+			<Control id="IDC_SHOW_MESSAGES" type="control" caption="Показывать сообщения" />
+			<Control id="IDC_PROGRESS_BAR" type="control" />
+			<Control id="IDC_LOAD_PROTOCOLS" type="button" caption="Загрузить" />
+			<Control id="IDCANCEL" type="button" caption="Закрыть" />
+			<Control id="IDC_SECONDARY_LOAD" type="control" caption="Загрузка после перепроверки" />
+		</Dialog>
+		<Dialog id="IDD_REGION_PAGE">
+			<Control id="IDC_OBJECT_TREE" type="control" />
+			<Control id="IDC_ADD_REGION" type="button" caption="Добавить регион" />
+			<Control id="IDC_ADD_AREA" type="button" caption="Добавить район" />
+			<Control id="IDC_ADD_SCHOOL" type="button" caption="Добавить учреждение" />
+			<Control id="IDC_EDIT_OBJECT" type="button" caption="Изменить" />
+			<Control id="IDC_DELETE_OBJECT" type="button" caption="Удалить" />
+		</Dialog>
+		<Dialog id="IDD_PROCESSDATA_DIALOG" caption="Обработка результатов">
+			<Control id="IDC_PROCESS_CONTROL" type="control" />
+		</Dialog>
+		<Dialog id="IDD_HUMANTEST_PAGE">
+			<Control id="IDC_LIST" type="control" />
+			<Control id="IDC_SHOW_STATISTIC" type="button" caption="Статистика" />
+			<Control id="IDC_BACK_HUMANTESTS" type="button" caption="Откатка\nтестов" />
+			<Control id="IDC_DELETE_PACKAGES" type="button" caption="Удаление пакетов" />
+		</Dialog>
+		<Dialog id="IDD_LICENSE_PAGE">
+			<Control id="IDC_LIST" type="control" />
+			<Control id="IDC_SHOW_STATISTIC" type="button" caption="Статистика" />
+		</Dialog>
+		<Dialog id="IDD_PROCESSSTART_GIA_DIALOG" caption="Запуск процесса">
+			<Control id="IDC_PROCESS_TYPE" type="combo|list" />
+			<Control id="IDC_PACKAGE_AMOUNT" type="edit" />
+			<Control id="IDC_PACKAGE_MASK" type="edit" />
+			<Control id="IDC_SELECT_PACKAGE_MASK" type="button" caption="..." />
+			<Control id="IDC_GROUP_AMOUNT" type="edit" />
+			<Control id="IDOK" type="button" caption="Запустить" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_COMPLECTSHEET_PAGE">
+			<Control id="IDC_COMPLECT_LIST" type="control" />
+			<Control id="IDC_SHEET_LIST" type="control" />
+			<Control id="IDC_COMPLECT_LIST_WORK" type="button" caption="Работа со списком" />
+			<Control id="IDC_COMPLECT_DATA_WORK" type="button" caption="Работа с данными" />
+			<Control id="IDC_SHEET_LIST_WORK" type="button" caption="Работа со списком" />
+			<Control id="IDC_SHEET_DATA_WORK" type="button" caption="Работа с данными" />
+			<Control id="IDC_SHOW_LOGGER" type="button" caption="Показать журнал" />
+		</Dialog>
+		<Dialog id="IDD_PROGRESS_DATA_DIALOG" caption="???">
+			<Control id="IDC_DO_BREAK" type="button" caption="Прервать" />
+			<Control id="WS_BORDER" type="control" caption="&quot;,IDC_PROGRESS_CONTROL,&quot;msctls_progress32" />
+		</Dialog>
+		<Dialog id="IDD_LOGGER_DATA_DLG" caption="Журнал ошибок">
+			<Control id="IDC_LOGGER" type="control" />
+			<Control id="IDC_LOGGER_CLEAR" type="button" caption="Очистить" />
+			<Control id="IDCANCEL" type="button" caption="Закрыть" />
+		</Dialog>
+		<Dialog id="IDD_PROCESS_COMPLECT_SELECT_DIALOG" caption="Выборка">
+			<Control id="IDC_CRITERION" type="combo|list" />
+			<Control id="IDC_REGION" type="combo|list" />
+			<Control id="IDC_SUBJECT" type="combo|list" />
+			<Control id="IDC_EXAMDATE" type="combo|list" />
+			<Control id="IDC_FILENAME" type="edit" />
+			<Control id="IDC_BARCODE" type="edit" />
+			<Control id="IDC_IS_CLEARED" type="control" caption="Очистить список" />
+			<Control id="IDC_STRING_AMOUNT" type="edit" />
+			<Control id="IDOK" type="button" caption="Выбрать" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_PROCESS_SHEET_SELECT_DIALOG" caption="Выборка">
+			<Control id="IDC_SHEETTYPE" type="combo|list" />
+			<Control id="IDC_CRITERION" type="combo|list" />
+			<Control id="IDC_REGION" type="combo|list" />
+			<Control id="IDC_SUBJECT" type="combo|list" />
+			<Control id="IDC_EXAMDATE" type="combo|list" />
+			<Control id="IDC_FILENAME" type="edit" />
+			<Control id="IDC_BARCODE" type="edit" />
+			<Control id="IDC_IS_CLEARED" type="control" caption="Очистить список" />
+			<Control id="IDC_STRING_AMOUNT" type="edit" />
+			<Control id="IDOK" type="button" caption="Выбрать" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_PROCESS_LIST_DIALOG" caption="Работа со списком">
+			<Control id="IDC_QUERY_RADIO" type="control" caption="Выполнить запрос к базе данных" />
+			<Control id="BS_AUTORADIOBUTTON" type="control" caption="Выбрать все записи&quot;,IDC_SELECT_RADIO,&quot;Button" />
+			<Control id="IDC_DESELECT_RADIO" type="control" caption="Снять выделение со всех записей" />
+			<Control id="IDOK" type="button" caption="Выполнить" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_PROCESS_COMPLECT_START_DIALOG" caption="Обработка комплектов">
+			<Control id="IDC_PROCESSTYPE" type="combo|list" />
+			<Control id="IDC_PACKAGE_AMOUNT" type="edit" />
+			<Control id="IDC_GROUP_AMOUNT" type="edit" />
+			<Control id="IDC_CLEAR_DATABASE" type="control" caption="Очистить базу данных при обработке " />
+			<Control id="IDC_SELECTED_RADIO" type="control" caption="Выделенные комплекты" />
+			<Control id="IDC_PACKAGE_RADIO" type="control" caption="Комплекты, содержащие бланки из пакета" />
+			<Control id="IDC_QUERY_RADIO" type="control" caption="Комплекты из выборки" />
+			<Control id="IDC_PACKAGE_MASK" type="edit" />
+			<Control id="IDC_REGION" type="combo|list" />
+			<Control id="IDC_SUBJECT" type="combo|list" />
+			<Control id="IDC_EXAMDATE" type="combo|list" />
+			<Control id="IDOK" type="button" caption="Запустить" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_PROGRESS_COMPLECT_DIALOG" caption="???">
+			<Control id="IDC_DO_BREAK" type="button" caption="Прервать" />
+			<Control id="WS_BORDER" type="control" caption="&quot;,IDC_PROGRESS_CONTROL,&quot;msctls_progress32" />
+		</Dialog>
+		<Dialog id="IDD_PROGRESS_SHEET_DIALOG" caption="???">
+			<Control id="IDC_DO_BREAK" type="button" caption="Прервать" />
+			<Control id="WS_BORDER" type="control" caption="&quot;,IDC_PROGRESS_CONTROL,&quot;msctls_progress32" />
+		</Dialog>
+		<Dialog id="IDD_PROCESS_SHEET_START_DIALOG" caption="Обработка бланков">
+			<Control id="IDC_PROCESSTYPE" type="combo|list" />
+			<Control id="IDC_PACKAGE_AMOUNT" type="edit" />
+			<Control id="IDC_GROUP_AMOUNT" type="edit" />
+			<Control id="IDC_CLEAR_DATABASE" type="control" caption="Очистить базу данных при обработке " />
+			<Control id="IDC_SELECTED_RADIO" type="control" caption="Выделенные бланки" />
+			<Control id="IDC_PACKAGE_RADIO" type="control" caption="Бланки из пакета" />
+			<Control id="IDC_QUERY_RADIO" type="control" caption="Бланки из выборки" />
+			<Control id="IDC_PACKAGE_MASK" type="edit" />
+			<Control id="IDC_SHEETTYPE" type="combo|list" />
+			<Control id="IDC_REGION" type="combo|list" />
+			<Control id="IDC_SUBJECT" type="combo|list" />
+			<Control id="IDC_EXAMDATE" type="combo|list" />
+			<Control id="IDOK" type="button" caption="Запустить" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_RESULTTEST_PAGE">
+			<Control id="IDC_RESULT_LIST" type="control" />
+			<Control id="IDC_RESULT_LIST_WORK" type="button" caption="Работа со списком" />
+			<Control id="IDC_RESULT_DATA_WORK" type="button" caption="Работа с данными" />
+			<Control id="IDC_SHOW_LOGGER" type="button" caption="Показать журнал" />
+		</Dialog>
+		<Dialog id="IDD_PARTICIPANT_VERIFY_DIALOG" caption="Проверка по базе данных">
+			<Control id="IDC_LIST" type="control" />
+		</Dialog>
+		<Dialog id="IDD_PROGRESS_REVISE_DIALOG" caption="???">
+			<Control id="WS_BORDER" type="control" caption="&quot;,IDC_PROGRESS_CONTROL,&quot;msctls_progress32" />
+		</Dialog>
+		<Dialog id="IDD_PARTICIPANT_REVISE_DIALOG" caption="Поиск по базе данных">
+			<Control id="IDC_LIST" type="control" />
+			<Control id="IDC_FIND_TARGET" type="button" caption="Найти в базе РЦОИ" />
+			<Control id="IDC_ADD_TARGET" type="button" caption="Добавить в базу РЦОИ" />
+			<Control id="IDC_EDIT_TARGET" type="button" caption="Изменить в базе РЦОИ" />
+			<Control id="IDC_EDIT_SOURCE" type="button" caption="Изменить в базе ППОИ" />
+			<Control id="IDCANCEL" type="button" caption="Закрыть окно" />
+		</Dialog>
+		<Dialog id="IDD_PARTICIPANT_SEARCH_DIALOG" caption="Поиск...">
+			<Control id="IDC_SEARCH_PARAM" type="combo|list" />
+			<Control id="IDOK" type="button" caption="Найти" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_PROCESS_RESULT_SELECT_DIALOG" caption="Выборка">
+			<Control id="IDC_CRITERION" type="combo|list" />
+			<Control id="IDC_REGION" type="combo|list" />
+			<Control id="IDC_SUBJECT" type="combo|list" />
+			<Control id="IDC_EXAMDATE" type="combo|list" />
+			<Control id="IDC_FILENAME" type="edit" />
+			<Control id="IDC_IS_CLEARED" type="control" caption="Очистить список" />
+			<Control id="IDC_STRING_AMOUNT" type="edit" />
+			<Control id="IDOK" type="button" caption="Выбрать" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+		</Dialog>
+		<Dialog id="IDD_APPEAL_VIEW_PAGE">
+			<Control id="IDC_LIST" type="control" />
+			<Control id="IDC_VIEWAPPEALBTN" type="button" caption="ButtonName" />
+			<Control id="IDC_SELECTAPPEALBTN" type="button" caption="ButtonName" />
+		</Dialog>
+		<Dialog id="IDD_CERTIFICATES_PAGE">
+			<Control id="IDC_CERTIFICATES_LIST" type="control" />
+			<Control id="IDC_BTN_FILTER" type="button" caption="Выборка" />
+		</Dialog>
+		<Dialog id="IDD_DOUBLES_FILTER" caption="Критерии поиска">
+			<Control id="IDOK" type="button" caption="OK" />
+			<Control id="IDCANCEL" type="button" caption="Cancel" />
+			<Control id="IDC_DOUBLE_TYPES" type="combo|list" />
+			<Control id="IDC_SEARCH_DATA" type="edit" />
+			<Control id="IDC_SEARCH_FITLER_TYPE_EXTRA" type="combo|list" />
+		</Dialog>
+		<Dialog id="IDD_HASPKEYLISTDLG" caption="Выберите ключ">
+			<Control id="IDOK" type="button" caption="OK" />
+			<Control id="IDCANCEL" type="button" caption="Cancel" />
+			<Control id="IDC_CBX_KEYS" type="combo|list" />
+		</Dialog>
+		<Dialog id="IDD_FANSPAGE">
+			<Control id="IDC_FANLIST" type="control" />
+			<Control id="IDC_CBXEXAM" type="combo|list" />
+			<Control id="IDC_BTNLOADANSWERS" type="button" caption="Загрузить из БД" />
+			<Control id="IDC_BTNSAVE" type="button" caption="Экспорт" />
+			<Control id="IDC_BTNIMPORT" type="button" caption="Импорт" />
+			<Control id="IDC_BTNUPDATESCHEME" type="button" caption="Загрузить в схему" />
+			<Control id="IDC_CBXEXAMVAR" type="combo|list" />
+		</Dialog>
+		<Dialog id="IDD_VARIANTSSELECTOR" caption="Выберите варианты">
+			<Control id="IDOK" type="button" caption="OK" />
+			<Control id="IDCANCEL" type="button" caption="Cancel" />
+			<Control id="IDC_VARIANTSLIST" type="control" />
+			<Control id="IDC_BTNCHECK" type="button" caption="Выделить/снять выделение" />
+		</Dialog>
+		<Dialog id="IDD_BINVIEWPAGE">
+			<Control id="IDLOAD_BIN_FILE" type="button" caption="Загрузить" />
+			<Control id="IDC_LIST" type="control" />
+			<Control id="ID_CALCULATE_CRC" type="button" caption="Подсчёт CRC" />
+		</Dialog>
+		<Dialog id="IDD_CRC_DIALOG" caption="Вычисление MD5">
+			<Control id="IDOK" type="button" caption="Закрыть" />
+			<Control id="IDC_CALCULATE" type="button" caption="Вычислить!" />
+			<Control id="IDC_SOURCE" type="edit" />
+		</Dialog>
+		<Dialog id="IDD_COMPLECT_PAGE_NEW" />
+		<Dialog id="IDD_SCALING_PAGE">
+			<Control id="IDC_EXAMS" type="combo|list" />
+			<Control id="IDC_SAVE" type="button" caption="Сохранить" />
+			<Control id="IDC_EDIT3_FROM" type="edit" />
+			<Control id="IDC_EDIT4_FROM" type="edit" />
+			<Control id="IDC_EDIT5_FROM" type="edit" />
+			<Control id="IDC_EDIT2_TO" type="edit" />
+			<Control id="IDC_EDIT3_TO" type="edit" />
+			<Control id="IDC_EDIT4_TO" type="edit" />
+			<Control id="IDC_EDIT5_TO" type="edit" />
+			<Control id="IDC_ALG3_FROM" type="edit" />
+			<Control id="IDC_ALG4_FROM" type="edit" />
+			<Control id="IDC_ALG5_FROM" type="edit" />
+			<Control id="IDC_ALG2_TO" type="edit" />
+			<Control id="IDC_ALG3_TO" type="edit" />
+			<Control id="IDC_ALG4_TO" type="edit" />
+			<Control id="IDC_ALG5_TO" type="edit" />
+			<Control id="IDC_GEO3_FROM" type="edit" />
+			<Control id="IDC_GEO4_FROM" type="edit" />
+			<Control id="IDC_GEO5_FROM" type="edit" />
+			<Control id="IDC_GEO2_TO" type="edit" />
+			<Control id="IDC_GEO3_TO" type="edit" />
+			<Control id="IDC_GEO4_TO" type="edit" />
+			<Control id="IDC_GEO5_TO" type="edit" />
+			<Control id="IDC_EDIT_GK4" type="edit" />
+			<Control id="IDC_EDIT_GK5" type="edit" />
+			<Control id="IDC_MFCPROPERTYGRID1" type="control" />
+		</Dialog>
+		<Dialog id="IDD_PARTICIPANT_PAGE_NEW">
+			<Control id="IDC_ADD" type="button" caption="Добавить" />
+			<Control id="IDC_EDIT" type="button" caption="Изменить" />
+			<Control id="IDC_DELETE" type="button" caption="Удалить" />
+			<Control id="IDC_VIEW" type="button" caption="Просмотр" />
+			<Control id="IDC_EXPORT_DATA_PPOI" type="button" caption="Экспорт данных в ППОИ" />
+			<Control id="IDC_IMPORT_DATA_PPOI" type="button" caption="Импорт данных из ППОИ" />
+			<Control id="IDC_REPORT_PROTOCOLS" type="button" caption="Менеджер протоколов" />
+			<Control id="IDC_LOAD_PROTOCOLS" type="button" caption="Загрузка протоколов" />
+			<Control id="IDC_ROLLBACK_PROTOCOLS" type="button" caption="Откатка протоколов" />
+			<Control id="IDC_SELECT" type="button" caption="Выборка" />
+			<Control id="IDC_BLACK_BOX" type="button" caption="Чёрный ящик" />
+		</Dialog>
+	</LockStringProject>
+	<LockStringProject no="2">
+		<VCProject path="D:\use_2014_1\Projects\CreateDatabase" include="D:\use_2014_1\Projects\CreateDatabase\inc\resource.h" res="D:\use_2014_1\Projects\CreateDatabase\res\CreateDatabase.rc" proj="CreateDatabase" />
+		<ProjecInfo prefix="" lock_string="" />
+		<Menu id="IDR_MAINFRAME">
+			<MenuItem id="ID_APP_EXIT" text="&amp;Файл\В&amp;ыход" />
+			<MenuItem id="ID_CONNECT_SVR" text="Операции с БД\Выбрать сервер" />
+			<MenuItem id="ID_CREATE_ERBD" text="Операции с БД\Создать базу" />
+			<MenuItem id="ID_UPDATE_ERBD" text="Операции с БД\Обновить базу" />
+			<MenuItem id="ID_DELETE_DATABASE" text="Операции с БД\Удалить базу" />
+			<MenuItem id="ID_LOAD_SCHEME" text="Операции с БД\Загрузить/обновить схему" />
+			<MenuItem id="ID_SET_AUTH" text="Операции с БД\Сменить авторизацию базы на текущую" />
+			<MenuItem id="ID_RUN_SCRIPT" text="Операции с БД\Выполнить скрипт" />
+			<MenuItem id="ID_CHANGE_PREDCODE" text="Операции с БД\Код представительства" />
+			<MenuItem id="ID_AUTH53" text="Авторизации\5.3" />
+			<MenuItem id="ID_AUTH54" text="Авторизации\5.4" />
+			<MenuItem id="ID_AUTH55" text="Авторизации\5.5" />
+			<MenuItem id="ID_VIEW_AUTH_ONLY" text="&amp;Вид\Только БД с текущей авторизацией" />
+			<MenuItem id="ID_VIEW_STATUS_BAR" text="&amp;Вид\&amp;Строка состояния" />
+			<MenuItem id="ID_APP_ABOUT" text="&amp;Справка\&amp;О проекте CreateDatabase..." />
+		</Menu>
+		<Dialog id="IDD_ABOUTBOX" caption="О проекте CreateDB">
+			<Control id="IDOK" type="button" caption="OK" />
+			<Control id="IDC_EDIT1" type="edit" />
+			<Control id="IDC_EDIT2" type="edit" />
+			<Control id="IDC_EDIT3" type="edit" />
+			<Control id="IDC_EDIT4" type="edit" />
+			<Control id="IDC_EDIT5" type="edit" />
+		</Dialog>
+		<Dialog id="IDD_ACCESS_DIALOG" caption="Параметры доступа">
+			<Control id="IDOK" type="button" caption="OK" />
+			<Control id="IDCANCEL" type="button" caption="Отмена" />
+			<Control id="IDC_SERVER" type="edit" />
+			<Control id="IDC_LGN" type="edit" />
+			<Control id="IDC_PWD" type="edit" />
+			<Control id="IDC_AUTH_SELECT" type="combo|list" />
+			<Control id="IDC_CHECK1" type="control" caption="SQL Express" />
+		</Dialog>
+		<Dialog id="IDD_CHANGEPREDCODE" caption="Смена кода представительства">
+			<Control id="IDOK" type="button" caption="OK" />
+			<Control id="IDCANCEL" type="button" caption="Отменить" />
+			<Control id="IDC_EDIT1" type="edit" />
+			<Control id="IDC_EDIT2" type="edit" />
+			<Control id="IDC_EDIT5" type="edit" />
+		</Dialog>
+		<Dialog id="IDD_CREATE_DATABASE" caption="Создание базы данных">
+			<Control id="IDOK" type="button" caption="OK" />
+			<Control id="IDCANCEL" type="button" caption="Отмена" />
+			<Control id="IDC_EDIT1" type="edit" />
+			<Control id="IDC_EDIT2" type="edit" />
+			<Control id="IDC_SELECT_FILE" type="button" caption="..." />
+			<Control id="IDC_EDIT3" type="edit" />
+			<Control id="IDC_SELECT_DBPATH" type="button" caption="..." />
+			<Control id="IDC_EDIT4" type="edit" />
+			<Control id="IDC_SELECT_LOGPATH" type="button" caption="..." />
+			<Control id="IDC_REPORT" type="edit" />
+		</Dialog>
+		<Dialog id="IDD_SQLFS_BROWSE_DIALOG" caption="Выберите папку на сервере">
+			<Control id="IDOK" type="button" caption="Выбрать" />
+			<Control id="IDCANCEL" type="button" caption="Отмена" />
+			<Control id="IDC_SQLFS_TREE" type="control" />
+			<Control id="IDC_PATH_EDIT" type="edit" />
+		</Dialog>
+		<Dialog id="IDD_SELECT_FILE" caption="Выберите файл двойным щелчком">
+			<Control id="IDC_LIST1" type="combo|list" />
+		</Dialog>
+		<Dialog id="IDD_DO_SCRIPT" caption="Dialog">
+			<Control id="IDOK" type="button" caption="OK" />
+			<Control id="IDCANCEL" type="button" caption="Отмена" />
+			<Control id="IDC_DBNAME" type="edit" />
+			<Control id="IDC_FILENAME" type="edit" />
+			<Control id="IDC_BUTTON1" type="button" caption="..." />
+			<Control id="IDC_REPORT" type="edit" />
+			<Control id="IDC_USEDBN" type="control" caption="Выполнить скрипт для базы данных" />
+		</Dialog>
+		<Dialog id="IDD_LOADSCHEME" caption="Dialog">
+			<Control id="IDOK" type="button" caption="Загрузить в базу" />
+			<Control id="IDCANCEL" type="button" caption="Выход" />
+			<Control id="IDC_SCHEMEPATH" type="edit" />
+			<Control id="IDC_SELECTFILE" type="button" caption="..." />
+			<Control id="IDC_LIBVERFL" type="edit" />
+			<Control id="IDC_VERFL" type="edit" />
+			<Control id="IDC_DATEFL" type="edit" />
+			<Control id="IDC_LIBVERDB" type="edit" />
+			<Control id="IDC_VERDB" type="edit" />
+			<Control id="IDC_LOADSCHEME" type="edit" />
+			<Control id="IDC_EDIT4" type="edit" />
+			<Control id="IDC_BUTTON2" type="button" caption="Прочитать файл" />
+			<Control id="IDC_SCHEMTYPEFL" type="edit" />
+			<Control id="IDC_SCHEMTYPEDB" type="edit" />
+		</Dialog>
+	</LockStringProject>
+</GenLockString>

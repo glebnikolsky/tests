@@ -1,0 +1,8 @@
+triples1	 repeat_count = 50	pithagoras_max = 40000	1421.41sec
+triples11	 repeat_count = 50	pithagoras_max = 40000	937.795sec
+triples12	 repeat_count = 50	pithagoras_max = 40000	939.667sec
+triples2	 repeat_count = 50	pithagoras_max = 40000	9052.16sec
+triples3	 repeat_count = 50	pithagoras_max = 40000	9029.95sec
+triples4	 repeat_count = 50	pithagoras_max = 40000	521.605sec
+triples5	 repeat_count = 50	pithagoras_max = 40000	531.58sec
+triples6	 repeat_count = 50	pithagoras_max = 40000	524.584sec

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<GenLocString>
+	<LockStringProject no="1">
+		<VSproject file="dfsadfsadfsadgfdsfgsd\dfg sdfgsdfgsdfgsdfg\dsfgsdfgsdfgsdfg" name="dsfgsdfgsdfgsdfg" prefix="FTC." />
+		<menu IDR="sadkfjaslkdjflksadjfklsad'">
+			<menuItem name="adadasdadad" id="12" caption="sdfsadgf sdfgsdgsdfgsdfgsdfg dsfg dsfg" />
+			<menuItem name="qqqqqqqqqqqqqq" id="13" caption="dsglsd; sdg dfg " />
+		</menu>
+		<dialog name="sfsa fsadfsa dgfsadgfsadg" IDD="30">
+			<control ID="12" name="sad asFD SAFASDF ASF" Caption="sd afsfgsdgf sdgsdg" />
+		</dialog>
+	</LockStringProject>
+	<LockStringProject no="2">
+		<VSproject file="dfsadfsadfsadgfdsfgsd\dfg sdfgsdfgsdfgsdfg\dsfgsdfgsdfgsdfg" name="dsfgsdfgsdfgsdfg" prefix="FTC." />
+		<menu IDR="sadkfjaslkdjflksadjfklsad'">
+			<menuItem name="adadasdadad" id="12" caption="sdfsadgf sdfgsdgsdfgsdfgsdfg dsfg dsfg" />
+			<menuItem name="qqqqqqqqqqqqqq" id="13" caption="dsglsd; sdg dfg " />
+		</menu>
+		<dialog name="sfsa fsadfsa dgfsadgfsadg" IDD="30">
+			<control ID="12" name="sad asFD SAFASDF ASF" Caption="sd afsfgsdgf sdgsdg" />
+		</dialog>
+	</LockStringProject>
+	<LockStringProject no="3">
+		<VSproject file="dfsadfsadfsadgfdsfgsd\dfg sdfgsdfgsdfgsdfg\dsfgsdfgsdfgsdfg" name="dsfgsdfgsdfgsdfg" prefix="FTC." />
+		<menu IDR="sadkfjaslkdjflksadjfklsad'">
+			<menuItem name="adadasdadad" id="12" caption="sdfsadgf sdfgsdgsdfgsdfgsdfg dsfg dsfg" />
+			<menuItem name="qqqqqqqqqqqqqq" id="13" caption="dsglsd; sdg dfg " />
+		</menu>
+		<dialog name="sfsa fsadfsa dgfsadgfsadg" IDD="30">
+			<control ID="12" name="sad asFD SAFASDF ASF" Caption="sd afsfgsdgf sdgsdg" />
+		</dialog>
+	</LockStringProject>
+	<LockStringProject no="4">
+		<VSproject file="dfsadfsadfsadgfdsfgsd\dfg sdfgsdfgsdfgsdfg\dsfgsdfgsdfgsdfg" name="dsfgsdfgsdfgsdfg" prefix="FTC." />
+		<menu IDR="sadkfjaslkdjflksadjfklsad'">
+			<menuItem name="adadasdadad" id="12" caption="sdfsadgf sdfgsdgsdfgsdfgsdfg dsfg dsfg" />
+			<menuItem name="qqqqqqqqqqqqqq" id="13" caption="dsglsd; sdg dfg " />
+		</menu>
+		<dialog name="sfsa fsadfsa dgfsadgfsadg" IDD="30">
+			<control ID="12" name="sad asFD SAFASDF ASF" Caption="sd afsfgsdgf sdgsdg" />
+		</dialog>
+	</LockStringProject>
+</GenLocString>

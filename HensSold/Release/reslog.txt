@@ -1,0 +1,14 @@
+Log 0
+ 1341.305343s wall, 1326.866505s user + 6.630043s system = 1333.496548s CPU (99.4%)
+Log 1
+ 1330.259822s wall, 1321.266070s user + 6.021639s system = 1327.287708s CPU (99.8%)
+Log 2
+ 1337.349533s wall, 1327.786911s user + 6.411641s system = 1334.198553s CPU (99.8%)
+Log 3
+ 271.433244s wall, 268.540121s user + 1.279208s system = 269.819330s CPU (99.4%)
+Log 4
+ 164.796950s wall, 163.957051s user + 0.015600s system = 163.972651s CPU (99.5%)
+Log 5
+ 164.687825s wall, 163.691849s user + 0.046800s system = 163.738650s CPU (99.4%)
+No Log 
+ 1.065416s wall, 1.060807s user + 0.000000s system = 1.060807s CPU (99.6%)

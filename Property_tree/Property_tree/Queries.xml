@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!-- 
+	Запросы для Typography
+-->
+<queries>
+	<query> <!--  Описание одного запроса -->
+		<aliase>q1</aliase> <!--  Имя ветки реестра для сохранения параметров грида для этого запроса, 
+								  желательно не менять, должно быть уникально в пределах файла -->
+		<name>Запрос 1</name> <!--  название запроса, отображаемое в пользовательском интерфейсе. Уникально!  -->
+		<columns>4</columns> <!--  количество столбцов. Так проще  -->
+		<headers>Дата экзамена;Предмет;Зона;Итого</headers> <!--  заголовки столбцов. Пусть даже пустой тег. Разделитель ';'   -->
+		<body><![CDATA[
+select  PF.ExamDate,PF.SubjectCode, pf.ZoneCode, COUNT(*)
+from fct.PdfFiles PF inner join fct.PressPre PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.Pdfname = PP.Pdfname
+	  AND pf.RowNumber = PP.PdfNumber  
+		  inner join fct.LoadFile LF ON 
+			pp.LoadFileID = LF.LoadFileID	 
+where 	
+	   Pf.ExamDate > '$ExamDate$' and LF.LoadDate > '$LoadDate$'
+	   --and LF.LoadDate > '2015-04-27 19:00:00.000'
+		--and pp.regioncode <> 90
+		  --Pf.ExamDate = '2015.05.28' --and LF.LoadDate > '2015-04-15 00:00:00.000'
+		--and pp.regioncode <> 90
+		--and pp.regioncode in (86,49,83,38)
+		--and Pf.ExamDate in ('2015.06.26')
+		--and pf.SubjectCode in (29,30, 31,33)
+		--and pf.ZoneCode = 0
+	
+group by PF.ExamDate,PF.SubjectCode,pf.ZoneCode
+order by PF.ExamDate,PF.SubjectCode, pf.ZoneCode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q2</aliase> 
+		<columns>6</columns>
+		<headers>Регион;Дата экзамена;Предмет;Зона;Вариант;Итого</headers> 
+		<name>Запрос 2</name>
+		<body><![CDATA[
+select pp.regioncode, PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode, COUNT(*)
+from fct.PdfFiles PF inner join fct.pressPre PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.Pdfname = PP.Pdfname
+	  AND pf.RowNumber = PP.PdfNumber   
+where 	
+	   Pf.ExamDate > '$ExamDate$' --and Pf.SubjectCode = $SubjectCode$
+		--and pp.regioncode = 90 and PF.SubjectCode = 1
+group by pp.regioncode,PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+order by pp.regioncode,PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q3</aliase> 
+		<columns>4</columns>
+		<headers>Дата экзамена;Предмет;Зона;Итого</headers>
+		<name>Запрос 3</name>
+		<body><![CDATA[
+select  PF.ExamDate,PF.SubjectCode, pf.ZoneCode, COUNT(*)
+from fct.PdfFiles PF inner join fct.PressKims PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.Pdfname = PP.Pdfname
+	  AND pf.RowNumber = PP.PdfNumber  
+		  inner join fct.LoadFile LF ON 
+			pp.LoadFileID = LF.LoadFileID
+		  inner join fct.PressPacks PPs ON
+		   pp.PackNumber = PPs.PackNumber 
+		  inner join fct.PressBoxs PB ON
+		   PPs.BoxNumber = PB.BoxNumber  		 
+where 	
+	   Pf.ExamDate > '$ExamDate$' and LF.LoadDate > '$LoadDate$'
+		--and PF.SubjectCode = 22
+		--and pp.Pdfname like '%p_ZOU.%'
+		--and PB.RegionCode = 90
+group by PF.ExamDate,PF.SubjectCode,pf.ZoneCode
+order by PF.ExamDate,PF.SubjectCode, pf.ZoneCode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q4</aliase> 
+		<columns>5</columns>
+		<headers>Дата экзамена;Предмет;Зона;Вариант;Итого</headers>
+		<name>Запрос 4</name>
+		<body><![CDATA[
+select  PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode, COUNT(*)
+from fct.PdfFiles PF inner join fct.PressKims PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.Pdfname = PP.Pdfname
+	  AND pf.RowNumber = PP.PdfNumber   
+	  inner join fct.LoadFile LF ON 
+			pp.LoadFileID = LF.LoadFileID	 
+	
+where 	
+	   Pf.ExamDate > '$ExamDate$' and LF.LoadDate > '$LoadDate$' and pp.SubjectCode = $SubjectCode$
+group by PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+order by PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q5</aliase> 
+		<columns>2</columns>
+		<headers>Дата экзамена;Итого</headers>
+		<name>Запрос 5</name>
+		<body><![CDATA[
+SELECT examdate, COUNT(*)
+FROM fct.PressPre PP
+WHERE PP.ExamDate > '$ExamDate$'
+group by examdate
+order by examdate
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q6</aliase> 
+		<columns>3</columns>
+		<headers>Дата экзамена;Предмет;Итого</headers>
+		<name>Запрос 6</name>
+		<body><![CDATA[
+SELECT examdate,subjectcode, COUNT(*)
+FROM fct.PressPre PP
+WHERE PP.ExamDate > '$ExamDate$'
+group by examdate, subjectcode
+order by examdate, subjectcode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q7</aliase> 
+		<columns>5</columns>
+		<headers>Дата экзамена;Предмет;Зона;Вариант;Итого</headers>
+		<name>Запрос 7</name>
+		<body><![CDATA[
+select  PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode, COUNT(*)
+from fct.PdfFiles PF inner join fct.pressPre PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.PdfName = PP.PdfName
+	  AND pf.RowNumber = PP.PdfNumber   
+where 	
+	   Pf.ExamDate > '$ExamDate$' and Pf.SubjectCode = $SubjectCode$
+group by PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+order by PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q8</aliase> 
+		<columns>6</columns>
+		<headers>Регион;Дата экзамена;Предмет;Зона;Вариант;Итого</headers>
+		<name>Запрос 8</name>
+		<body><![CDATA[
+select pp.regioncode, PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode, COUNT(*)
+from fct.PdfFiles PF inner join fct.pressPre PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.PdfName = PP.PdfName
+	  AND pf.RowNumber = PP.PdfNumber   
+where 	
+	   Pf.ExamDate > '$ExamDate$' --and Pf.SubjectCode = $SubjectCode$
+group by pp.regioncode,PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+order by pp.regioncode,PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q9</aliase> 
+		<columns>4</columns>
+		<headers>Дата экзамена;Предмет;Зона;Итого</headers>
+		<name>Запрос 9</name>
+		<body><![CDATA[
+select  PF.ExamDate,PF.SubjectCode, pf.ZoneCode, COUNT(*)
+from fct.PdfFiles PF inner join fct.pressPre PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.PdfName = PP.PdfName
+	  AND pf.RowNumber = PP.PdfNumber   
+where 	
+	   Pf.ExamDate > '$ExamDate$'
+group by PF.ExamDate,PF.SubjectCode,pf.ZoneCode
+order by PF.ExamDate,PF.SubjectCode, pf.ZoneCode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q10</aliase> 
+		<columns>6</columns>
+		<headers>Регион;Дата экзамена;Предмет;Зона;Вариант;Итого</headers>
+		<name>Запрос 10</name>
+		<body><![CDATA[
+select pp.regioncode, PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode, COUNT(*)
+from fct.PdfFiles PF inner join fct.pressPre PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.PdfName = PP.PdfName
+	  AND pf.RowNumber = PP.PdfNumber   
+					inner join fct.LoadFile LF ON 
+		pp.LoadFileID = LF.LoadFileID			
+where 	
+	   Pf.ExamDate > '$ExamDate$' and LF.LoadDate > '$LoadDate$'
+group by pp.regioncode,PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+order by pp.regioncode,PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q11</aliase> 
+		<columns>4</columns>
+		<headers>Дата экзамена;Предмет;Зона;Итого</headers>
+		<name>Запрос 11</name>
+		<body><![CDATA[
+select  PF.ExamDate,PF.SubjectCode, pf.ZoneCode, COUNT(*)
+from fct.PdfFiles PF inner join fct.pressPre PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.PdfName = PP.PdfName
+	  AND pf.RowNumber = PP.PdfNumber  
+		  inner join fct.LoadFile LF ON 
+			pp.LoadFileID = LF.LoadFileID	 
+where 	
+	   Pf.ExamDate > '$ExamDate$'and LF.LoadDate < '$LoadDate$'
+group by PF.ExamDate,PF.SubjectCode,pf.ZoneCode
+order by PF.ExamDate,PF.SubjectCode, pf.ZoneCode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q12</aliase> 
+		<columns>5</columns>
+		<headers>Дата экзамена;Предмет;Зона;Вариант;Итого</headers>
+		<name>Запрос 12</name>
+		<body><![CDATA[
+select  PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode, COUNT(*)
+from fct.PdfFiles PF inner join fct.pressPre PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.PdfName = PP.PdfName
+	  AND pf.RowNumber = PP.PdfNumber   
+	  inner join fct.LoadFile LF ON 
+			pp.LoadFileID = LF.LoadFileID	 
+	
+where 	
+	   Pf.ExamDate > '$ExamDate$' and LF.LoadDate > '$LoadDate$'
+group by PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+order by PF.ExamDate,PF.SubjectCode,pf.ZoneCode, pf.variantcode
+]]></body> 
+	</query>
+	<query> 
+		<aliase>q13</aliase> 
+		<columns>5</columns>
+		<headers>Регион;Дата экзамена;Предмет;Зона</headers>
+		<name>Запрос 13</name>
+		<body><![CDATA[
+select    CAST(R.Region AS varchar) + ' - ' + R.RegionName , PF.ExamDate, CAST(S.SubjectCode AS varchar) + ' - ' + S.SubjectName,pf.ZoneCode
+from fct.PdfFiles PF inner join fct.pressPre PP   ON  
+		PF.SubjectCode =  PP.SubjectCode 
+	  AND PF.ExamDate = PP.ExamDate
+	  AND pf.ZoneCode = PP.ZoneCode
+	  AND pf.PdfName = PP.PdfName
+	  AND pf.RowNumber = PP.PdfNumber   
+					inner join fct.LoadFile LF ON 
+		pp.LoadFileID = LF.LoadFileID	inner join rbdc_Regions R ON 
+		pp.regioncode = R.REGION        inner join sc_Subjects S ON 
+		pp.SubjectCode = S.SubjectCode
+where 	
+	   Pf.ExamDate > '$ExamDate$' and LF.LoadDate < '$LoadDate$'
+group by pp.regioncode,CAST(R.Region AS varchar) + ' - ' + R.RegionName,PF.ExamDate,PF.SubjectCode , CAST(S.SubjectCode AS varchar) + ' - ' + S.SubjectName,pf.ZoneCode
+order by pp.regioncode, CAST(R.Region AS varchar) + ' - ' + R.RegionName,PF.ExamDate,PF.SubjectCode,pf.ZoneCode
+]]></body> 
+	</query>
+</queries>
+

@@ -1,0 +1,258 @@
+d:\u_use\projects\acdstation\acdstation.vcxproj
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\acstation\acstation_vs2012.vcxproj
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\ResizableLib\include;$(IncludePath)</IncludePath>
+d:\u_use\projects\acstation\acstation_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\appealprocess\appealprocess.vcxproj
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+d:\u_use\projects\appealprocess\appealprocess_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\baseadmin\baseadmin_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared;\\DEV-SRV\lib\boost\boost-1_68</IncludePath>
+	<IncludePath>\\dev-srv\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+d:\u_use\projects\countercrc\countercrc_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\createdatabase\createdatabase.vcxproj
+	<IncludePath>$(WindowsSDK_IncludePath);\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\ResizableLib\include;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\ResizableLib\include;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\ResizableLib\src\ResizableLib;$(IncludePath)</IncludePath>
+d:\u_use\projects\createdatabase\createdatabase_vs2015.vcxproj
+	<IncludePath>\\dev-srv\lib\Ultimate Grid\Include;\\dev-srv\lib\boost\boost-1_68;$(IncludePath);$(WindowsSDK_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\ResizableLib\include;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared;\\DEV-SRV\lib\ResizableLib\include</IncludePath>
+d:\u_use\projects\csv2xml\csv2xml_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\dbmanager\dbmanager_vs2012.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\ResizableLib\src\ResizableLib;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\ResizableLib\src\ResizableLib;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\ResizableLib\src\ResizableLib;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\dev-srv\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\dbmanager\dbmanager_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\ResizableLib\src\ResizableLib;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\DEV-SRV\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\dev-srv\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\fineform60\fineform60_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcac\ftcac_vs2012.vcxproj
+	<IncludePath>\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+d:\u_use\projects\ftcac\ftcac_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcauthstat\ftcauthstat_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftccheckergia\ftccheckergia_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftccheckerntw\ftccheckerntw_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcconfig\ftcconfig_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);C:\Program Files (x86)\Windows Kits\10\Include\10.0.10586.0\ucrt</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\lib-1_68;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);$(VC_LibraryPath_x86)</IncludePath>
+d:\u_use\projects\ftccontrol\ftccontrol_vs2012.vcxproj
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+d:\u_use\projects\ftccontrol\ftccontrol_vs2015.vcxproj
+	<IncludePath>\\dev-srv\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftccontrolac\ftccontrolac_vs2012.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+d:\u_use\projects\ftccontrolac\ftccontrolac_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcdat\ftcdat_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcdatcontrols\ftcdatcontrols.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+d:\u_use\projects\ftcexcel11lite\ftcexcel11lite_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcexpertgia\ftcexpertgia_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcexpertntw\ftcexpertntw_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcexportchecker\ftcexportchecker_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcexportergia\ftcexportergia_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcexporterntw\ftcexporterntw_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcmath\ftcmath_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcnet\ftcnet_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcoptions\ftcoptions.vcxproj
+	<IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\boost\boost-1_64</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\boost\boost-1_64</IncludePath>
+d:\u_use\projects\ftcoptions\ftcoptions_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\boost\boost-1_64</IncludePath>
+d:\u_use\projects\ftcorfo\ftcorfo_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+d:\u_use\projects\ftcprintcallback\ftcprintcallback_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+d:\u_use\projects\ftcreviewer\ftcreviewer_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcuac\ftcuac_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\dev-srv\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+d:\u_use\projects\ftcusecontrol\ftcusecontrol_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcuseload\ftcuseload_vs2012.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+d:\u_use\projects\ftcuseload\ftcuseload_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcutil\ftcutil_vs2012.vcxproj
+	<IncludePath>\\dev-srv\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+d:\u_use\projects\ftcutil\ftcutil_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\ftcviewer\ftcviewer_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\genlockstring\genlockstring.vcxproj
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\ResizableLib\include;\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\genlockstring\genlockstring_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\ResizableLib\include;\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared;\\DEV-SRV\lib\ResizableLib\include</IncludePath>
+d:\u_use\projects\genlockstring-old\genlocstring.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\Ultimate Grid\Include;$(IncludePath)</IncludePath>
+d:\u_use\projects\handwriter\handwriter_vs2012.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_55;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_55;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\ResizableLib\src\ResizableLib;$(IncludePath)</IncludePath>
+d:\u_use\projects\handwriter\handwriter_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_55;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir_71A)include;$(FrameworkSDKDir_71A)include</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_55;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\ResizableLib\src\ResizableLib;$(IncludePath)</IncludePath>
+	<IncludePath>\\dev-srv\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\importgiadlg\importgiadlg.vcxproj
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\importgiadlg\importgiadlg_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\investigator\investigator.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\ResizableLib\include;$(IncludePath)</IncludePath>
+d:\u_use\projects\investigator\investigator_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\dev-srv\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+d:\u_use\projects\proverka\proverka_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\replace\replace.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\reportfill\reportfill_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\schemeeditor\schemeeditor_vs2015.vcxproj
+	<IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\schemeupdater\schemeupdater_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\scriptenvelope\scriptenvelope.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\scripter\scripter.vcxproj
+	<IncludePath>\\10.0.18.1\lib\ResizableLib\include;\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\ResizableLib\include;\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\ResizableLib\include;\\DEV-SRV\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\scripter\scripter_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\ResizableLib\include;\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\setversion\setversion.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\statistics\statistics_vs2015.vcxproj
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>$(UniversalCRT_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\Ultimate Grid\Include;$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\testbulkload\testbulkload.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\testingmodule\testingmodule_vs2015.vcxproj
+	<IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);\\DEV-SRV\lib\boost\boost-1_68;$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\tests\schemetests\schemetests.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+d:\u_use\projects\testthirdcheck\testthirdcheck_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\typography\typography.vcxproj
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\10.0.18.1\lib\ResizableLib\include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\10.0.18.1\lib\ResizableLib\include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\10.0.18.1\lib\ResizableLib\include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\typography\typography_vs2015.vcxproj
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\10.0.18.1\lib\ResizableLib\include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\DEV-SRV\lib\boost\boost-1_68;$(IncludePath)</IncludePath>
+	<IncludePath>\\10.0.18.1\lib\Ultimate Grid\Include;\\10.0.18.1\lib\ResizableLib\include;\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\unitstests\ftcutilstesting\ftcutilstesting.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;$(IncludePath)</IncludePath>
+d:\u_use\projects\unitstests\ftcutilsut\ftcutilsut.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\ResizableLib\include;$(IncludePath)</IncludePath>
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_64;\\10.0.18.1\lib\ResizableLib\include;$(IncludePath)</IncludePath>
+d:\u_use\projects\wrmsxml\wrmsxml_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)Include\um;$(WIndowsSDKDir_81)Include\shared</IncludePath>
+d:\u_use\projects\zlib\zlib_vs2015.vcxproj
+	<IncludePath>\\DEV-SRV\lib\boost\boost-1_68;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);$(UniversalCRT_IncludePath);$(WIndowsSDKDir_81)\Include;$(IncludePath)</IncludePath>

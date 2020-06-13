@@ -1,0 +1,6 @@
+crc16 linear	32768	32768
+crc16 random	41413	24123
+0
+
+linear crc32	0	4294967296
+0
