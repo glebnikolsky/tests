@@ -52,11 +52,12 @@ bool Guid::operator <= (const Guid &r) const { return val_ <= r.val_; }
 
 bool Guid::operator >= (const Guid &r) const {	return val_ >= r.val_; }
 
-const Guid& Guid::operator = (const Guid& r) 
+Guid& Guid::operator = (const Guid& r) 
 {
 	val_ = r.val_;
 	return *this;
 }
+
 
 const Guid& Guid::operator = (const TCHAR *str) {	return *this = Guid(str); }
 

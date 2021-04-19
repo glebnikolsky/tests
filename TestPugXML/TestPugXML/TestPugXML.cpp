@@ -5,6 +5,8 @@ Script::// TestPugXML.cpp : Defines the entry point for the console application.
 #include "TestPugXML.h"
 #include "pugixml.hpp"
 #include <fstream>
+#include <iostream>
+#include <sstream>
 #include <sstream>
 #include <string>
 #include <set>
@@ -610,17 +612,28 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		}
 		else
 		{
-			Selector apd_;
-			apd_.SetQuery("/Selector/Criterion[@type='rro']");
-		    apd_.Open(_T("Selector.apd"));
+			//Selector apd_;
+			//apd_.SetQuery("/Selector/Criterion[@type='rro']");
+		 //   apd_.Open(_T("Selector.apd"));
 
-			if (!apd_.IsOpen()) {
-				std::string err(_T("Не загружается файл Selector.apd.\n "));
-				err += apd_.ErrorText();
-				AfxMessageBox(err.c_str());
-			}
-			std::string sql = apd_.GetSql(2);
-			std::set<std::string> t = apd_.GetRequired(2);
+			//if (!apd_.IsOpen()) {
+			//	std::string err(_T("Не загружается файл Selector.apd.\n "));
+			//	err += apd_.ErrorText();
+			//	AfxMessageBox(err.c_str());
+			//}
+			//std::string sql = apd_.GetSql(2);
+			//std::set<std::string> t = apd_.GetRequired(2);
+			pugi::xml_document doc;
+			pugi::xml_parse_result result;
+			result = doc.load_string("<test atr1=\"1\" atr2=\"2\"/>");
+			if ( !result) 
+				std::cout<<result.description()<<'\n';
+			pugi::xml_node test = doc.first_child();
+			std::cout<<test.attribute("atr1").as_string()<<"\t"<<test.attribute("atr2").as_string()<<"\t"<<test.attribute("atr3").as_string()<<"\n"<<
+				test.attribute("atr1").as_int()<<"\t"<<test.attribute("atr2").as_int()<<"\t"<<test.attribute("atr3").as_int()<<"\n"
+				<<(test.attribute("atr3").as_string() == "");
+
+
 		}
 	}
 	else
