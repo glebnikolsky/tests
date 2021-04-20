@@ -27,6 +27,7 @@ int main()
 	copy(begin(d), end(d), ostream_iterator<int>(ofs, ";"));
 	ofs << '\n';
 
+
     return 0;
 }
 
