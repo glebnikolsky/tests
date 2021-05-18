@@ -128,6 +128,10 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		}
 		else
 		{
+			test t{ 1 };
+			t.(1);
+			t.(2);
+
 			boost::timer::auto_cpu_timer t;
 			setlocale(LC_ALL, "ru-RU");
 			if (argc < 3) {

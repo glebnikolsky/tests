@@ -630,7 +630,7 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 				std::cout<<result.description()<<'\n';
 			pugi::xml_node test = doc.first_child();
 			std::cout<<test.attribute("atr1").as_string()<<"\t"<<test.attribute("atr2").as_string()<<"\t"<<test.attribute("atr3").as_string()<<"\n"<<
-				test.attribute("atr1").as_int()<<"\t"<<test.attribute("atr2").as_int()<<"\t"<<test.attribute("atr3").as_int()<<"\n"
+				test.attribute("atr1").as_int()<<"\t"<<test.attribute("atr2").as_int()<<"\t"<<test.attribute("atr3").as_int(-1)<<"\n"
 				<<(test.attribute("atr3").as_string() == "");
 
 

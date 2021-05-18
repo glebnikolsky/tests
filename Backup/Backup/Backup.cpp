@@ -9,6 +9,7 @@
 #include <string>
 #include <Windows.h>
 
+
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
@@ -19,7 +20,7 @@ namespace ba = boost::algorithm;
 
 fs::path inpath;
 fs::path outpath;
-std::string extensions{ "txt;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx;h;hh;hpp;hxx;hm;inl;inc;xsd;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon - ms;xml;vcxproj;filters;user;sln;reg;bat" };
+std::string extensions{ "txt;cpp;c;cc;cxx;def;odl;idl;bat;asm;asmx;h;hh;hpp;hxx;inl;inc;rc;ico;cur;bmp;dlg;rc2;gif;jpg;jpeg;jpe;tiff;tif;png;mfcribbon - ms;xml;vcxproj;filters;user;sln;reg" };
 
 std::set<std::string> ext;
 
@@ -81,6 +82,7 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	inpath = fs::canonical(fs::path(argv[1]));
+	if (!exists(fs::path(argv[2]))) create_directories(fs::path(argv[2]));
 	outpath = fs::canonical(fs::path(argv[2]));
 	make_path();
 	make_extensions();
