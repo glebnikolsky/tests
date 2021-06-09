@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 
+
 #include <algorithm>
 #include <iostream>
 #include <chrono>
@@ -13,9 +14,12 @@
 #include <memory>
 #include <vector>
 #include <assert.h>
+#include <sstream>
+#include <boost/circular_buffer.hpp>
+#include <boost/format.hpp>
+#include <boost/timer/timer.hpp>
 
 #include "ThreadSafeQueue.h"
-
 
 
 
@@ -86,6 +90,99 @@
 //};
 //
 
+long GenKimNo( long seq, bool oral, int year )
+{
+	if ( oral ) {
+		int code = 2 + year* 3;
+		long tmp = seq;
+		for ( int i{0}; tmp; ++i, tmp /= 10 ) code += (i % 2 ? 1 : 3) * (tmp % 10);
+		return seq * 10 + (code % 10 ? 10 - code % 10 : 0);
+	}
+	else return seq;
+}
+
+long GenKimNo1( long seq, bool oral, int year )
+{
+	if ( oral ){
+		std::pair<long, long> no = std::make_pair( 200000 + year * 10000, seq );
+		int veight[13] = {1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1};
+		long tmp = no.first;
+		int code( 0 );
+		for ( int i = 5; tmp && i >= 0; --i, tmp /= 10 ) code += veight[i] * (tmp % 10);
+		tmp = no.second;
+		for ( int i = 11; tmp && i > 5; --i, tmp /= 10 ) code += veight[i] * (tmp % 10);
+		no.second *= 10;
+		no.second += code % 10 ? 10 - code % 10 : 0;
+		return no.second;
+	}
+	else return seq;
+}
+
+std::string ToEAN13N1( std::pair<long, long> &no )
+{
+
+	int veight[13] = {1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1};
+	std::string ret;
+	std::ostringstream ean;
+	ean << boost::format( _T( "%1$3d%2$09d0" ) ) % no.first % no.second;
+	ret = ean.str();
+	int code( 0 );
+	for ( int i = 0; i < 12; ++i ) code += veight[i] * (ret[i] - '0');
+	code = code % 10 ? 10 - code % 10 : 0;
+	if ( code ) ret[12] = ret[12] + code;
+
+	return ret;
+}
+
+std::string ToEAN13N2( std::pair<long, long> &no )
+{
+	std::string ret;
+	std::ostringstream ean;
+	ean << boost::format( _T( "%1$3d%2$09d0" ) ) % no.first % no.second;
+	ret = ean.str();
+	int code( 0 );
+	for ( int i = 0; i < 12; ++i ) code += (i % 2 ? 3 : 1) * (ret[i] - '0');
+	code = code % 10 ? 10 - code % 10 : 0;
+	ret[12] = ret[12] + code;
+	return ret;
+}
+
+std::string ToEAN13N3( std::pair<long, long> &no )
+{
+	auto tmp = no;
+	int code{0};
+	for ( int i{0}; tmp.first; ++i, tmp.first /= 10 ) code += (i % 2 ? 3 : 1) * ( tmp.first % 10);
+	for ( int i{0}; tmp.second; ++i, tmp.second /= 10 ) code += (i % 2 ? 1 : 3) * (tmp.second % 10);
+	no.second = no.second *10 +(code % 10 ? 10 - code % 10 : 0);
+	std::ostringstream ean;
+	ean << boost::format( _T( "%1$3d%2$010d" ) ) % no.first % no.second;
+	return ean.str();
+}
+
+std::string ToEAN13N4( long long &&no )
+{
+	//0123456789123
+	int code{0};
+	long long tmp{no};
+	for ( int i{1}; tmp; ++i, tmp /= 10 ) code += (i % 2 ? 3 : 1) * (tmp % 10);
+	return std::to_string( no * 10 + (code % 10 ? 10 - code % 10 : 0));
+}
+
+std::string ToEAN13N5( long long &&no )
+{
+	//0123456789123
+	int code{0};
+	long long tmp{no};
+	std::string res(13,'0');
+	for ( int i{1}, j{11}; tmp; ++i, tmp /= 10,--j ){
+		int r = tmp % 10;
+		res[j] += r;
+		code += (i % 2 ? 3 : 1) * r;
+	}
+	res[12] += code % 10 ? 10 - code % 10 : 0;
+	return res;
+}
+
 
 
 int main()
@@ -109,7 +206,69 @@ int main()
 	//for (auto i : cb) std::cout << '\t' << i->a_ << ' ' << i->b_ << '\t';
 	//std::cout << '\n';
 	//std::cout << '\n';
-		
+	const long Z = 100000;
+	for ( int i = 0; i < 10; ++i )
+		for ( long j : {1, 2, 3, 4} )
+			for ( long k{0}; k < Z; ++k )
+				if ( ToEAN13N5( (200 + i * 10 + j) * 1000000000ll + k ) != ToEAN13N1( std::make_pair( 200 + i * 10 + j, std::move( k ) ) ) )
+					std::cout << ToEAN13N5( (200 + i * 10 + j) * 1000000000ll + k   ) << ' ' << ToEAN13N1( std::make_pair( 200 + i * 10 + j, std::move( k ) ) ) << '\n';
+	{
+		boost::timer::auto_cpu_timer t;
+		for ( int i = 0; i < 10; ++i )
+			for ( long j : {1, 2, 3, 4} )
+				for ( long k{0}; k < Z; ++k )
+					ToEAN13N1( std::make_pair( 200 + i * 10 + j, std::move( k ) ) );
+	}
+	{
+		boost::timer::auto_cpu_timer t;
+		for ( int i = 0; i < 10; ++i )
+			for ( long j : {1, 2, 3, 4} )
+				for ( long k{0}; k < Z; ++k )
+					ToEAN13N2( std::make_pair( 200 + i * 10 + j, std::move( k ) ) );
+	}
+	{
+		boost::timer::auto_cpu_timer t;
+		for ( int i = 0; i < 10; ++i )
+			for ( long j : {1, 2, 3, 4} )
+				for ( long k{0}; k < Z; ++k )
+					ToEAN13N3( std::make_pair( 200 + i * 10 + j, std::move( k ) ) );
+	}
+	{
+		boost::timer::auto_cpu_timer t;
+		for ( int i = 0; i < 10; ++i )
+			for ( long j : {1, 2, 3, 4} )
+				for ( long k{0}; k < Z; ++k )
+					ToEAN13N4( (200 + i * 10 + j) * 1000000000 +k  );
+	}
+	{
+		boost::timer::auto_cpu_timer t;
+		for ( int i = 0; i < 10; ++i )
+			for ( long j : {1, 2, 3, 4} )
+				for ( long k{0}; k < Z; ++k )
+					ToEAN13N5( (200 + i * 10 + j) * 1000000000 + k );
+	}
+
+	return 0;
+	for(int i=0; i< 10; ++i )
+	std::cout << GenKimNo( 123456, true, i ) << ' ' << GenKimNo( 123456, true, i ) << '\n';
+
+	return 0;
+	boost::circular_buffer<int> tst( 10 );
+	tst.push_back( 1 );
+	tst.push_back( 2 );
+	tst.push_back( 3 );
+	tst.push_back( 4 );
+	for ( auto &i : tst )
+		std::cout << i << ' ';
+	std::cout << '\n';
+	tst.pop_front();
+	tst.push_back( 5 );
+	tst.front() = 10;
+	for ( auto &i : tst )
+		std::cout << i << ' ';
+	std::cout << '\n';
+	return 0;
+
 	ThreadSafeQueue q;
 	std::thread::id id = std::this_thread::get_id();
 	for (int i = 0; i < 100; ++i) q.push_back(test_struct(-1, i), id);
