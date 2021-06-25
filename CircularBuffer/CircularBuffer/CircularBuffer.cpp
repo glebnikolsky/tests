@@ -206,53 +206,56 @@ int main()
 	//for (auto i : cb) std::cout << '\t' << i->a_ << ' ' << i->b_ << '\t';
 	//std::cout << '\n';
 	//std::cout << '\n';
-	const long Z = 100000;
-	for ( int i = 0; i < 10; ++i )
-		for ( long j : {1, 2, 3, 4} )
-			for ( long k{0}; k < Z; ++k )
-				if ( ToEAN13N5( (200 + i * 10 + j) * 1000000000ll + k ) != ToEAN13N1( std::make_pair( 200 + i * 10 + j, std::move( k ) ) ) )
-					std::cout << ToEAN13N5( (200 + i * 10 + j) * 1000000000ll + k   ) << ' ' << ToEAN13N1( std::make_pair( 200 + i * 10 + j, std::move( k ) ) ) << '\n';
-	{
-		boost::timer::auto_cpu_timer t;
-		for ( int i = 0; i < 10; ++i )
-			for ( long j : {1, 2, 3, 4} )
-				for ( long k{0}; k < Z; ++k )
-					ToEAN13N1( std::make_pair( 200 + i * 10 + j, std::move( k ) ) );
-	}
-	{
-		boost::timer::auto_cpu_timer t;
-		for ( int i = 0; i < 10; ++i )
-			for ( long j : {1, 2, 3, 4} )
-				for ( long k{0}; k < Z; ++k )
-					ToEAN13N2( std::make_pair( 200 + i * 10 + j, std::move( k ) ) );
-	}
-	{
-		boost::timer::auto_cpu_timer t;
-		for ( int i = 0; i < 10; ++i )
-			for ( long j : {1, 2, 3, 4} )
-				for ( long k{0}; k < Z; ++k )
-					ToEAN13N3( std::make_pair( 200 + i * 10 + j, std::move( k ) ) );
-	}
-	{
-		boost::timer::auto_cpu_timer t;
-		for ( int i = 0; i < 10; ++i )
-			for ( long j : {1, 2, 3, 4} )
-				for ( long k{0}; k < Z; ++k )
-					ToEAN13N4( (200 + i * 10 + j) * 1000000000 +k  );
-	}
-	{
-		boost::timer::auto_cpu_timer t;
-		for ( int i = 0; i < 10; ++i )
-			for ( long j : {1, 2, 3, 4} )
-				for ( long k{0}; k < Z; ++k )
-					ToEAN13N5( (200 + i * 10 + j) * 1000000000 + k );
-	}
+	//const long Z = 100000;
+	//for ( int i = 0; i < 10; ++i )
+	//	for ( long j : {1, 2, 3, 4} )
+	//		for ( long k{0}; k < Z; ++k )
+	//			if ( ToEAN13N5( (200 + i * 10 + j) * 1000000000ll + k ) != ToEAN13N1( std::make_pair( 200 + i * 10 + j, std::move( k ) ) ) )
+	//				std::cout << ToEAN13N5( (200 + i * 10 + j) * 1000000000ll + k   ) << ' ' << ToEAN13N1( std::make_pair( 200 + i * 10 + j, std::move( k ) ) ) << '\n';
+	//{
+	//	boost::timer::auto_cpu_timer t;
+	//	for ( int i = 0; i < 10; ++i )
+	//		for ( long j : {1, 2, 3, 4} )
+	//			for ( long k{0}; k < Z; ++k )
+	//				ToEAN13N1( std::make_pair( 200 + i * 10 + j, std::move( k ) ) );
+	//}
+	//{
+	//	boost::timer::auto_cpu_timer t;
+	//	for ( int i = 0; i < 10; ++i )
+	//		for ( long j : {1, 2, 3, 4} )
+	//			for ( long k{0}; k < Z; ++k )
+	//				ToEAN13N2( std::make_pair( 200 + i * 10 + j, std::move( k ) ) );
+	//}
+	//{
+	//	boost::timer::auto_cpu_timer t;
+	//	for ( int i = 0; i < 10; ++i )
+	//		for ( long j : {1, 2, 3, 4} )
+	//			for ( long k{0}; k < Z; ++k )
+	//				ToEAN13N3( std::make_pair( 200 + i * 10 + j, std::move( k ) ) );
+	//}
+	//{
+	//	boost::timer::auto_cpu_timer t;
+	//	for ( int i = 0; i < 10; ++i )
+	//		for ( long j : {1, 2, 3, 4} )
+	//			for ( long k{0}; k < Z; ++k )
+	//				ToEAN13N4( (200 + i * 10 + j) * 1000000000 +k  );
+	//}
+	//{
+	//	boost::timer::auto_cpu_timer t;
+	//	for ( int i = 0; i < 10; ++i )
+	//		for ( long j : {1, 2, 3, 4} )
+	//			for ( long k{0}; k < Z; ++k )
+	//				ToEAN13N5( (200 + i * 10 + j) * 1000000000 + k );
+	//}
 
-	return 0;
-	for(int i=0; i< 10; ++i )
-	std::cout << GenKimNo( 123456, true, i ) << ' ' << GenKimNo( 123456, true, i ) << '\n';
-
-	return 0;
+	//return 0;
+	//for ( int y = 0; y < 10; ++y ){
+	//	std::vector<int> hit( 10000000, 0 );
+	//	for ( long i = 1; i <= 9999999; ++i )
+	//		++hit[GenKimNo( i, true, y ) % 10000000];
+	//	for ( long i = 1; i < 10000000; ++i ) if ( hit[i] != 1 ) std::cout << i << '=' << hit[i] << '\t';
+	//}
+	//return 0;
 	boost::circular_buffer<int> tst( 10 );
 	tst.push_back( 1 );
 	tst.push_back( 2 );
@@ -264,6 +267,11 @@ int main()
 	tst.pop_front();
 	tst.push_back( 5 );
 	tst.front() = 10;
+	for ( auto &i : tst )
+		std::cout << i << ' ';
+	std::vector<int> tmp{9,8,7};
+	std::copy( begin( tmp ), end( tmp ), back_inserter( tst ) );
+	std::cout << '\n';
 	for ( auto &i : tst )
 		std::cout << i << ' ';
 	std::cout << '\n';
