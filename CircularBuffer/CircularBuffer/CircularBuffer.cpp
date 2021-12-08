@@ -266,12 +266,15 @@ int main()
 	std::cout << '\n';
 	tst.pop_front();
 	tst.push_back( 5 );
+	for ( auto &i : tst )
+		std::cout << i << ' ';
+	std::cout << '\n';
 	tst.front() = 10;
 	for ( auto &i : tst )
 		std::cout << i << ' ';
+	std::cout << '\n';
 	std::vector<int> tmp{9,8,7};
 	std::copy( begin( tmp ), end( tmp ), back_inserter( tst ) );
-	std::cout << '\n';
 	for ( auto &i : tst )
 		std::cout << i << ' ';
 	std::cout << '\n';

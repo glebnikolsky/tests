@@ -34,6 +34,13 @@ int _tmain(int argc, TCHAR* argv[], TCHAR* envp[])
 		}
 		else
 		{
+
+			CFolderPickerDialog dlg(_T("D:\\tests\\CSV\\"));
+			dlg.m_ofn.lpstrTitle = _T("Выберите директорию");
+			if ( dlg.DoModal() == IDOK ){
+				CString  qq = dlg.GetPathName();
+			}
+
             if (argc == 4 ){
                 LONGLONG new_len = _wtoi64(argv[3]);
                 if ( new_len){
