@@ -28,6 +28,12 @@
 
 #include <iostream>
 
+#include <afxdb.h>        // ODBC
+#include <boost/log/trivial.hpp>
+#include <boost/log/sources/logger.hpp>
 
 
+
+#include "d:\u_use\Projects\FtcUtil\Inc\FtcUtil.h"
+#include "d:\u_use\Projects\FtcNet\Inc\FtcNet.h"
 // TODO: reference additional headers your program requires here

@@ -7,7 +7,7 @@
 
 
 
-#import "D:\use_2014\Interfaces\TR55\IUSE55Authorizer.tlb" no_namespace, named_guids
+#import "D:\u_use\Interfaces\TR55\IUSE55Authorizer.tlb" no_namespace, named_guids
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
