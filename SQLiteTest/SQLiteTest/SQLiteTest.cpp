@@ -4,13 +4,22 @@
 #include "SQLiteTest.h"
 #include "sqlite3pp.h"
 
+#include "zip.h"
+#include "unzip.h"
+
+#include <io.h>
+#include <fcntl.h>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <sstream>
 #include <string>
 #include <chrono>
 
+#include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/integer.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/timer/timer.hpp>
 #include <boost/random/linear_congruential.hpp>
@@ -33,6 +42,45 @@ vector<long> strdata( 1000000 );
 vector<long> intdata( 1000000 );
 vector<long> refs( 1000000 );
 
+
+struct Foo{
+	struct Bar{
+		int a;
+		std::vector<long> b;
+		std::string c;
+	};
+	Bar b;
+	const int& GetA(){ return b.a; }
+	const std::vector<long>& GetB(){ return b.b; }
+	const size_t& GetBSize(){ return b.b.size(); }
+};
+
+
+string cp1251_to_utf8( const char *str ){
+	string res;
+	int result_u, result_c;
+	result_u = MultiByteToWideChar( 1251, 0, str, -1, 0, 0 );
+	if ( !result_u ){ return 0; }
+	wchar_t *ures = new wchar_t[result_u];
+	if ( !MultiByteToWideChar( 1251, 0, str, -1, ures, result_u ) ){
+		delete[] ures;
+		return 0;
+	}
+	result_c = WideCharToMultiByte( CP_UTF8, 0, ures, -1, 0, 0, 0, 0 );
+	if ( !result_c ){
+		delete[] ures;
+		return 0;
+	}
+	char *cres = new char[result_c];
+	if ( !WideCharToMultiByte( CP_UTF8, 0, ures, -1, cres, result_c, 0, 0 ) ){
+		delete[] cres;
+		return 0;
+	}
+	delete[] ures;
+	res.append( cres );
+	delete[] cres;
+	return res;
+}
 
 void GenTest()
 {
@@ -128,8 +176,11 @@ void ShowTable( sqlite3pp::database &db, const TCHAR* sql )
 		std::cout << (begin(qry) != end(qry)) << '\n';
 		for ( int i = 0; i < qry.column_count(); ++i ) cout << qry.column_name( i ) << "\t";
 		cout << "\n---------------------------------------------\n";
-		for ( auto r = qry.begin(); r != qry.end(); ++r ) ShowRecord( r, qry.column_count() );
+		std::cout << std::distance(qry.begin(),qry.end()) << '\n';
+		int n{0};
+		for ( auto r = qry.begin(); r != qry.end(); ++r,++n ) ShowRecord( r, qry.column_count() );
 		cout << "---------------------------------------------\n";
+		std::cout << n << '\n';
 	}
 	catch(sqlite3pp::database_error dberr){
 		std::cout << "Error: "<<dberr.what()<<'\n';
@@ -145,7 +196,54 @@ string LoadSQL( const TCHAR* filename )
 	return sql;
 }
 
+bool TestZip()
+{
+	boost::timer::auto_cpu_timer t;
+	HZIP hz = CreateZip( _T( "D:\\tmp\\test.zip" ), _T( "qwerty" ) );
+	int fh;
+	int err = _sopen_s( &fh, _T( "D:\\tmp\\ERBD_EGE_MAIN_22.db" ), _O_BINARY | _O_RDONLY, _SH_DENYRD, _S_IREAD );
+	if ( err ) std::cout << "fuck";
+	boost::filesystem::path p( _T( "D:\\tmp\\ERBD_EGE_MAIN_22.db" ) );
+	auto fsize = file_size( p );
 
+	const unsigned int BUFSIZE = 0x4000;
+	char buf[BUFSIZE];
+
+	for ( size_t bytes, part{0}; (bytes = _read( fh, buf, BUFSIZE )) != 0; ++part ){
+		ZipAdd( hz, (_T( "ERBD_EGE_MAIN_22.db." ) + std::to_string( part )).c_str(), buf, bytes );
+		fsize -= bytes;
+		std::cout << '\t' << fsize << '\r';
+	}
+	std::cout << '\n';
+	_close( fh );
+	CloseZip( hz );
+	return true;
+}
+
+bool TestUnZip()
+{
+	boost::timer::auto_cpu_timer t;
+	HZIP hz = OpenZip( _T( "D:\\tmp\\test.zip" ), _T( "qwerty" ) );
+	int fh;
+	int err = _sopen_s( &fh, _T( "D:\\tmp\\ERBD_EGE_MAIN_22.dbz" ), _O_CREAT | _O_BINARY | _O_WRONLY, _SH_DENYWR, _S_IWRITE );
+	ZIPENTRY ze;
+	SetUnzipBaseDir( hz, _T( "D:\\tmp\\" ) );
+	GetZipItem( hz, -1, &ze );
+	const unsigned int BUFSIZE = 0x4000;
+	char buf[BUFSIZE];
+	long fsize{0};
+	for ( int fl = 0, no_files = ze.index; fl < no_files; ++fl ){
+		GetZipItem( hz, fl, &ze );
+		UnzipItem( hz, fl, buf, BUFSIZE );
+		_write( fh, buf, ze.unc_size );
+		fsize += ze.unc_size;
+		std::cout << fsize << '\r';
+	}
+	std::cout << '\n';
+	_close( fh );
+	CloseZip( hz );
+	return true;
+}
 
 
 int main()
@@ -165,412 +263,174 @@ int main()
         }
         else
         {
+
+			{
+				using namespace std;
+				ios state( nullptr );
+				state.copyfmt( cout );
+				cout << std::uppercase
+					<< std::hex;
+				cout << setfill( '0' )
+					<< setw( 2 ) << 1 << setfill( '0' )
+					<< setw( 2 ) << 2 << setfill( '0' )
+					<< setw( 2 ) << 10 << setfill( '0' )
+					<< setw( 2 ) << 12;
+				cout.copyfmt( state );
+				cout << '\t'<<10;
+				ostringstream tmp;
+				tmp << std::uppercase
+					<< std::hex;
+				tmp << setfill( '0' ) << setw( 2 ) << 1 << setfill( '0' ) << setw( 2 ) << 2 << setfill( '0' ) << setw( 2 ) << 3 << setfill( '0' ) << setw( 2 ) << 10;
+				cout << '\n' << tmp.str();
+
+
+			}
+
+
+
+			auto t1= std::chrono::high_resolution_clock::now();
 			setlocale( LC_ALL, "ru-RU" );
+			boost::int_t<48>::fast val;
+			std::string ptn( _T( "1234_5_6" ) ), a, b;
+			a = boost::replace_all_copy( ptn, "_", "9" );
+			b = boost::replace_all_copy( ptn, "_", "0" );
+			long long l{0};
+			for ( long i = 0; i < 1000000; i += 7 )l += i;
+			auto t2 = std::chrono::high_resolution_clock::now();
+
+			std::cout << std::chrono::duration<double, std::milli>( t2 - t1 ).count() << ' ' << l << '\n';
+
+
+
+			{
+			
+				const char* s = "Карл у клары спиздил кораллы. Щуф\n";
+				wofstream w("d:\\tmp\\wfile.txt");
+				w << L"фы\n";
+				w.close();
+				ofstream o( "d:\\tmp\\wfile.txt",ios_base::app  );
+				for ( int i = 0; i < 100; ++i ){
+					o<<cp1251_to_utf8( s );
+				}
+
+
+			}
+
+
 			sqlite3pp::database db1( _T( "D:\\tmp\\ERBD_EGE_MAIN_22.db" ) );
-TCHAR *qq = "select * from pressPre where packnumber in('00212111',\n\
-'00212617',\n\
-'00006859',\n\
-'00011901',\n\
-'00052524',\n\
-'00082423',\n\
-'00139181',\n\
-'00160606',\n\
-'00161350',\n\
-'00021287',\n\
-'00100843',\n\
-'00167312',\n\
-'00200941',\n\
-'00036744',\n\
-'00051663',\n\
-'00080272',\n\
-'00107137',\n\
-'00110179',\n\
-'00174688',\n\
-'00209268',\n\
-'00009627',\n\
-'00025567',\n\
-'00033911',\n\
-'00032601',\n\
-'00075985',\n\
-'00089213',\n\
-'00095621',\n\
-'00104593',\n\
-'00170932',\n\
-'00020646',\n\
-'00024837',\n\
-'00053648',\n\
-'00107753',\n\
-'00135003',\n\
-'00185171',\n\
-'00000353',\n\
-'00155121',\n\
-'00208088',\n\
-'00035670',\n\
-'00055374',\n\
-'00059879',\n\
-'00136550',\n\
-'00149442',\n\
-'00149943',\n\
-'00157921',\n\
-'00209675',\n\
-'00023953',\n\
-'00028456',\n\
-'00161894',\n\
-'00188571',\n\
-'00202502',\n\
-'00004706',\n\
-'00014879',\n\
-'00045485',\n\
-'00101817',\n\
-'00121511',\n\
-'00149147',\n\
-'00154010',\n\
-'00163082',\n\
-'00170834',\n\
-'00184615',\n\
-'00215028',\n\
-'00027962',\n\
-'00032953',\n\
-'00045441',\n\
-'00075340',\n\
-'00097553',\n\
-'00113612',\n\
-'00119604',\n\
-'00158675',\n\
-'00185140',\n\
-'00070215',\n\
-'00084627',\n\
-'00090719',\n\
-'00101287',\n\
-'00131171',\n\
-'00140682',\n\
-'00147153',\n\
-'00212361',\n\
-'00010832',\n\
-'00011533',\n\
-'00079917',\n\
-'00100051',\n\
-'00131639',\n\
-'00005653',\n\
-'00028857',\n\
-'00147507',\n\
-'00202170',\n\
-'00024841',\n\
-'00032272',\n\
-'00032424',\n\
-'00108838',\n\
-'00129760',\n\
-'00003898',\n\
-'00095095',\n\
-'00103947',\n\
-'00122668',\n\
-'00125955',\n\
-'00133236',\n\
-'00175734',\n\
-'00212617',\n\
-'00006859',\n\
-'00011901',\n\
-'00052524',\n\
-'00082423',\n\
-'00139181',\n\
-'00160606',\n\
-'00161350',\n\
-'00021287',\n\
-'00100843',\n\
-'00167312',\n\
-'00200941',\n\
-'00036744',\n\
-'00051663',\n\
-'00080272',\n\
-'00107137',\n\
-'00110179',\n\
-'00174688',\n\
-'00209268',\n\
-'00009627',\n\
-'00025567',\n\
-'00033911',\n\
-'00032601',\n\
-'00075985',\n\
-'00089213',\n\
-'00095621',\n\
-'00104593',\n\
-'00170932',\n\
-'00020646',\n\
-'00024837',\n\
-'00053648',\n\
-'00107753',\n\
-'00135003',\n\
-'00185171',\n\
-'00000353',\n\
-'00155121',\n\
-'00208088',\n\
-'00035670',\n\
-'00055374',\n\
-'00059879',\n\
-'00136550',\n\
-'00149442',\n\
-'00149943',\n\
-'00157921',\n\
-'00209675',\n\
-'00023953',\n\
-'00028456',\n\
-'00161894',\n\
-'00188571',\n\
-'00202502',\n\
-'00004706',\n\
-'00014879',\n\
-'00045485',\n\
-'00101817',\n\
-'00121511',\n\
-'00149147',\n\
-'00154010',\n\
-'00163082',\n\
-'00170834',\n\
-'00184615',\n\
-'00215028',\n\
-'00027962',\n\
-'00032953',\n\
-'00045441',\n\
-'00075340',\n\
-'00097553',\n\
-'00113612',\n\
-'00119604',\n\
-'00158675',\n\
-'00185140',\n\
-'00070215',\n\
-'00084627',\n\
-'00090719',\n\
-'00101287',\n\
-'00131171',\n\
-'00140682',\n\
-'00147153',\n\
-'00212361',\n\
-'00010832',\n\
-'00011533',\n\
-'00079917',\n\
-'00100051',\n\
-'00131639',\n\
-'00005653',\n\
-'00028857',\n\
-'00147507',\n\
-'00202170',\n\
-'00024841',\n\
-'00032272',\n\
-'00032424',\n\
-'00108838',\n\
-'00129760',\n\
-'00003898',\n\
-'00095095',\n\
-'00103947',\n\
-'00122668',\n\
-'00125955',\n\
-'00133236',\n\
-'00175734',\n\
-'00212617',\n\
-'00006859',\n\
-'00011901',\n\
-'00052524',\n\
-'00082423',\n\
-'00139181',\n\
-'00160606',\n\
-'00161350',\n\
-'00021287',\n\
-'00100843',\n\
-'00167312',\n\
-'00200941',\n\
-'00036744',\n\
-'00051663',\n\
-'00080272',\n\
-'00107137',\n\
-'00110179',\n\
-'00174688',\n\
-'00209268',\n\
-'00009627',\n\
-'00025567',\n\
-'00033911',\n\
-'00032601',\n\
-'00075985',\n\
-'00089213',\n\
-'00095621',\n\
-'00104593',\n\
-'00170932',\n\
-'00020646',\n\
-'00024837',\n\
-'00053648',\n\
-'00107753',\n\
-'00135003',\n\
-'00185171',\n\
-'00000353',\n\
-'00155121',\n\
-'00208088',\n\
-'00035670',\n\
-'00055374',\n\
-'00059879',\n\
-'00136550',\n\
-'00149442',\n\
-'00149943',\n\
-'00157921',\n\
-'00209675',\n\
-'00023953',\n\
-'00028456',\n\
-'00161894',\n\
-'00188571',\n\
-'00202502',\n\
-'00004706',\n\
-'00014879',\n\
-'00045485',\n\
-'00101817',\n\
-'00121511',\n\
-'00149147',\n\
-'00154010',\n\
-'00163082',\n\
-'00170834',\n\
-'00184615',\n\
-'00215028',\n\
-'00027962',\n\
-'00032953',\n\
-'00045441',\n\
-'00075340',\n\
-'00097553',\n\
-'00113612',\n\
-'00119604',\n\
-'00158675',\n\
-'00185140',\n\
-'00070215',\n\
-'00084627',\n\
-'00090719',\n\
-'00101287',\n\
-'00131171',\n\
-'00140682',\n\
-'00147153',\n\
-'00212361',\n\
-'00010832',\n\
-'00011533',\n\
-'00079917',\n\
-'00100051',\n\
-'00131639',\n\
-'00005653',\n\
-'00028857',\n\
-'00147507',\n\
-'00202170',\n\
-'00024841',\n\
-'00032272',\n\
-'00032424',\n\
-'00108838',\n\
-'00129760',\n\
-'00003898',\n\
-'00095095',\n\
-'00103947',\n\
-'00122668',\n\
-'00125955',\n\
-'00133236',\n\
-'00175734',\n\
-'00212617',\n\
-'00006859',\n\
-'00011901',\n\
-'00052524',\n\
-'00082423',\n\
-'00139181',\n\
-'00160606',\n\
-'00161350',\n\
-'00021287',\n\
-'00100843',\n\
-'00167312',\n\
-'00200941',\n\
-'00036744',\n\
-'00051663',\n\
-'00080272',\n\
-'00107137',\n\
-'00110179',\n\
-'00174688',\n\
-'00209268',\n\
-'00009627',\n\
-'00025567',\n\
-'00033911',\n\
-'00032601',\n\
-'00075985',\n\
-'00089213',\n\
-'00095621',\n\
-'00104593',\n\
-'00170932',\n\
-'00020646',\n\
-'00024837',\n\
-'00053648',\n\
-'00107753',\n\
-'00135003',\n\
-'00185171',\n\
-'00000353',\n\
-'00155121',\n\
-'00208088',\n\
-'00035670',\n\
-'00055374',\n\
-'00059879',\n\
-'00136550',\n\
-'00149442',\n\
-'00149943',\n\
-'00157921',\n\
-'00209675',\n\
-'00023953',\n\
-'00028456',\n\
-'00161894',\n\
-'00188571',\n\
-'00202502',\n\
-'00004706',\n\
-'00014879',\n\
-'00045485',\n\
-'00101817',\n\
-'00121511',\n\
-'00149147',\n\
-'00154010',\n\
-'00163082',\n\
-'00170834',\n\
-'00184615',\n\
-'00215028',\n\
-'00027962',\n\
-'00032953',\n\
-'00045441',\n\
-'00075340',\n\
-'00097553',\n\
-'00113612',\n\
-'00119604',\n\
-'00158675',\n\
-'00185140',\n\
-'00070215',\n\
-'00084627',\n\
-'00090719',\n\
-'00101287',\n\
-'00131171',\n\
-'00140682',\n\
-'00147153',\n\
-'00212361',\n\
-'00010832',\n\
-'00011533',\n\
-'00079917',\n\
-'00100051',\n\
-'00131639',\n\
-'00005653',\n\
-'00028857',\n\
-'00147507',\n\
-'00202170',\n\
-'00024841',\n\
-'00032272',\n\
-'00032424',\n\
-'00108838',\n\
-'00129760',\n\
-'00003898',\n\
-'00095095',\n\
-'00103947',\n\
-'00122668',\n\
-'00125955',\n\
-'00133236',\n\
-'00175734',\n\
-'00186336')";
+TCHAR *qq = "select * from pressPre where packnumber in('00212111','00212617','00186336')";
 
-ShowTable( db1, qq );
+//ShowTable( db1, qq );
+if ( db1.execute( _T( "\
+DROP TABLE IF EXISTS Stations;\n\
+CREATE TABLE IF NOT EXISTS Stations(\n\
+	ID_Station INT PRIMARY KEY,\n\
+	RegionCode INT,\n\
+	StationCode INT,\n\
+	StationName TEXT NOT NULL,\n\
+	uStationName TEXT NOT NULL\n\
+);\n\
+\n\
+DROP TABLE IF EXISTS Auditories;\n\
+CREATE TABLE IF NOT EXISTS Auditories(\n\
+	ID_Station INT KEY,\n\
+	AuditoriumCode INT NOT NULL,\n\
+	AuditoriumName TEXT NOT NULL,\n\
+	uAuditoriumName TEXT NOT NULL,\n\
+	PRIMARY KEY (ID_Station, AuditoriumCode),\n\
+	FOREIGN KEY  (ID_Station) REFERENCES Stations(ID_Station)\n\
+);\n\
+\n\
+DROP TABLE IF EXISTS KIM_Auditories;\n\
+CREATE TABLE IF NOT EXISTS KIM_Auditories(\n\
+	ID_Station INT KEY,\n\
+	AuditoriumCode INT NOT NULL,\n\
+	StuffCode TEXT NOT NULL,\n\
+	PRIMARY KEY (StuffCode)\n\
+);\n\
+DROP INDEX IF EXISTS KIM_AuditoriesStuffCode;\n\
+CREATE INDEX IF NOT EXISTS KIM_AuditoriesStationAu ON KIM_Auditories( ID_Station, AuditoriumCode);\n" ) ))  cout << db1.error_msg() << '\n';
 
+CDatabase dbsql;
+try{
+	BOOL b = dbsql.OpenEx( _T( "DRIVER=SQL Server;SERVER={85.143.100.115};DATABASE={FP_EGE_2023};UID={KeyService};PWD={KeyService};ConnectionTimeout=10000" ), CDatabase::useCursorLib );
+}
+catch ( CDBException *ex ){
+	cout << ex->m_strError.GetString();
+}
+CRecordset rs( &dbsql );
+rs.Open( CRecordset::forwardOnly, "\
+SELECT distinct ID, RegionCode, StationCode, cast(StationName as nvarchar(1000)) FROM[FP_EGE_2023].[dbo].[Stations]" );
+sqlite3pp::command stations( db1, "INSERT INTO Stations(ID_Station, RegionCode, StationCode, StationName, uStationName) VALUES (?, ?, ?, ?,'')" );
+sqlite3pp::transaction xct( db1 );
+for ( ; !rs.IsEOF(); rs.MoveNext()){
+	CDBVariant val;
+	CString sval;
+	rs.GetFieldValue( (short)0, val );
+	stations.bind( 1, val.m_iVal );
+	rs.GetFieldValue( (short)1, val );
+	stations.bind( 2, val.m_iVal);
+	rs.GetFieldValue( (short)2, val );
+	stations.bind( 3, val.m_iVal);
+	rs.GetFieldValue( (short)3, sval );
+	stations.bind( 4, sval.GetString(), sqlite3pp::copy );
+	stations.execute()<<'\n';
+	stations.reset();
+}
+xct.commit();
+rs.Close();
+rs.Open( CRecordset::forwardOnly, "\
+SELECT distinct s.ID, e.AuditoriumCode, cast(e.AuditoriumName as nvarchar(1000))\n\
+FROM[FP_EGE_2023].[dbo].[Stations] AS s\n\
+JOIN[FP_EGE_2023].[dbo].[AuditoriumExams] AS e\n\
+ON( s.Id = e.StationId )" );
+sqlite3pp::transaction xct1( db1 );
+sqlite3pp::command auditories( db1, "INSERT INTO Auditories(AuditoriumID, ID_Station, AuditoriumCode, AuditoriumName, uAuditoriumName) VALUES (?, ?, ?, ?,'')" );
+int auditoriumID{1};
+for ( ; !rs.IsEOF(); rs.MoveNext(), ++auditoriumID ){
+	CDBVariant val;
+	CString sval;
+	auditories.bind( 1, auditoriumID );
+	rs.GetFieldValue( (short)0, val );
+	auditories.bind( 2, val.m_lVal );
+	rs.GetFieldValue( (short)1, val );
+	auditories.bind( 3, val.m_iVal );
+	rs.GetFieldValue( (short)2, sval );
+	auditories.bind( 4, sval.GetString(), sqlite3pp::copy );
+	auditories.execute()<<'\n';
+	auditories.reset();
+}
+xct1.commit();
+rs.Close();
+rs.Open( CRecordset::forwardOnly, "\
+SELECT KimNumber, s.Id, n.AuditoryCode\n\
+FROM dbo.FullPackageNumbers AS n\n\
+JOIN dbo.Keys AS k ON( n.KeyId = k.Id )\n\
+JOIN dbo.Stations AS s ON( k.RegionCode = s.RegionCode AND k.StationCode = s.StationCode )" );
+sqlite3pp::transaction xct2( db1 );
+sqlite3pp::command stuff_codes( db1, "INSERT INTO KIM_Auditories(StuffCode, ID_Station, AuditoriumCode) VALUES (?, ?, ?)" );
+for ( ; !rs.IsEOF(); rs.MoveNext(), ++auditoriumID ){
+	CDBVariant val;
+	CString sval;
+	rs.GetFieldValue( (short)0, sval );
+	stuff_codes.bind( 1, sval.GetString(), sqlite3pp::copy );
+	rs.GetFieldValue( (short)1, val );
+	stuff_codes.bind( 2, val.m_lVal );
+	rs.GetFieldValue( (short)2, val );
+	stuff_codes.bind( 3, val.m_lVal );
+	int res = stuff_codes.execute();
+	if ( res){
+		cout << "!!!!!!!!!!!!!!!!!!!!" << res;
+		break;
+	}
+	stuff_codes.reset();
+}
+xct2.commit();
+rs.Close();
 
-
-
+ShowTable( db1, "select count(*) from stations" );
+ShowTable( db1, "select count(*) from Auditories" );
+ShowTable( db1, "select count(*) from KIM_Auditories" );
 
 			try{
 				boost::filesystem::path p( "C:\\Program Files (x86)\\Federal Test Center\\DDOffice2022-2023FL\\init\\Sheets.sqlt" );
@@ -581,14 +441,15 @@ ShowTable( db1, qq );
 				string sql = LoadSQL( _T( "D:\\tmp\\BaseAdmin.sql" ) );
 				if ( db.execute( sql.c_str() )) cout << db.error_msg()<<'\n';
 				db.enable_foreign_keys( true );
-//				TestInsert( db, 100 );
-				ShowTable( db, _T( "\
-SELECT WSheets.*, WMarks.* FROM (SELECT * FROM WSheets WHERE (SheetID IN (SELECT SheetID FROM WSheetSends WHERE (SendID = 1)))) \n\
-WSheets LEFT OUTER JOIN WMarks ON WSheets.SheetID = WMarks.SheetID" ) );
-				ShowTable( db, _T( "\
-SELECT * FROM Files \n\
-WHERE FileID IN (SELECT DISTINCT WMarks.FileID FROM (SELECT * FROM WSheets WHERE (FileID = 1) ) \n\
-WSheets INNER JOIN WMarks ON WSheets.SheetID = WMarks.SheetID)" ) );
+				TestInsert( db, 100 );
+//				ShowTable( db, _T( "\
+//SELECT WSheets.*, WMarks.* FROM (SELECT * FROM WSheets WHERE (SheetID IN (SELECT SheetID FROM WSheetSends WHERE (SendID = 1)))) \n\
+//WSheets LEFT OUTER JOIN WMarks ON WSheets.SheetID = WMarks.SheetID" ) );
+//				ShowTable( db, _T( "\
+//SELECT * FROM Files \n\
+//WHERE FileID IN (SELECT DISTINCT WMarks.FileID FROM (SELECT * FROM WSheets WHERE (FileID = 1) ) \n\
+//WSheets INNER JOIN WMarks ON WSheets.SheetID = WMarks.SheetID)" ) );
+				ShowTable( db, _T( "SELECT * FROM Test" ) );
 
 					boost::timer::auto_cpu_timer t;
 					{
