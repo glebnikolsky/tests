@@ -6,9 +6,16 @@
 #include "unzip.h"
 #include "zip.h"
 #include <string>
+#include <tuple>
 #include <vector>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+
+namespace fs = boost::filesystem;
+
+using BookInfo = std::tuple<fs::path, std::vector<std::string>, std::vector<std::string>>;
+
+std::vector<BookInfo> bi;
 
 std::wstring CodePageToUnicode( int codePage, const char *src )
 {
@@ -55,10 +62,10 @@ std::string UnicodeToCodePage( int codePage, const wchar_t *src )
 	return x;
 }
 
-void ProcZip( const std::string &file )
+void ProcZip( const fs::path &file )
 {
 	std::cout << file << '\n';
-	HZIP hz = OpenZip( file.c_str(), nullptr );
+	HZIP hz = OpenZip( file.string().c_str(), nullptr);
 	if ( !hz ) {
 		std::cerr << "OOps!\n";
 		return;
@@ -78,15 +85,17 @@ void ProcZip( const std::string &file )
 		pugi::xpath_query query( "/package/metadata/dc:title" );
 		pugi::xpath_query query1( "/package/metadata/dc:creator" );
 		pugi::xpath_node_set res = query.evaluate_node_set( doc );
+		std::vector<std::string> title, author;
 		for ( auto k : res ){
 			pugi::xml_node nd = k.node().first_child();
-			std::cout << '\t' << UnicodeToCodePage( 1251, CodePageToUnicode( 65001, nd.value() ).c_str() ) << '\n';
+			title.push_back(UnicodeToCodePage( 1251, CodePageToUnicode( 65001, nd.value()).c_str()));
 		}
 		pugi::xpath_node_set res1 = query1.evaluate_node_set( doc );
 		for ( auto k : res1 ){
 			pugi::xml_node nd = k.node().first_child();
-			std::cout << '\t' << UnicodeToCodePage( 1251, CodePageToUnicode( 65001, nd.value() ).c_str() ) << '\n';
+			author.push_back(UnicodeToCodePage( 1251, CodePageToUnicode( 65001, nd.value() ).c_str() ));
 		}
+		bi.emplace_back(file, author, title);
 	}
 }
 
@@ -94,12 +103,11 @@ void ProcZip( const std::string &file )
 int main(int argc, TCHAR *argv[])
 {
 	setlocale( LC_ALL, "ru-RU" );
-	namespace fs = boost::filesystem;
 
 	for ( fs::recursive_directory_iterator it( argv[1] ); it != fs::recursive_directory_iterator(); ++it ){
 		if ( !is_regular_file( it->status() ) ) continue;
 		if ( it->path().extension() != _T( ".epub" ) ) continue;
-		ProcZip( it->path().string() );
+		ProcZip( it->path() );
 	}
     return 0;
 }
