@@ -89,11 +89,13 @@ void ProcZip( const fs::path &file )
 		for ( auto k : res ){
 			pugi::xml_node nd = k.node().first_child();
 			title.push_back(UnicodeToCodePage( 1251, CodePageToUnicode( 65001, nd.value()).c_str()));
+			std::cout << *title.rbegin() << '\n';
 		}
 		pugi::xpath_node_set res1 = query1.evaluate_node_set( doc );
 		for ( auto k : res1 ){
 			pugi::xml_node nd = k.node().first_child();
 			author.push_back(UnicodeToCodePage( 1251, CodePageToUnicode( 65001, nd.value() ).c_str() ));
+			std::cout << *author.rbegin() << '\n';
 		}
 		bi.emplace_back(file, author, title);
 	}

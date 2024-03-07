@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="windows-1251"?>
-<Glue>
-	<Selector name="Из sht_Packages">
-		<FieldsNames names=";Регион;Тип Теста;;Предмет;Дата экзамена"/>
-		<Vars vars="region;;testtype;;subject;datexam"/>
-		
-	</Selector>
-</Glue>

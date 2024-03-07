@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <string.h>
 
 using namespace std;
 
@@ -40,6 +41,15 @@ void tryfuck( shared_ptr<Tst>t )
 
 int main()
 {
+	{
+		long tmp[4]{0};
+		const TCHAR *pos = "12.0.0.3";
+		for ( int n = 0; pos && *pos; ++n, pos = strchr( pos, '.' ) + 1 )
+			tmp[n] = atol( pos );
+
+	}
+
+
 	shared_ptr<Tst> t = make_shared<Tst>("t" );
 	shared_ptr<Tst> tt = make_shared<Tst>( "tt" );
 	t = tt;
@@ -47,6 +57,7 @@ int main()
 	bar( t, 1 );
 	foobar( t, "foobar", 2 );
 	tryfuck( t );
+	Tst* pt = t.get();
 	t.reset();
 	cout << (t == nullptr);
 	return 0;
