@@ -952,7 +952,7 @@ struct Dot
     bool operator < (const Dot& r) const { return point_ < r.point_; }
     friend ostream& operator<<(ostream& os, const Dot& r) { os << '(' << r.R() << ',' << r.C() << ')'; return os; }
 protected:
-    tuple<int, int> point_;
+    tuple<int, int>point_;
 };
 
 const Dot& operator +(const Dot& l, const Dot& r) { Dot tmp(l); return tmp += r; }
@@ -981,6 +981,7 @@ map<char, Connector> Connectors{ {'|',{N,S}},{'-',{E,W}},{'L',{N,E}},{'J',{N,W}}
 //    J is a 90 - degree bend connecting north and west.
 //    7 is a 90 - degree bend connecting south and west.
 //    F is a 90 - degree bend connecting south and east.
+set<tuple<char, char>> West{ {'-','-'},{'J','-'},{'-','7'} };
 
 vector<vector<char>> board;
 deque<Dot> to_view;
@@ -1013,6 +1014,10 @@ void ProcOuter(int r, int c)
     }
 }
 
+void ProcInner(int r, int c)
+{
+
+}
 
 int Day10_2Solve()
 {
