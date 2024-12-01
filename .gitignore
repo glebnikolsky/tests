@@ -40,7 +40,7 @@ local.properties
 *.suo
 *.user
 *.sln.docstates
-
+*.vsidx
 # Build results
 Cache/
 [Dd]ebug/
