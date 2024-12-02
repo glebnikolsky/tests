@@ -4,30 +4,30 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <map>
+#include <set>
+#include <unordered_map>
 #include <vector>
 
 using namespace std;
 
+//#define PART1
 int main()
 {
     ifstream input("1_1.txt");
 #ifdef PART1
-    vector<long> l, r;
+    multiset<int> l, r;
     while (!input.eof()) {
         long lval,rval;
         input >> lval >> rval;
-        l.push_back(lval);
-        r.push_back(rval);
+        l.insert(lval);
+        r.insert(rval);
     }
-    sort(l.begin(), l.end());
-    sort(r.begin(), r.end());
     long long res1{ 0 };
     for (auto i = l.begin(), j = r.begin(); i != l.end(); ++i, ++j) res1 += abs(*j - *i);
-    cout << res1 << '\n';
+    cout << res1 << '\n';//1873376
 #else // part 2 
     long long res2{ 0 };
-    map<long, long> lm,rm;
+    unordered_map<long, long> lm,rm;
     while (!input.eof()) {
         long lval, rval;
         input >> lval >> rval;
@@ -37,7 +37,7 @@ int main()
     for (auto& i : lm) 
         if (rm.count(i.first)) 
             res2 += i.first * rm[i.first]*i.second;
-    cout << res2 << '\n';
+    cout << res2 << '\n';//18997088
 #endif
 }
 
