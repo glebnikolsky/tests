@@ -34,29 +34,31 @@ long long proc_line(string &s)
 
 void prepare(string& s)
 {
-    //int dont_pos = s.rfind("don't()");
-    //if( dont_pos != -1) {
-    //    int do_pos = s.find("do()", dont_pos);
-    //    if (do_pos != -1) s = s.substr(0, dont_pos + 1) + s.substr(do_pos + 4);
-    //    else s = s.substr(0, dont_pos + 1);
-    //    dont_pos = s.rfind("don't()", dont_pos);
+    int dont_pos = s.find("don't()");
+    while( dont_pos != -1) {
+        int do_pos = s.find("do()", dont_pos);
+        if (do_pos != -1) {
+            s = s.substr(0, dont_pos + 1) + s.substr(do_pos + 4);
+        }
+        else s = s.substr(0, dont_pos + 1);
+        dont_pos = s.find("don't()", dont_pos);
+    }
+    //vector<int> dont;
+    //vector<int> dos;
+    //int pos = s.find("do()");
+    //while (pos != -1) {
+    //    dos.push_back(pos);
+    //    pos = s.find("do()", pos+1);
     //}
-    vector<int> dont;
-    vector<int> dos;
-    int pos = s.find("do()");
-    while (pos != -1) {
-        dos.push_back(pos);
-        pos = s.find("do()", pos+1);
-    }
-    pos = s.find("don't()");
-    while (pos != -1) {
-        dont.push_back(pos);
-        pos = s.find("don't()", pos + 1);
-    }
-    copy(dos.begin(), dos.end(), ostream_iterator<int>(cout, "\t"));
-    cout << '\n';
-    copy(dont.begin(), dont.end(), ostream_iterator<int>(cout, "\t"));
-    cout << '\n';
+    //pos = s.find("don't()");
+    //while (pos != -1) {
+    //    dont.push_back(pos);
+    //    pos = s.find("don't()", pos + 1);
+    //}
+    //copy(dos.begin(), dos.end(), ostream_iterator<int>(cout, "\t"));
+    //cout << '\n';
+    //copy(dont.begin(), dont.end(), ostream_iterator<int>(cout, "\t"));
+    //cout << '\n';
 
 }
 
@@ -65,12 +67,12 @@ void prepare(string& s)
 int main()
 { 
     ifstream input("3.txt");
-    string s;
+    string mem;
     long long res{ 0 };
-    while (getline(input, s)) {
-        prepare(s);
-        res += proc_line(s);
-     }
+    mem.assign((istreambuf_iterator<char>(input)),
+        istreambuf_iterator<char>());
+    prepare(mem);
+    res += proc_line(mem);
     cout << res << '\n';//88125394
     return 0;
 }
