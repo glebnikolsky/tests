@@ -3,27 +3,39 @@
 
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <set>
 #include <string>
 #include <sstream>
 #include <tuple>
+#include <vector>
 
 using namespace std;
 
-set < tuple<int, int>> fst_lst, lst_fst;
+map<int, int> fst_lst, lst_fst;
+set<int> 
 
 void add_pair(string& line)
 {
     int pos = line.find('|');
     int fst = stoi(line);
     int lst = stoi(line.substr(pos + 1));
-    fst_lst.insert(make_tuple(fst, lst));
-    lst_fst.insert(make_tuple(lst, fst));
+    fst_lst[fst] = lst;
+    lst_fst[lst] = fst;
 }
 
 int proc(string &line)
 {
-    return 0;
+    istringstream is(line);
+    vector<int> v;
+    while (!is.eof()) {
+        int val;
+        is >> val;
+        v.push_back(val);
+    }
+    int res{ 0 };
+
+    return res;
 }
 
 int main()
