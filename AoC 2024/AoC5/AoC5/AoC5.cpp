@@ -12,43 +12,66 @@
 
 using namespace std;
 
-map<int, int> fst_lst, lst_fst;
-set<int> 
+map<int, set<int>> fst_lst;
 
 void add_pair(string& line)
 {
-    int pos = line.find('|');
+    size_t pos = line.find('|');
     int fst = stoi(line);
     int lst = stoi(line.substr(pos + 1));
-    fst_lst[fst] = lst;
-    lst_fst[lst] = fst;
+    fst_lst[fst].insert(lst);
+}
+
+
+bool vec_in_set(vector<int>& v, int pos, set<int> &s)
+{
+    for (int i = pos; i < v.size(); ++i) if (!s.count(v[i])) return false;
+    return true;
 }
 
 int proc(string &line)
 {
-    istringstream is(line);
     vector<int> v;
-    while (!is.eof()) {
-        int val;
-        is >> val;
-        v.push_back(val);
-    }
-    int res{ 0 };
+    stringstream ss{ line };
+    copy(istream_iterator<int>(ss), istream_iterator<int>(), back_inserter(v));
+    for(int i = 0; i < v.size() - 1; ++i) if ( !vec_in_set(v,i+1, fst_lst[v[i]])) return 0;
+    return v[v.size()/2];
+}
 
-    return res;
+
+vector<int> try_change(vector<int> v, set<int> s)
+{
+
+}
+
+int proc2(string& line)
+{
+    stringstream ss{ line };
+    vector<int> v;
+    copy(istream_iterator<int>(ss), istream_iterator<int>(), back_inserter(v));
+    set<int> s(v.begin(),v.end());
+    v.clear();
+    v = try_change(v, s);
+    if ( !s.size() ) return v[v.size() / 2];
+    else return 
 }
 
 int main()
 {
     ifstream input("5_1.txt");
     string line;
-    int res{ 0 };
+    int res1{ 0 }, res2{ 0 };
     while (getline(input, line)) {
-        if (line.find('|') != -1) add_pair(line);
-        if (line.empty()) continue;
-        else res += proc(line);
+        if (line.find('|') != -1) {
+            add_pair(line);
+            continue;
+        }
+        else if (line.empty()) continue;
+        for (size_t pos{ 0 }; pos != string::npos; pos = line.find(",")) line.replace(pos, 1, " ");
+        int res = proc(line);
+        res1 += res;
+        if ( !res ) res2 += proc2(line);
     }
-            cout << res;
-
+    cout << res1 << '\t'<<res2<<'\n';
 }
 
