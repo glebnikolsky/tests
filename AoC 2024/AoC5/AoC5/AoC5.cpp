@@ -38,10 +38,26 @@ int proc(string &line)
     return v[v.size()/2];
 }
 
-
 vector<int> try_change(vector<int> v, set<int> s)
 {
-
+    int cnd{ 0 };
+    auto candidate = [&](int &cnd) {
+        if (v.size()) {
+            for (auto i : fst_lst)
+                if (s.count(i.first) && i.second.size() - 1 >= s.size()) 
+                {
+                    cnd = i.first;
+                    return true;
+                }
+        }
+        };
+    if (s.empty()) return v;
+    if (candidate(cnd)) {
+        v.push_back(cnd);
+        s.erase(cnd);
+        try_change(v, s);
+    }
+    return v;
 }
 
 int proc2(string& line)
@@ -50,10 +66,17 @@ int proc2(string& line)
     vector<int> v;
     copy(istream_iterator<int>(ss), istream_iterator<int>(), back_inserter(v));
     set<int> s(v.begin(),v.end());
-    v.clear();
-    v = try_change(v, s);
-    if ( !s.size() ) return v[v.size() / 2];
-    else return 
+    for (auto i : s) {
+        set<int>ss(s);
+        vector<int> vv;
+        if (fst_lst.count(i) && fst_lst[i].size() >= s.size() - 1) {
+            vv.push_back(i);
+            s.erase(i);
+            vv = try_change(vv, ss);
+            if (!s.size()) return v[v.size() / 2];
+        }
+    }
+    return 0;
 }
 
 int main()
@@ -67,7 +90,7 @@ int main()
             continue;
         }
         else if (line.empty()) continue;
-        for (size_t pos{ 0 }; pos != string::npos; pos = line.find(",")) line.replace(pos, 1, " ");
+        for (size_t pos = line.find(","); pos != string::npos; pos = line.find(",",pos+1)) line.replace(pos, 1, " ");
         int res = proc(line);
         res1 += res;
         if ( !res ) res2 += proc2(line);
