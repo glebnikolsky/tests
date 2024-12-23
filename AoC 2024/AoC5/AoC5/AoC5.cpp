@@ -1,6 +1,7 @@
 // AoC5.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <map>
@@ -69,7 +70,12 @@ int proc2(string& line)
     for (auto i : s) {
         set<int>ss(s);
         vector<int> vv;
-        if (fst_lst.count(i) && fst_lst[i].size() >= s.size() - 1) {
+        if (fst_lst.count(i)) {
+            s.erase(i);
+            if (includes(fst_lst[i].begin(), fst_lst[i].end(), ss.begin(), ss.end())) {
+
+            }
+        }&& fst_lst[i].size() >= s.size() - 1) {
             vv.push_back(i);
             s.erase(i);
             vv = try_change(vv, ss);
