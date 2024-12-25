@@ -39,55 +39,59 @@ int proc(string &line)
     return v[v.size()/2];
 }
 
-vector<int> try_change(vector<int> v, set<int> s)
+void try_change(vector<int> &res, set<int> &rest)
 {
-    int cnd{ 0 };
-    auto candidate = [&](int &cnd) {
-        if (v.size()) {
-            for (auto i : fst_lst)
-                if (s.count(i.first) && i.second.size() - 1 >= s.size()) 
-                {
-                    cnd = i.first;
-                    return true;
-                }
+    if (!rest.size()) return ;
+    cout << "\t";
+    copy(res.begin(), res.end(), ostream_iterator<int>(cout, ","));
+    cout << "\b:{";
+    copy(rest.begin(), rest.end(), ostream_iterator<int>(cout, ","));
+    cout << "\b}\n";
+    for (auto i = rest.begin(); i != rest.end(); ) {
+        int probe{ *i };
+        if (fst_lst.count(probe)) {
+            rest.erase(i);
+            if (includes(fst_lst[probe].begin(), fst_lst[probe].end(), rest.begin(), rest.end())) {
+                res.push_back(probe);
+                if (!rest.size()) return ;
+                try_change(res, rest);
+            }
+            else {
+                rest.insert(probe);
+            }
         }
-        };
-    if (s.empty()) return v;
-    if (candidate(cnd)) {
-        v.push_back(cnd);
-        s.erase(cnd);
-        try_change(v, s);
+        i = rest.find(probe);
+        if ( i != rest.end() )++i;
     }
-    return v;
+    return ;
 }
 
 int proc2(string& line)
 {
     stringstream ss{ line };
-    vector<int> v;
-    copy(istream_iterator<int>(ss), istream_iterator<int>(), back_inserter(v));
-    set<int> s(v.begin(),v.end());
-    for (auto i : s) {
-        set<int>ss(s);
-        vector<int> vv;
-        if (fst_lst.count(i)) {
-            s.erase(i);
-            if (includes(fst_lst[i].begin(), fst_lst[i].end(), ss.begin(), ss.end())) {
-
+    set<int> rest;
+    copy(istream_iterator<int>(ss), istream_iterator<int>(), inserter(rest, rest.end()));
+    for (auto i = rest.begin(); i != rest.end(); ) {
+        vector<int> res;
+        int probe{ *i };
+        if (fst_lst.count(probe)) {
+            rest.erase(i);
+            if (includes(fst_lst[probe].begin(), fst_lst[probe].end(), rest.begin(), rest.end())) {
+                res.push_back(probe);
+                try_change(res, rest);
+                if (!rest.size() ) return res[res.size() / 2];
             }
-        }&& fst_lst[i].size() >= s.size() - 1) {
-            vv.push_back(i);
-            s.erase(i);
-            vv = try_change(vv, ss);
-            if (!s.size()) return v[v.size() / 2];
+            rest.insert(probe);
         }
+        i = rest.find(probe);
+        ++i;
     }
     return 0;
 }
 
 int main()
 {
-    ifstream input("5_1.txt");
+    ifstream input("5.txt");
     string line;
     int res1{ 0 }, res2{ 0 };
     while (getline(input, line)) {
@@ -96,6 +100,11 @@ int main()
             continue;
         }
         else if (line.empty()) continue;
+        for (auto &i : fst_lst) {
+            cout << i.first << ":{";
+            copy(i.second.begin(), i.second.end(), ostream_iterator<int>(cout, ","));
+            cout << "\b}\n";
+        }
         for (size_t pos = line.find(","); pos != string::npos; pos = line.find(",",pos+1)) line.replace(pos, 1, " ");
         int res = proc(line);
         res1 += res;
