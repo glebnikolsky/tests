@@ -2,10 +2,11 @@
 //
 
 #include <algorithm>
+#include <bitset>
 #include <iostream>
 #include <iterator>
 #include <vector>
-#include <cstdlib>
+//#include <cstdlib>
 
 using namespace std;
 
@@ -55,37 +56,43 @@ private:
     combination_t curr;
 };
 
-void Calc(int n, int m)
+using Bits = bitset < 32 >;
+
+vector<Bits> bits;
+
+void InitBits()
 {
-    vector<vector<char>> combs;
+    unsigned long ul{ 1 };
+    for (int i = 1; i <= 32; ++i, ul <<= 1) bits.emplace_back(ul);
+}
+
+void Calcb(const int n, int m)
+{
+    vector<Bits> combs;
     combinations cs(n, m);
     while (!cs.completed)
     {
         combinations::combination_t c = cs.next();
-        vector<char> tmp;
-        for (auto& i : c) tmp.push_back(static_cast<char>(i));
+        Bits tmp;
+        for (auto& i : c) tmp |= bits[i-1];
         combs.push_back(tmp);
     }
     cout << "C(" << n << "," << m << ")=" << combs.size() << endl;
-    //for (auto& i : combs) {
-    //    copy(i.begin(), i.end(), ostream_iterator<int>(cout, ","));
-    //    cout << "\b\n";
-    //}
-    vector<long> res(m + 1, 0);
-    for (int i = 0; i < combs.size(); ++i) {
+    vector<int64_t> res(m + 1, 0);
+    for (int i = 0; i < combs.size() - 1; ++i) {
         for (int j = i + 1; j < combs.size(); ++j) {
-            vector<char> tmp;
-            set_difference(combs[i].begin(), combs[i].end(), combs[j].begin(), combs[j].end(), inserter(tmp, tmp.begin()));
-            ++res[tmp.size()];
+            ++res[m-(combs[i] & combs[j]).count()];
         }
     }
     copy(res.begin(), res.end(), ostream_iterator<int>(cout, ", "));
-    cout << "\b\b\b\n\n";
+    cout << "\n\n";
 }
+
 
 int main(int argc, char** argv)
 {
+    InitBits();
     for (int n = 4; n < 21; ++n)
-        for (int m = 2; m < n; ++m) Calc(n, m);
+        for (int m = 2; m < n; ++m) Calcb(n, m);
     return 0;
 }
