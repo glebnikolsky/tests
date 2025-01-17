@@ -81,7 +81,9 @@ int proc_2(vector<vector<char>>& v)
 {
     vector<vector<char>>& copy_v(v);
     proc_1(v);
-    
+    vector<vector<char>>& copy_vx(v);
+    return 0;
+
 }
 
 int main()
@@ -90,6 +92,10 @@ int main()
     string line;
     vector<vector<char>> v;
     while( getline(input,line)) v.push_back(vector<char>(line.begin(), line.end()));
+    for (auto &s : v)
+        for (auto& ch : s) 
+            if (ch == '.') 
+                ch = '0';
     cout << proc_1(v);
 }
 
