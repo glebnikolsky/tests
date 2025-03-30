@@ -1,0 +1,88 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\tests\\Pugi\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A7A1C378-549D-4E4D-AA89-7D4F85BB1FA1}|Pugi\\Pugi.vcxproj|E:\\tests\\Pugi\\Pugi\\Pugi.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A7A1C378-549D-4E4D-AA89-7D4F85BB1FA1}|Pugi\\Pugi.vcxproj|solutionrelative:Pugi\\Pugi.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A7A1C378-549D-4E4D-AA89-7D4F85BB1FA1}|Pugi\\Pugi.vcxproj|E:\\tests\\Pugi\\Pugi\\pugixml.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A7A1C378-549D-4E4D-AA89-7D4F85BB1FA1}|Pugi\\Pugi.vcxproj|solutionrelative:Pugi\\pugixml.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A7A1C378-549D-4E4D-AA89-7D4F85BB1FA1}|Pugi\\Pugi.vcxproj|E:\\tests\\Pugi\\Pugi\\pugixml.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A7A1C378-549D-4E4D-AA89-7D4F85BB1FA1}|Pugi\\Pugi.vcxproj|solutionrelative:Pugi\\pugixml.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A7A1C378-549D-4E4D-AA89-7D4F85BB1FA1}|Pugi\\Pugi.vcxproj|E:\\tests\\Pugi\\Pugi\\pugiconfig.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A7A1C378-549D-4E4D-AA89-7D4F85BB1FA1}|Pugi\\Pugi.vcxproj|solutionrelative:Pugi\\pugiconfig.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "pugixml.cpp",
+              "DocumentMoniker": "E:\\tests\\Pugi\\Pugi\\pugixml.cpp",
+              "RelativeDocumentMoniker": "Pugi\\pugixml.cpp",
+              "ToolTip": "E:\\tests\\Pugi\\Pugi\\pugixml.cpp",
+              "RelativeToolTip": "Pugi\\pugixml.cpp",
+              "ViewState": "AgIAAMszAAAAAAAAAAAcwJYzAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-21T13:29:50.296Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "pugixml.hpp",
+              "DocumentMoniker": "E:\\tests\\Pugi\\Pugi\\pugixml.hpp",
+              "RelativeDocumentMoniker": "Pugi\\pugixml.hpp",
+              "ToolTip": "E:\\tests\\Pugi\\Pugi\\pugixml.hpp",
+              "RelativeToolTip": "Pugi\\pugixml.hpp",
+              "ViewState": "AgIAADIFAAAAAAAAAAAcwEUFAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-03-21T13:27:55.371Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "pugiconfig.hpp",
+              "DocumentMoniker": "E:\\tests\\Pugi\\Pugi\\pugiconfig.hpp",
+              "RelativeDocumentMoniker": "Pugi\\pugiconfig.hpp",
+              "ToolTip": "E:\\tests\\Pugi\\Pugi\\pugiconfig.hpp",
+              "RelativeToolTip": "Pugi\\pugiconfig.hpp",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAcwBYAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-03-21T13:27:17.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Pugi.cpp",
+              "DocumentMoniker": "E:\\tests\\Pugi\\Pugi\\Pugi.cpp",
+              "RelativeDocumentMoniker": "Pugi\\Pugi.cpp",
+              "ToolTip": "E:\\tests\\Pugi\\Pugi\\Pugi.cpp*",
+              "RelativeToolTip": "Pugi\\Pugi.cpp*",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAswCMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-03-21T10:20:26.523Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
