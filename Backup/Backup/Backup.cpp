@@ -72,12 +72,21 @@ void proc_files()
 	}
 }
 
+
+void dummy() {
+	char *ptr = new char[1000];
+}
+
 int main(int argc, char **argv)
 {
+#ifdef _DEBUG
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 	setlocale(LC_ALL, "ru-RU");
 
-
 	if (argc < 3) {
+		dummy();
+	char *ptr = new char[100];
 		std::cerr << "Backup from to\n";
 		return 1;
 	}
