@@ -5,7 +5,6 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
 	  <NewTag/>
-	  <NewTag/>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
