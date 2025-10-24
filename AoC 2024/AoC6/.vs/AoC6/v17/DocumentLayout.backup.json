@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\tests\\AoC 2024\\AoC6\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8B284E33-A7D8-4B7E-8CE0-80588EEAE87D}|AoC6.vcxproj|C:\\tests\\AoC 2024\\AoC6\\AoC6.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{8B284E33-A7D8-4B7E-8CE0-80588EEAE87D}|AoC6.vcxproj|solutionrelative:AoC6.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AoC6.cpp",
+              "DocumentMoniker": "C:\\tests\\AoC 2024\\AoC6\\AoC6.cpp",
+              "RelativeDocumentMoniker": "AoC6.cpp",
+              "ToolTip": "C:\\tests\\AoC 2024\\AoC6\\AoC6.cpp*",
+              "RelativeToolTip": "AoC6.cpp*",
+              "ViewState": "AgIAACoAAAAAAAAAAAAuwEIAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-12-24T19:14:07.174Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

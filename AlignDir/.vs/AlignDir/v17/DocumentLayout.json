@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\tests\\AlignDir\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EE6EE090-A3DC-4448-9D64-1D313AB86F8E}|AlignDir\\AlignDir.vcxproj|C:\\tests\\AlignDir\\AlignDir\\AlignDir.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EE6EE090-A3DC-4448-9D64-1D313AB86F8E}|AlignDir\\AlignDir.vcxproj|solutionrelative:AlignDir\\AlignDir.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AlignDir.cpp",
+              "DocumentMoniker": "C:\\tests\\AlignDir\\AlignDir\\AlignDir.cpp",
+              "RelativeDocumentMoniker": "AlignDir\\AlignDir.cpp",
+              "ToolTip": "C:\\tests\\AlignDir\\AlignDir\\AlignDir.cpp",
+              "RelativeToolTip": "AlignDir\\AlignDir.cpp",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-14T18:00:10.644Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

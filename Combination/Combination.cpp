@@ -6,7 +6,7 @@
 #include <iostream>
 #include <iterator>
 #include <vector>
-//#include <cstdlib>
+#include <boost/multiprecision/cpp_int.hpp>
 
 using namespace std;
 
@@ -57,7 +57,8 @@ private:
 };
 
 using Bits = bitset < 32 >;
-
+//using BigInt = boost::multiprecision::int128_t;
+using BigInt = int64_t;
 vector<Bits> bits;
 
 void InitBits()
@@ -78,13 +79,13 @@ void Calcb(const int n, int m)
         combs.push_back(tmp);
     }
     cout << "C(" << n << "," << m << ")=" << combs.size() << endl;
-    vector<int64_t> res(m + 1, 0);
+    vector<BigInt> res(m + 1, 0);
     for (int i = 0; i < combs.size() - 1; ++i) {
         for (int j = i + 1; j < combs.size(); ++j) {
-            ++res[m-(combs[i] & combs[j]).count()];
+            ++res[m - (combs[i] & combs[j]).count()];
         }
     }
-    copy(res.begin(), res.end(), ostream_iterator<int>(cout, ", "));
+    copy(res.begin(), res.end(), ostream_iterator<BigInt>(cout, ", "));
     cout << "\n\n";
 }
 
