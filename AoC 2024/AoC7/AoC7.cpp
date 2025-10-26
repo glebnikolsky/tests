@@ -28,8 +28,22 @@ bool test_1(long long probe, vector<long>& v)
     return false;
 }
 
+void fill3(int n, string &s, int pos)
+{
+    div_t d = div(n, 3);
+    s[--pos]='0'+d.rem;
+    while(d.quot){
+        d = div(d.quot, 3);
+        s[--pos] = '0'+d.rem;
+    }
+}
+
 int main()
 {
+    string s("0000");
+    fill3(48, s, 4);
+    cout << s << endl;
+
     ifstream ifs("AoC7.txt");
     string line;
     long long res{ 0 };

@@ -17,8 +17,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
@@ -33,8 +37,7 @@
               "RelativeToolTip": "..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include\\string",
               "ViewState": "AgIAAGgAAAAAAAAAAAAqwHkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-10-23T18:55:27.467Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-23T18:55:27.467Z"
             },
             {
               "$type": "Document",
@@ -42,9 +45,9 @@
               "Title": "AoC7.cpp",
               "DocumentMoniker": "C:\\tests\\AoC 2024\\AoC7\\AoC7.cpp",
               "RelativeDocumentMoniker": "AoC7.cpp",
-              "ToolTip": "C:\\tests\\AoC 2024\\AoC7\\AoC7.cpp",
-              "RelativeToolTip": "AoC7.cpp",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\tests\\AoC 2024\\AoC7\\AoC7.cpp*",
+              "RelativeToolTip": "AoC7.cpp*",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAuwCwAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-10-23T17:53:58.304Z",
               "EditorCaption": ""
