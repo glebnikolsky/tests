@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\tests\\DLL\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4EAC530F-77BD-3408-D636-F16AFA6C081F}|DLL.vcxproj|E:\\tests\\DLL\\DLL.def||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{4EAC530F-77BD-3408-D636-F16AFA6C081F}|DLL.vcxproj|solutionrelative:DLL.def||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DLL.def",
+              "DocumentMoniker": "E:\\tests\\DLL\\DLL.def",
+              "RelativeDocumentMoniker": "DLL.def",
+              "ToolTip": "E:\\tests\\DLL\\DLL.def",
+              "RelativeToolTip": "DLL.def",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001913|",
+              "WhenOpened": "2025-05-31T11:59:15.138Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

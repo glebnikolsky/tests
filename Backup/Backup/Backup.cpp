@@ -20,7 +20,7 @@ namespace ba = boost::algorithm;
 
 fs::path inpath;
 fs::path outpath;
-std::string extensions{ "txt;cpp;c;cc;cxx;def;odl;idl;bat;asm;asmx;h;hh;hpp;hxx;inl;inc;rc;ico;cur;bmp;dlg;rc2;gif;jpg;jpeg;jpe;tiff;tif;png;mfcribbon - ms;xml;vcxproj;filters;user;sln;reg" };
+std::string extensions{ "txt;cpp;c;cc;cxx;def;odl;idl;bat;asm;asmx;h;hh;hpp;hxx;inl;inc;rc;ico;cur;bmp;dlg;rc2;gif;jpg;jpeg;jpe;tiff;tif;png;mfcribbon-ms;xml;vcxproj;filters;user;sln;reg" };
 
 std::set<std::string> ext;
 
