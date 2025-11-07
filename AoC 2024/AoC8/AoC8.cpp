@@ -15,28 +15,21 @@ struct Pos {
 
     int r_;
     int c_;
-    inline int distance(Pos rgt) { return abs(r_ - rgt.r_) + abs(c_ - rgt.c_); }
-    inline Pos angle(Pos rgt) { return Pos(r_ - rgt.r_, c_ - rgt.c_); }
-    inline const Pos operator +(const Pos rgt) {
+    inline Pos operator +(const Pos rgt) {
         return Pos(r_ + rgt.r_, c_ + rgt.c_);
     }
-    inline const Pos operator -(const Pos rgt) {
-        return Pos(r_  rgt.r_, c_ + rgt.c_);
+    inline Pos operator -(const Pos rgt) {
+        return Pos(r_ - rgt.r_, c_ - rgt.c_);
+    }
+    inline Pos operator *(int mul) {
+        return Pos(r_*mul, c_*mul);
+    }
+    bool in_field(size_t rows, size_t cols) {
+        if (r_ < 0 || r_ >= rows) return false;
+        if (c_ < 0 || c_ >= cols) return false;
+        return true;
     }
     };
-
-void find_antinode1(Pos pt, vector<Pos>& ant) 
-{
-    vector<int> distances;
-    for (int i = 0; i < ant.size(); ++i) distances.push_back(pt.distance(ant[i]));
-    sort(distances.begin(), distances.end());
-    for (int i = 0; i < distances.size() - 1; ++i)
-        for (int j = i+1; j < distances.size(); ++j) {
-            if (2 * distances[i] == distances[j]) 
-                return true;
-        }
-    return false;
-}
 
 void prepare_antennas1(vector<string>& field, map<char, vector<Pos>> &antennas)
 {
@@ -47,12 +40,28 @@ void prepare_antennas1(vector<string>& field, map<char, vector<Pos>> &antennas)
 
 int solve1(vector<string>& field)
 {
-    long count{ 0 };
     map<char, vector<Pos>> antennas;
     prepare_antennas1(field, antennas);
-    for (auto& antenna : antennas) find_antinode1(antenna.second));
-    for (auto& i : field)
-        for (auto& j : i) if (j == '#') ++count;
+    size_t height = field.size();
+    size_t width = field[0].length();
+    long count{ 0 };
+    for (auto& a : antennas) {
+        auto k = a.first;
+        auto ant = a.second;
+        for (int i = 0; i < ant.size() - 1; ++i)
+            for (int j = i + 1; j < ant.size(); ++j) {
+                Pos up = ant[i] * 2 - ant[j];
+                Pos dn = ant[j] * 2 - ant[i];
+                if (up.in_field(height, width) && field[up.r_][up.c_] != 'k' && field[up.r_][up.c_] != '#') {
+                    ++count;
+                    if (field[up.r_][up.c_] != '#') field[up.r_][up.c_] = '#';
+                }
+                if (dn.in_field(height, width) && field[dn.r_][dn.c_] != 'k' && field[dn.r_][dn.c_] != '#') {
+                    ++count;
+                    if (field[dn.r_][dn.c_] != '#') field[dn.r_][dn.c_] = '#';
+                }
+            }
+    }
     return count;
 }
 
@@ -60,12 +69,13 @@ int solve1(vector<string>& field)
 
 int main()
 {
-    ifstream ifs("AoC8_1.txt");
+    ifstream ifs("AoC8.txt");
     string line;
     vector<string> field;
     while (getline(ifs, line)) field.push_back(line);
     long res{ 0 };
-    res = solve1(field);
+    cout << solve1(field) << endl;
+
 }
 
 
