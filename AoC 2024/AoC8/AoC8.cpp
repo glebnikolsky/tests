@@ -29,7 +29,7 @@ struct Pos {
         if (c_ < 0 || c_ >= cols) return false;
         return true;
     }
-    };
+ };
 
 void prepare_antennas1(vector<string>& field, map<char, vector<Pos>> &antennas)
 {
@@ -38,10 +38,8 @@ void prepare_antennas1(vector<string>& field, map<char, vector<Pos>> &antennas)
             if (field[r][c] != '.') antennas[field[r][c]].push_back(Pos(r, c));
 }
 
-int solve1(vector<string>& field)
+int solve1(map<char, vector<Pos>>& antennas, vector<string>& field)
 {
-    map<char, vector<Pos>> antennas;
-    prepare_antennas1(field, antennas);
     size_t height = field.size();
     size_t width = field[0].length();
     long count{ 0 };
@@ -52,11 +50,11 @@ int solve1(vector<string>& field)
             for (int j = i + 1; j < ant.size(); ++j) {
                 Pos up = ant[i] * 2 - ant[j];
                 Pos dn = ant[j] * 2 - ant[i];
-                if (up.in_field(height, width) && field[up.r_][up.c_] != 'k' && field[up.r_][up.c_] != '#') {
+                if (up.in_field(height, width) && field[up.r_][up.c_] != k && field[up.r_][up.c_] != '#') {
                     ++count;
                     if (field[up.r_][up.c_] != '#') field[up.r_][up.c_] = '#';
                 }
-                if (dn.in_field(height, width) && field[dn.r_][dn.c_] != 'k' && field[dn.r_][dn.c_] != '#') {
+                if (dn.in_field(height, width) && field[dn.r_][dn.c_] != k && field[dn.r_][dn.c_] != '#') {
                     ++count;
                     if (field[dn.r_][dn.c_] != '#') field[dn.r_][dn.c_] = '#';
                 }
@@ -65,7 +63,37 @@ int solve1(vector<string>& field)
     return count;
 }
 
+int solve2(map<char, vector<Pos>>& antennas, vector<string>& field)
+{
+    size_t height = field.size();
+    size_t width = field[0].length();
+    long count{ 0 };
+    for (auto& a : antennas) {
+        auto ant = a.second;
+        if (ant.size() == 1) continue;
+        auto k = a.first;
+        count += ant.size();
+        for (int i = 0; i < ant.size() - 1; ++i)
+            for (int j = i + 1; j < ant.size(); ++j) {
+                Pos dup = ant[i] - ant[j];
+                Pos ddn = ant[j] - ant[i];
+                for (Pos up = ant[i] + dup; up.in_field(height, width); up = up + dup) {
+                    if (field[up.r_][up.c_] == '.') {
+                        field[up.r_][up.c_] = '#';
+                        ++count;
+                    }
+                }
+                for (Pos dn = ant[j] + ddn; dn.in_field(height, width) ; dn = dn + ddn) {
+                    if (field[dn.r_][dn.c_] == '.') {
+                        field[dn.r_][dn.c_] = '#';
+                        ++count;
+                    }
+                }
+            }
+    }
+    return count;
 
+}
 
 int main()
 {
@@ -74,7 +102,11 @@ int main()
     vector<string> field;
     while (getline(ifs, line)) field.push_back(line);
     long res{ 0 };
-    cout << solve1(field) << endl;
+    map<char, vector<Pos>> antennas;
+    prepare_antennas1(field, antennas);
+    cout << solve1(antennas, field) << endl;
+    cout<<solve2(antennas, field) << endl;
+    for (auto& i : field) cout << i << endl;
 
 }
 
