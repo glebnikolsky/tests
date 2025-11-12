@@ -1,13 +1,10 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\tests\\AoC 2024\\AoC8\\",
+  "WorkspaceRootPath": "E:\\tests\\AoC 2024\\AoC8\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{05B67A5F-4E05-4198-AC97-D4A33B77BDCF}|AoC8.vcxproj|C:\\tests\\AoC 2024\\AoC8\\AoC8.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{05B67A5F-4E05-4198-AC97-D4A33B77BDCF}|AoC8.vcxproj|E:\\tests\\AoC 2024\\AoC8\\AoC8.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{05B67A5F-4E05-4198-AC97-D4A33B77BDCF}|AoC8.vcxproj|solutionrelative:AoC8.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include\\vector||{3B902123-F8A7-4915-9F01-361F908088D0}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -17,39 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "vector",
-              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include\\vector",
-              "RelativeDocumentMoniker": "..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include\\vector",
-              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include\\vector",
-              "RelativeToolTip": "..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\include\\vector",
-              "ViewState": "AgIAAHgHAAAAAAAAAAAqwIkHAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-11-06T16:19:05.327Z"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "AoC8.cpp",
-              "DocumentMoniker": "C:\\tests\\AoC 2024\\AoC8\\AoC8.cpp",
+              "DocumentMoniker": "E:\\tests\\AoC 2024\\AoC8\\AoC8.cpp",
               "RelativeDocumentMoniker": "AoC8.cpp",
-              "ToolTip": "C:\\tests\\AoC 2024\\AoC8\\AoC8.cpp",
+              "ToolTip": "E:\\tests\\AoC 2024\\AoC8\\AoC8.cpp",
               "RelativeToolTip": "AoC8.cpp",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAiwGoAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAvwDAAAAAwAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-29T16:13:39.095Z",
+              "WhenOpened": "2025-11-05T13:22:21.398Z",
               "EditorCaption": ""
             }
           ]

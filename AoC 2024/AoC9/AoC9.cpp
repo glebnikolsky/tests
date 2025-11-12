@@ -42,7 +42,6 @@ struct disk_block {
     int size_;
     int file_id_;
     disk_block(int adr, int sz, int fid) : addr_{ adr }, size_{ sz }, file_id_{ fid } {}
-    disk_block( int adr, int sz) : addr_{ adr }, size_{ sz }, file_id_{ -1 } {}
     bool operator <(const disk_block& rgt) const {
         return make_tuple(size_,addr_)< make_tuple(rgt.size_, rgt.addr_);
 	}
@@ -59,10 +58,23 @@ struct disk_block {
 
 };
 
+void Show(vector<disk_block>& file_layout, vector<disk_block>& space_layout)
+{
+    size_t len{ 42 };
+    //for (auto& i : file_layout) len += i.size_;
+    //for (auto& i : space_layout) len += i.size_;
+    string out(len, '.');
+    for (auto& i : file_layout) 
+        for (int j = i.addr_; j < i.addr_+i.size_; ++j) out[j] = (char)(i.file_id_ + '0');
+    
+    cout << out<<endl;
+}
+
 uint64_t solve2(string &line)
 {
     uint64_t crc{ 0 };
     vector<disk_block> file_layout;
+    vector<disk_block> space_layout;
     int file_id{ 0 };
     int addr{ 0 };
     for (int i = 0; i < line.length(); i += 2, ++file_id) {
@@ -70,29 +82,19 @@ uint64_t solve2(string &line)
         file_layout.emplace_back(addr, file_size,file_id);
 		addr += file_size;
         int free_size = line[i + 1] - '0';
-//        if (free_size) {
-            file_layout.emplace_back(addr, free_size);
-            addr += free_size;
-//        }
+        space_layout.emplace_back(addr, free_size, file_id);
+        addr += free_size;
     }
-    {
-        ofstream ofs("res.txt");
-        for (auto& i : file_layout) ofs << i << endl;
-    }
-    ofstream ofs("proc.txt");
-    for (int fid = file_layout.size() - 2; fid; fid -= 2) {
-		if (file_layout[fid].file_id_ == -1) continue;
-        int free_space{ 0 };
-        for (int i = 1; i < fid; i+=2) {
-            if (file_layout[i].size_ < file_layout[fid].size_) continue;
-            free_space = i;
-            break;
+    //Show(file_layout, space_layout);
+    for (int fid = file_layout.size() - 1; fid; --fid) {
+        for (int sps{ 0 }; sps < fid; ++sps)
+            if (space_layout[sps].size_ >= file_layout[fid].size_) {
+                file_layout[fid].addr_ = space_layout[sps].addr_;
+                space_layout[sps].addr_ += file_layout[fid].size_;
+                space_layout[sps].size_ -= file_layout[fid].size_;
+                break;
         }
-        if (!free_space) continue;
-        ofs << file_layout[fid] << "=>" << file_layout[free_space] << endl;
-        file_layout[fid].addr_ = file_layout[free_space].addr_;
-        file_layout[free_space].addr_ += file_layout[fid].size_;
-        file_layout[free_space].size_ -= file_layout[fid].size_;
+//        Show(file_layout, space_layout);
     }
     for (auto& i : file_layout)
         crc += i.crc();
