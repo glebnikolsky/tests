@@ -11,19 +11,24 @@
 #include <vector>
 
 using namespace std;
+
+vector<string> topography;
+
 struct Pos {
     Pos(int r=-1, int c=-1) :r_(r), c_(c) {}
     int r_;
     int c_;
-    bool valid() { return r_ >= 0 && < rows_ && c_ >= 0 && c < cols_; }
+    bool valid() { return r_ >= 0 && r_ < rows_ && c_ >= 0 && c_ < cols_; }
     Pos up() { Pos p(r_ - 1, c_); return p; }
     Pos down() { Pos p(r_ +1, c_); return p; }
     Pos left() { Pos p(r_, c_ - 1); return p; }
     Pos right() { Pos p(r_, c_ + 1); return p; }
-
+    char height() {return topography[r_][c_];}
     static int rows_;
     static int cols_;
 };
+
+
 
 bool move(stack<Pos>& pos, vector<string>& topography, Pos &current_pos, char current_height)
 {
@@ -57,7 +62,7 @@ uint64_t trails1(vector<string>& topography, int r, int c)
             current_pos = pos.top();
             pos.pop();
         }
-    }while(!pos.empty())
+    } while (!pos.empty());
     return trails;
 }
 
