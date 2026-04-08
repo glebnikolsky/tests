@@ -1,0 +1,163 @@
+#include "stdafx.h"
+#include "db.h"
+#include "sqlite3pp.h"
+
+#include <fstream>
+#include <iostream>
+#include <sstream>
+
+#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/format.hpp>
+#include <boost/lexical_cast.hpp>
+
+namespace fs = boost::filesystem;
+namespace sql3 = sqlite3pp;
+using namespace std;
+
+namespace {
+	const char* kDBStruct = "\
+PRAGMA foreign_keys = ON;\n\
+PRAGMA temp_store = 2;\n\
+PRAGMA page_size = 8192;\n\
+PRAGMA journal_mode=off;\n\
+PRAGMA synchronous = off;\n\
+\n\
+CREATE TABLE IF NOT EXISTS Folders(\n\
+	folder_id	INTEGER PRIMARY KEY AUTOINCREMENT,\n\
+	folder TEXT NOT NULL\n\
+);\n\
+\
+CREATE UNIQUE INDEX IF NOT EXISTS folders_idx ON Folders(folder);\n\
+\
+CREATE TABLE IF NOT EXISTS Files(\n\
+	file_id	INTEGER PRIMARY KEY AUTOINCREMENT,\n\
+	file TEXT NOT NULL,\n\
+	type TEXT NOT NULL,\n\
+	size INTEGER NOT NULL,\n\
+	crc INTEGER NULL,\n\
+	folder_id	INTEGER REFERENCES Folders(folder_id)\n\
+);\n\
+CREATE INDEX IF NOT EXISTS FilesIdxType ON Files( type );\n\
+\
+CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
+
+	template<typename T>bool GetFieldVal(sql3::query::iterator& rec, int field_no, T& val)
+	{
+		switch ((*rec).column_type(field_no)) {
+		case SQLITE_INTEGER:
+			val = boost::lexical_cast<T>((*rec).get<long>(field_no));
+			break;
+
+		case SQLITE_TEXT:
+			val = boost::lexical_cast<T>((*rec).get<const char*>(field_no));
+			break;
+
+		case SQLITE_FLOAT:
+			val = boost::lexical_cast<T>((*rec).get<double>(field_no));
+			break;
+
+		case SQLITE_BLOB:
+			val = boost::lexical_cast<T>((*rec).get<const char*>(field_no));
+			break;
+
+		case SQLITE_NULL:
+			return false;
+		}
+		return true;
+	}
+
+	string DupApos(const string& s) {
+		string res(s);
+		boost::replace_all(res, "'", "''");
+		return res;
+	}
+	struct insert_muli {
+		insert_muli(sql3::database &db,const char* hdr, long max_count=3000):db_(db),hdr_(hdr), max_count_(max_count),count_(0),value_(string()){}
+		
+		void Add(const string& ins) {
+			if (!count_) value_ += hdr_ + ins + "\n";
+			else value_ += "," + ins + "\n";
+			if (++count_ == max_count_) Flush();
+		}
+		void Flush() {
+			if (!count_) return;
+			value_ += ";";
+			int ret = db_.execute(value_.c_str());
+			if (ret) {
+				cout << db_.error_msg() << ends;
+				exit(1);
+			}
+			cout << '\t' << count_<<endl;
+			value_.clear();
+			count_ = 0;
+		}
+		sql3::database& db_;
+		string hdr_;
+		string value_;
+		long max_count_;
+		long count_;
+
+	};
+
+	struct folder {
+		string path_;
+		long id_;
+
+		long CheckDir(sql3::database &dbs, const fs::path& p) {
+			if (path_ == p.string() && id_) return id_;
+			path_ = p.string();
+			ostringstream sql;
+			sql << boost::format("SELECT folder_id FROM Folders WHERE folder = '%1%'") % DupApos(path_);
+			sql3::query q(dbs, sql.str().c_str());
+			sql3::query::iterator i = q.begin();
+			if (i != q.end()) {
+				id_ = (*i).get<long long>(0);
+				return id_;
+			}
+			int ret = dbs.executef("INSERT INTO Folders(folder) VALUES('%s');", DupApos(path_).c_str());
+			cout << path_ << endl;
+			id_ = static_cast<long>(dbs.last_insert_rowid());
+			return id_;
+		}
+	};
+}
+
+namespace db{
+	void CreateDb(const char* dbn)
+	{
+		sql3::database tmp(dbn);
+		int ret = tmp.execute(kDBStruct);
+		if (ret) {
+			cout << tmp.error_msg() << ends;
+			exit(1);
+		}
+	}
+
+	void Fill(const char *dbn, const char* root)
+	{
+		sql3::database dbs(dbn);
+		folder last_visited{ "", 0 };
+		insert_muli im(dbs, "INSERT INTO Files(folder_id,file,type,size) VALUES", 10000);
+		//ofstream ofs("\\tmp\\libra.txt");
+		for (fs::recursive_directory_iterator i(root); i != fs::recursive_directory_iterator(); ++i)
+		{
+			if (fs::is_directory(i->path())) {
+//				cout << i->path() << '\t' << i->path().parent_path() << '\t' << i->path().root_path() << '\t' << i->path().relative_path() << endl;
+				last_visited.CheckDir(dbs, i->path());
+			}
+			else {
+				ostringstream sql;
+				sql << boost::format("SELECT file_id FROM Files WHERE file = '%1%' AND folder_id=%2%") % DupApos((*i).path().filename().string())%last_visited.id_;
+				sql3::query q(dbs, sql.str().c_str());
+				if (q.begin() != q.end()) continue;
+				sql.str("");
+					sql << boost::format("(%1%,'%2%','%3%',%4%)") %last_visited.id_ % DupApos(i->path().filename().string())%DupApos(i->path().extension().string())%
+					file_size(i->path());
+				//ofs << last_visited.id_<<'\t'<<i->path().string() << endl;
+				im.Add(sql.str());
+			}
+		}
+		im.Flush();
+	}
+}

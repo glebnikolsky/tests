@@ -24,8 +24,8 @@ struct Pos {
     Pos left() { Pos p(r_, c_ - 1); return p; }
     Pos right() { Pos p(r_, c_ + 1); return p; }
     char height() {return topography[r_][c_];}
-    static int rows_;
-    static int cols_;
+    inline static int rows_{ 0 };
+    inline static int cols_{ 0 };
 };
 
 
@@ -80,7 +80,7 @@ uint64_t solve1(vector<string>& topography)
 
 int main()
 {
-    ifstream ifs("AoC10.txt");
+    ifstream ifs("AoC10_1.txt");
     string line;
     vector<string> topography;
     while (getline(ifs, line)) topography.push_back(line);

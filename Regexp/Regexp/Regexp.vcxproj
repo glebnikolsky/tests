@@ -71,8 +71,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>d:\boost\include\boost-1_83;$(IncludePath)</IncludePath>
-    <LibraryPath>d:\boost\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>e:\boost\include\boost-1_90;$(IncludePath)</IncludePath>
+    <LibraryPath>e:\boost\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>

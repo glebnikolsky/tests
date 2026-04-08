@@ -2,19 +2,22 @@
 //
 
 #include "stdafx.h"
+#include <algorithm>
 #include <iostream>
+#include <vector>
+#include <set>
 #include <string>
 #include <boost/algorithm/string/trim_all.hpp>
 //#include <boost/algorithm/string/classification.hpp>
 #include <boost/regex.hpp>
 #include <boost/tokenizer.hpp>
 
+	using namespace std;
+	using namespace boost;
 
 
 void FindGO(std::string &file, std::string &batch)
 {
-	using namespace std;
-	using namespace boost;
 	auto begin = file.begin();
 	auto cbegin = begin;
 	auto cend = begin;
@@ -180,7 +183,24 @@ GO");
 		std::cout << err;
 	}
 	std::string p;
-	while ( ParseScript( s1, p )) std::cout << p<<'\n';
+//	while ( ParseScript( s1, p )) std::cout << p<<'\n';
+	string err_str = "Violation of UNIQUE KEY constraint 'UC_fct_PressPre_Barcode_R'. Cannot insert duplicate key in object 'fct.PressPre'. The duplicate key value is (2530017639170).";
+//	regex rerr(".*(Barcode_R|Barcode_AB|Barcode_C|Barcode_C2).*\\((\\d{13})\\).*");
+	regex rerr(".*(Barcode_(R|AB|C|C2)).*duplicate key.*\\((\\d{13})\\).*");
+	smatch what;
+	if (regex_match(err_str, what, rerr)) {
+		for (auto i = what.begin(); i != what.end(); ++i) cout << *i << endl;
+	}
+	vector<long> v{ 1,2,3,4,5 };
+	set<long> st{ 1,3,4,5 };
+	auto last_pos = v.rbegin();
+	for (; last_pos != v.rend(); ++last_pos) 
+		if (st.count(*last_pos)) {
+			auto b = last_pos.base();
+			cout << *last_pos << '\t';
+			if (b != v.end()) cout << *last_pos.base();
+			cout << endl;
+		}
 	return 0;
 }
 
