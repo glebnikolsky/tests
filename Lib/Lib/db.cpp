@@ -92,7 +92,6 @@ CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
 				cout << db_.error_msg() << ends;
 				exit(1);
 			}
-			cout << '\t' << count_<<endl;
 			value_.clear();
 			count_ = 0;
 		}
@@ -120,8 +119,8 @@ CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
 				return id_;
 			}
 			int ret = dbs.executef("INSERT INTO Folders(folder) VALUES('%s');", DupApos(path_).c_str());
-			cout << path_ << endl;
 			id_ = static_cast<long>(dbs.last_insert_rowid());
+			cout << path_ << endl;
 			return id_;
 		}
 	};
@@ -172,11 +171,9 @@ namespace db{
 		sql3::database dbs(dbn);
 		folder last_visited{ "", 0 };
 		insert_muli im(dbs, "INSERT INTO Files(folder_id,file,type,size) VALUES", 10000);
-		//ofstream ofs("\\tmp\\libra.txt");
 		for (fs::recursive_directory_iterator i(root); i != fs::recursive_directory_iterator(); ++i)
 		{
 			if (fs::is_directory(i->path())) {
-//				cout << i->path() << '\t' << i->path().parent_path() << '\t' << i->path().root_path() << '\t' << i->path().relative_path() << endl;
 				last_visited.CheckDir(dbs, i->path());
 			}
 			else {
@@ -185,9 +182,8 @@ namespace db{
 				sql3::query q(dbs, sql.str().c_str());
 				if (q.begin() != q.end()) continue;
 				sql.str("");
-					sql << boost::format("(%1%,'%2%','%3%',%4%)") %last_visited.id_ % DupApos(i->path().filename().string())%DupApos(i->path().extension().string())%
-					file_size(i->path());
-				//ofs << last_visited.id_<<'\t'<<i->path().string() << endl;
+				sql << boost::format("(%1%,'%2%','%3%',%4%)") %last_visited.id_ % DupApos(i->path().filename().string())%DupApos(i->path().extension().string())%
+				file_size(i->path());
 				im.Add(sql.str());
 			}
 		}
