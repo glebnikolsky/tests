@@ -9,6 +9,7 @@ int main()
 {
     setlocale(LC_ALL, "ru-RU");
     db::CreateDb("\\tmp\\libra.db");
-    db::Fill("\\tmp\\libra.db", "\\boost");
+    db::Fill("\\tmp\\libra.db", "\\books");
+    db::CalcCrc("\\tmp\\libra.db", "\\books");
 }
 

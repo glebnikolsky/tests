@@ -2,9 +2,11 @@
 #include "db.h"
 #include "sqlite3pp.h"
 
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
@@ -46,7 +48,7 @@ CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
 	{
 		switch ((*rec).column_type(field_no)) {
 		case SQLITE_INTEGER:
-			val = boost::lexical_cast<T>((*rec).get<long>(field_no));
+			val = boost::lexical_cast<T>((*rec).get<long long>(field_no));
 			break;
 
 		case SQLITE_TEXT:
@@ -121,6 +123,13 @@ CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
 			return id_;
 		}
 	};
+
+	template<typename T>
+	string PrettyNum(T val, const char* delim = "'") {
+		string num = to_string(val);
+		for (int pos = num.length() - 3; pos > 0; pos -= 3) num.insert(pos, delim);
+		return num;
+	}
 }
 
 namespace db{
@@ -159,5 +168,28 @@ namespace db{
 			}
 		}
 		im.Flush();
+	}
+
+	void CalcCrc(const char* dbn, const char* root)
+	{
+		sql3::database dbs(dbn);
+		long long total;
+		{
+			sql3::query cnt(dbs, "SELECT count(*) FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE type in('.epub','.fb2')");
+			sql3::query::iterator rec = cnt.begin();
+			GetFieldVal(rec, 0, total);
+		}
+		auto start = chrono::high_resolution_clock::now();
+		sql3::query q(dbs, "SELECT folder||'\\'||file FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE type in('.epub','.fb2')");
+		for (sql3::query::iterator i = q.begin(); i != q.end(); ++i) {
+			string p;
+			GetFieldVal(i, 0, p);
+			ifstream ifs(p.c_str(), ios::binary);
+			vector
+		}
+
+//		ifstream fl("\\tmp\Barcode_AB.range.1", ios::binary);
+
+
 	}
 }

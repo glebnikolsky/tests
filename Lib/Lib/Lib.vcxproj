@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>e:\boost\include\boost-1_90;$(IncludePath)</IncludePath>
-    <LibraryPath>e:\boost\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>\boost\include\boost-1_90;$(IncludePath)</IncludePath>
+    <LibraryPath>\boost\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>\boost\include\boost-1_90;$(IncludePath)</IncludePath>
