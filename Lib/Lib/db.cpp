@@ -5,10 +5,12 @@
 #include <chrono>
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <sstream>
 #include <vector>
 
 #include <boost/algorithm/string.hpp>
+#include <boost/crc.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
@@ -130,6 +132,28 @@ CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
 		for (int pos = num.length() - 3; pos > 0; pos -= 3) num.insert(pos, delim);
 		return num;
 	}
+
+	unsigned int Calc(const string& p, size_t len) {
+		ifstream ifs(p.c_str(), ios::binary);
+		constexpr size_t kBsize = 1'204 * 1'024;
+		ifstream fl(p.c_str(), ios::in | ios::binary);
+		boost::crc_32_type  computer;
+		computer.reset();
+		try {
+			do {
+				vector<char> v(min(kBsize, len));
+				ifs.read(&v[0], v.size());
+				computer.process_bytes(&v[0], v.size());
+				if (len >= kBsize) len -= kBsize;
+				else len = 0;
+ 			} while (len);
+		}
+		catch (exception e) {
+			cout << e.what();
+		}
+		return computer.checksum();
+	}
+
 }
 
 namespace db{
@@ -173,23 +197,27 @@ namespace db{
 	void CalcCrc(const char* dbn, const char* root)
 	{
 		sql3::database dbs(dbn);
-		long long total;
+		long long total, curnt{ 1 };
 		{
 			sql3::query cnt(dbs, "SELECT count(*) FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE type in('.epub','.fb2')");
 			sql3::query::iterator rec = cnt.begin();
 			GetFieldVal(rec, 0, total);
 		}
 		auto start = chrono::high_resolution_clock::now();
-		sql3::query q(dbs, "SELECT folder||'\\'||file FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE type in('.epub','.fb2')");
-		for (sql3::query::iterator i = q.begin(); i != q.end(); ++i) {
+		sql3::query q(dbs, "SELECT folder||'\\'||file, size, file_id FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE type in('.epub','.fb2')");
+		cout << "Total: "<<PrettyNum(total) << endl;
+		for (sql3::query::iterator i = q.begin(); i != q.end(); ++i,++curnt) {
 			string p;
+			size_t len;
+			long id;
 			GetFieldVal(i, 0, p);
-			ifstream ifs(p.c_str(), ios::binary);
-			vector
+			GetFieldVal(i, 1, len);
+			GetFieldVal(i, 2, id);
+			ostringstream sql;
+			sql << boost::format("UPDATE Files SET crc=%1% WHERE file_id=%2%") % Calc(p,len) % id;
+			dbs.execute(sql.str().c_str());
+			std::chrono::duration<double, std::milli> fp_ms = chrono::high_resolution_clock::now() - start;
+			cout<<'\r'<<string(50,' ')<<"\r" << PrettyNum(curnt) << '\t' << fp_ms.count() / 1000.<<'\t'<< (fp_ms.count()/1000/curnt)*(total-curnt);
 		}
-
-//		ifstream fl("\\tmp\Barcode_AB.range.1", ios::binary);
-
-
 	}
 }

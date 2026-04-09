@@ -1,17 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\tests\\Lib\\",
+  "WorkspaceRootPath": "E:\\tests\\Lib\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|C:\\tests\\Lib\\Lib\\db.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|E:\\tests\\Lib\\Lib\\db.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|solutionrelative:Lib\\db.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|C:\\tests\\Lib\\Lib\\Lib.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\__msvc_filebuf.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|E:\\tests\\Lib\\Lib\\Lib.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|solutionrelative:Lib\\Lib.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|C:\\tests\\Lib\\Lib\\db.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|E:\\BOOST\\INCLUDE\\BOOST-1_90\\BOOST\\LEXICAL_CAST\\DETAIL\\CONVERTER_LEXICAL_STREAMS.HPP||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|E:\\BOOST\\INCLUDE\\BOOST-1_90\\BOOST\\FUNCTION\\FUNCTION_BASE.HPP||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|E:\\tests\\Lib\\Lib\\db.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{FE0F4791-FB51-4BAA-8E5F-E54358BDD554}|Lib\\Lib.vcxproj|solutionrelative:Lib\\db.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -22,15 +31,52 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "__msvc_filebuf.hpp",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\__msvc_filebuf.hpp",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.43.34808\\include\\__msvc_filebuf.hpp",
+              "ViewState": "AgIAACMCAAAAAAAAAAAcwDMCAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-09T11:43:36.729Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "converter_lexical_streams.hpp",
+              "DocumentMoniker": "E:\\boost\\include\\boost-1_90\\boost\\lexical_cast\\detail\\converter_lexical_streams.hpp",
+              "RelativeDocumentMoniker": "..\\..\\boost\\include\\boost-1_90\\boost\\lexical_cast\\detail\\converter_lexical_streams.hpp",
+              "ToolTip": "E:\\boost\\include\\boost-1_90\\boost\\lexical_cast\\detail\\converter_lexical_streams.hpp",
+              "RelativeToolTip": "..\\..\\boost\\include\\boost-1_90\\boost\\lexical_cast\\detail\\converter_lexical_streams.hpp",
+              "ViewState": "AgIAAGYAAAAAAAAAAADgv3EAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-09T11:42:24.432Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "function_base.hpp",
+              "DocumentMoniker": "E:\\boost\\include\\boost-1_90\\boost\\function\\function_base.hpp",
+              "RelativeDocumentMoniker": "..\\..\\boost\\include\\boost-1_90\\boost\\function\\function_base.hpp",
+              "ToolTip": "E:\\boost\\include\\boost-1_90\\boost\\function\\function_base.hpp",
+              "RelativeToolTip": "..\\..\\boost\\include\\boost-1_90\\boost\\function\\function_base.hpp",
+              "ViewState": "AgIAANwBAAAAAAAAAADgv/ABAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-04-09T11:42:21.797Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Lib.cpp",
-              "DocumentMoniker": "C:\\tests\\Lib\\Lib\\Lib.cpp",
+              "DocumentMoniker": "E:\\tests\\Lib\\Lib\\Lib.cpp",
               "RelativeDocumentMoniker": "Lib\\Lib.cpp",
-              "ToolTip": "C:\\tests\\Lib\\Lib\\Lib.cpp",
+              "ToolTip": "E:\\tests\\Lib\\Lib\\Lib.cpp",
               "RelativeToolTip": "Lib\\Lib.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
@@ -39,11 +85,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "db.h",
-              "DocumentMoniker": "C:\\tests\\Lib\\Lib\\db.h",
+              "DocumentMoniker": "E:\\tests\\Lib\\Lib\\db.h",
               "RelativeDocumentMoniker": "Lib\\db.h",
-              "ToolTip": "C:\\tests\\Lib\\Lib\\db.h",
+              "ToolTip": "E:\\tests\\Lib\\Lib\\db.h",
               "RelativeToolTip": "Lib\\db.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
@@ -54,11 +100,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "db.cpp",
-              "DocumentMoniker": "C:\\tests\\Lib\\Lib\\db.cpp",
+              "DocumentMoniker": "E:\\tests\\Lib\\Lib\\db.cpp",
               "RelativeDocumentMoniker": "Lib\\db.cpp",
-              "ToolTip": "C:\\tests\\Lib\\Lib\\db.cpp",
-              "RelativeToolTip": "Lib\\db.cpp",
-              "ViewState": "AgIAAIcAAAAAAAAAAAAAAJIAAAAAAAAAAAAAAA==",
+              "ToolTip": "E:\\tests\\Lib\\Lib\\db.cpp*",
+              "RelativeToolTip": "Lib\\db.cpp*",
+              "ViewState": "AgIAAL4AAAAAAAAAAAAcwNwAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-04-09T10:37:12.235Z",
               "EditorCaption": ""
