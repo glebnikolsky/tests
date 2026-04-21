@@ -6,11 +6,12 @@
 #include <fstream>
 #include <iostream>
 #include <numeric>
+#include <set>
 #include <sstream>
 #include <vector>
 
 #include <boost/algorithm/string.hpp>
-#include <boost/crc.hpp>
+#include <boost/hash2/md5.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
@@ -27,6 +28,13 @@ PRAGMA page_size = 8192;\n\
 PRAGMA journal_mode=off;\n\
 PRAGMA synchronous = off;\n\
 \n\
+CREATE TABLE IF NOT EXISTS Types(\n\
+	type_id INTEGER NOT NULL,\n\
+	type TEXT PRIMARY KEY \n\
+);\n\
+\
+\INSERT INTO Types(type_id,type) VALUES(5,'.pdf'), (3,'.epub'), (2,'.fb2'), (4,'.djvu'), (1,'.zip');\n\
+\
 CREATE TABLE IF NOT EXISTS Folders(\n\
 	folder_id	INTEGER PRIMARY KEY AUTOINCREMENT,\n\
 	folder TEXT NOT NULL\n\
@@ -39,9 +47,37 @@ CREATE TABLE IF NOT EXISTS Files(\n\
 	file TEXT NOT NULL,\n\
 	type TEXT NOT NULL,\n\
 	size INTEGER NOT NULL,\n\
-	crc INTEGER NULL,\n\
+	crc TEXT NULL,\n\
 	folder_id	INTEGER REFERENCES Folders(folder_id)\n\
 );\n\
+\
+CREATE TABLE IF NOT EXISTS Genres(\n\
+	genre_id INTEGER PRIMARY KEY AUTOINCREMENT,\n\
+	genre TEXT NOT NULL\n\
+);\n\
+\
+CREATE TABLE IF NOT EXISTS Authors(\n\
+	autor_id INTEGER PRIMARY KEY AUTOINCREMENT,\n\
+	last_name TEXT NOT NULL,\n\
+	first_name TEXT,\n\
+	middle_name TEXT\n\
+);\n\
+\
+CREATE TABLE IF NOT EXISTS BooksGenres(\n\
+	file_id	INTEGER REFERENCES Files(file_id),\n\
+	genre_id INTEGER REFERENCES Genres(genre_id)\n\
+);\n\
+\
+CREATE TABLE IF NOT EXISTS BooksAuthors(\n\
+	file_id	INTEGER REFERENCES Files(file_id),\n\
+	autor_id INTEGER REFERENCES Author(autor_id)\n\
+);\n\
+\
+CREATE TABLE IF NOT EXISTS BooksTitles(\n\
+	file_id	INTEGER REFERENCES Files(file_id),\n\
+	title TEXT NOT NULL\n\
+);\n\
+\
 CREATE INDEX IF NOT EXISTS FilesIdxType ON Files( type );\n\
 \
 CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
@@ -132,42 +168,42 @@ CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
 		return num;
 	}
 
-	unsigned int Calc(const string& p, size_t len) {
+	string Calc(const string& p, size_t len) {
 		ifstream ifs(p.c_str(), ios::binary);
 		constexpr size_t kBsize = 1'204 * 1'024;
 		ifstream fl(p.c_str(), ios::in | ios::binary);
-		boost::crc_32_type  computer;
-		computer.reset();
+		boost::hash2::md5_128 hash;
 		try {
-			do {
+			while (len) {
 				vector<char> v(min(kBsize, len));
 				ifs.read(&v[0], v.size());
-				computer.process_bytes(&v[0], v.size());
+				hash.update(&v[0], v.size());
 				if (len >= kBsize) len -= kBsize;
 				else len = 0;
- 			} while (len);
+ 			}
 		}
 		catch (exception e) {
 			cout << e.what();
 		}
-		return computer.checksum();
+		return to_string(hash.result());
 	}
-
 }
 
 namespace db{
 	void CreateDb(const char* dbn)
 	{
-		sql3::database tmp(dbn);
-		int ret = tmp.execute(kDBStruct);
+		sql3::database dbs(dbn);
+		int ret = dbs.execute(kDBStruct);
+
 		if (ret) {
-			cout << tmp.error_msg() << ends;
+			cout << dbs.error_msg() << ends;
 			exit(1);
 		}
 	}
 
 	void Fill(const char *dbn, const char* root)
 	{
+		cout << "Load folders" << endl;
 		sql3::database dbs(dbn);
 		folder last_visited{ "", 0 };
 		insert_muli im(dbs, "INSERT INTO Files(folder_id,file,type,size) VALUES", 10000);
@@ -193,14 +229,22 @@ namespace db{
 	void CalcCrc(const char* dbn, const char* root)
 	{
 		sql3::database dbs(dbn);
+		cout << "Calculate md5" << endl;
 		long long total, curnt{ 1 };
 		{
-			sql3::query cnt(dbs, "SELECT count(*) FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE type in('.epub','.fb2')");
+			sql3::query cnt(dbs, 
+"SELECT count(*) FROM Folders fd \n\
+JOIN Files fl ON (fd.folder_id = fl.folder_id) \n\
+JOIN Types ON(type=fl.type) WHERE crc IS NULL");
 			sql3::query::iterator rec = cnt.begin();
 			GetFieldVal(rec, 0, total);
 		}
+		if (!total) return;
 		auto start = chrono::high_resolution_clock::now();
-		sql3::query q(dbs, "SELECT folder||'\\'||file, size, file_id FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE type in('.epub','.fb2')");
+		sql3::query q(dbs, 
+"SELECT folder||'\\'||file, size, file_id FROM Folders fd \n\
+JOIN Files fl ON (fd.folder_id = fl.folder_id) \n\
+JOIN Types ON(types=fl.type) WHERE crc IS NULL");
 		cout << "Total: "<<PrettyNum(total) << endl;
 		for (sql3::query::iterator i = q.begin(); i != q.end(); ++i,++curnt) {
 			string p;
@@ -210,10 +254,33 @@ namespace db{
 			GetFieldVal(i, 1, len);
 			GetFieldVal(i, 2, id);
 			ostringstream sql;
-			sql << boost::format("UPDATE Files SET crc=%1% WHERE file_id=%2%") % Calc(p,len) % id;
+			sql << boost::format("UPDATE Files SET crc='%1%' WHERE file_id=%2%") % Calc(p,len) % id;
 			dbs.execute(sql.str().c_str());
 			std::chrono::duration<double, std::milli> fp_ms = chrono::high_resolution_clock::now() - start;
 			cout<<'\r'<<string(50,' ')<<"\r" << PrettyNum(curnt) << '\t' << fp_ms.count() / 1000.<<'\t'<< (fp_ms.count()/1000/curnt)*(total-curnt);
 		}
 	}
+	void FindDoubles(const char* dbn)
+	{
+		sql3::database dbs(dbn);
+		cout << "Find doubles" << endl;
+		sql3::query q(dbs, "SELECT crc, COUNT(*) FROM files WHERE crc IS NOT NULL GROUP BY folder_id, size, crc HAVING COUNT(*) >1");
+		for (sql3::query::iterator i = q.begin(); i != q.end(); ++i) {
+			string crc;
+			GetFieldVal(i, 0, crc);
+			ostringstream sql;
+			sql << boost::format("SELECT folder||'\\'||file, file_id FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE crc = '%1%'")
+				% crc;
+			sql3::query f(dbs, sql.str().c_str());
+			for (sql3::query::iterator j = f.begin(); j != f.end(); ++j) {
+				string p;
+				GetFieldVal(j, 0, p);
+				int file_id;
+				GetFieldVal(j, 1, file_id);
+				cout << p << endl;
+			}
+			cout << endl;
+		}
+	}
+
 }

@@ -9,6 +9,8 @@ namespace db {
 	void Fill(const char* dbn, const char* root);
 
 	void CalcCrc(const char* dbn, const char* root);
+
+	void FindDoubles(const char* dbn);
 }
 
 #endif __LIB_DB_H__
