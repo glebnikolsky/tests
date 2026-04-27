@@ -141,20 +141,27 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Lib.cpp" />
+    <ClCompile Include="pugixml.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="sqlite3pp.cpp" />
     <ClCompile Include="sqlite3ppext.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="unzip.cpp" />
+    <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="db.h" />
+    <ClInclude Include="pugiconfig.hpp" />
+    <ClInclude Include="pugixml.hpp" />
     <ClInclude Include="sqlite3.h" />
     <ClInclude Include="sqlite3ext.h" />
     <ClInclude Include="sqlite3pp.h" />
     <ClInclude Include="sqlite3ppext.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="unzip.h" />
+    <ClInclude Include="zip.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

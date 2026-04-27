@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "db.h"
 #include "sqlite3pp.h"
+#include "pugixml.hpp"	
+#include "zip.h"
+#include "unzip.h"
 
 #include <chrono>
 #include <fstream>
@@ -30,8 +33,10 @@ PRAGMA synchronous = off;\n\
 \n\
 CREATE TABLE IF NOT EXISTS Types(\n\
 	type_id INTEGER NOT NULL,\n\
-	type TEXT PRIMARY KEY \n\
+	type TEXT NOT NULL\n\
 );\n\
+\
+DELETE FROM Types;\n\
 \
 \INSERT INTO Types(type_id,type) VALUES(5,'.pdf'), (3,'.epub'), (2,'.fb2'), (4,'.djvu'), (1,'.zip');\n\
 \
@@ -232,19 +237,13 @@ namespace db{
 		cout << "Calculate md5" << endl;
 		long long total, curnt{ 1 };
 		{
-			sql3::query cnt(dbs, 
-"SELECT count(*) FROM Folders fd \n\
-JOIN Files fl ON (fd.folder_id = fl.folder_id) \n\
-JOIN Types ON(type=fl.type) WHERE crc IS NULL");
+			sql3::query cnt(dbs, "SELECT count(*) FROM Files WHERE crc IS NULL");
 			sql3::query::iterator rec = cnt.begin();
 			GetFieldVal(rec, 0, total);
 		}
 		if (!total) return;
 		auto start = chrono::high_resolution_clock::now();
-		sql3::query q(dbs, 
-"SELECT folder||'\\'||file, size, file_id FROM Folders fd \n\
-JOIN Files fl ON (fd.folder_id = fl.folder_id) \n\
-JOIN Types ON(types=fl.type) WHERE crc IS NULL");
+		sql3::query q(dbs, "SELECT folder||'\\'||file, size, file_id FROM Folders j JOIN Files f ON (j.folder_id = f.folder_id) WHERE crc IS NULL");
 		cout << "Total: "<<PrettyNum(total) << endl;
 		for (sql3::query::iterator i = q.begin(); i != q.end(); ++i,++curnt) {
 			string p;
@@ -283,4 +282,25 @@ JOIN Types ON(types=fl.type) WHERE crc IS NULL");
 		}
 	}
 
+	void GetBooksInfo(const char* dbn) {
+		sql3::database dbs(dbn);
+		cout << "Get books info" << endl;
+		sql3::query q(dbs, "SELECT folder||'\\'||file, type_id FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE crc IS NOT NULL");
+		for (sql3::query::iterator i = q.begin(); i != q.end(); ++i) {
+			string p;
+			int type;
+			GetFieldVal(i, 0, p);
+			GetFieldVal(i, 1, type);
+			switch (type) {
+				case 1:	//zip
+					break;
+				case 2:	//fb2
+				case 3:	//epub
+					break;
+				case 4:	//djvu
+					break;
+			}
+
+		}
+	}
 }

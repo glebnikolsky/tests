@@ -11,6 +11,8 @@ namespace db {
 	void CalcCrc(const char* dbn, const char* root);
 
 	void FindDoubles(const char* dbn);
+
+	void GetBooksInfo(const char* dbn);
 }
 
 #endif __LIB_DB_H__
