@@ -7,23 +7,23 @@
 
 #include <chrono>
 #include <fstream>
-#include <iostream>
 #include <numeric>
 #include <set>
 #include <sstream>
-#include <vector>
 
 #include <boost/algorithm/string.hpp>
 #include <boost/hash2/md5.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/tokenizer.hpp>
 
 namespace fs = boost::filesystem;
 namespace sql3 = sqlite3pp;
 using namespace std;
 
 namespace {
+	
 	const char* kDBStruct = "\
 PRAGMA foreign_keys = ON;\n\
 PRAGMA temp_store = 2;\n\
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS Types(\n\
 \
 DELETE FROM Types;\n\
 \
-\INSERT INTO Types(type_id,type) VALUES(5,'.pdf'), (3,'.epub'), (2,'.fb2'), (4,'.djvu'), (1,'.zip');\n\
+INSERT INTO Types(type_id,type) VALUES(5,'.pdf'), (3,'.epub'), (2,'.fb2'), (4,'.djvu'), (1,'.zip');\n\
 \
 CREATE TABLE IF NOT EXISTS Folders(\n\
 	folder_id	INTEGER PRIMARY KEY AUTOINCREMENT,\n\
@@ -86,6 +86,10 @@ CREATE TABLE IF NOT EXISTS BooksTitles(\n\
 CREATE INDEX IF NOT EXISTS FilesIdxType ON Files( type );\n\
 \
 CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
+
+	bool xml_loaded{ false };
+	pugi::xml_document doc;
+
 
 	template<typename T>bool GetFieldVal(sql3::query::iterator& rec, int field_no, T& val)
 	{
@@ -156,7 +160,7 @@ CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
 			sql3::query q(dbs, sql.str().c_str());
 			sql3::query::iterator i = q.begin();
 			if (i != q.end()) {
-				id_ = (*i).get<long long>(0);
+				id_ = static_cast<long>((*i).get<long long>(0));
 				return id_;
 			}
 			int ret = dbs.executef("INSERT INTO Folders(folder) VALUES('%s');", DupApos(path_).c_str());
@@ -192,6 +196,168 @@ CREATE INDEX IF NOT EXISTS FilesIdxFile ON Files( file );";
 		}
 		return to_string(hash.result());
 	}
+
+	bool OpenEpubDoc(const char* path) {
+		if (xml_loaded) return true;
+		HZIP hz = OpenZip(path, nullptr);
+		if (!hz) {
+			cerr << "OOps!\n";
+			return false;
+		}
+		ZIPENTRY ze;
+		GetZipItem(hz, -1, &ze);
+		int numitems = ze.index;
+		for (int i = 0; i < numitems; ++i) {
+			GetZipItem(hz, i, &ze);
+			boost::to_lower(ze.name);
+			if (!boost::ends_with(ze.name, "content.opf")) continue;
+			std::cout << std::string(ze.name) << '\t' << ze.unc_size << '\n';
+			std::vector<TCHAR> buf(ze.unc_size + 1, '\0');
+			UnzipItem(hz, i, &buf[0], ze.unc_size);
+			pugi::xml_parse_result result = doc.load_buffer(&buf[0], buf.size());
+			if (result) {
+				xml_loaded = true;
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	std::string UnicodeToCodePage(int codePage, const wchar_t* src)
+	{
+		if (!src) return 0;
+		int srcLen = wcslen(src);
+		if (!srcLen) return std::string();
+
+		int requiredSize = WideCharToMultiByte(codePage,
+			0,
+			src, srcLen, 0, 0, 0, 0);
+
+		if (!requiredSize) return std::string();
+
+		std::string x(requiredSize + 1, '\0');
+
+		int retval = WideCharToMultiByte(codePage,
+			0,
+			src, srcLen, (LPSTR)x.c_str(), requiredSize, 0, 0);
+		if (!retval) return std::string();
+
+		return x;
+	}
+
+	std::wstring CodePageToUnicode(int codePage, const char* src)
+	{
+		if (!src) return std::wstring();
+		int srcLen = strlen(src);
+
+		int requiredSize = MultiByteToWideChar(codePage,
+			0,
+			src, srcLen, 0, 0);
+
+		if (!requiredSize)
+		{
+			return std::wstring();
+		}
+		std::wstring w(requiredSize + 1, L'\0');
+
+		int retval = MultiByteToWideChar(codePage,
+			0,
+			src, srcLen, (LPWSTR)w.c_str(), requiredSize);
+		if (!retval) return std::wstring();
+
+		return w;
+	}
+	//void
+	//std::vector<std::string>& GetAuthors(const char* path)
+	//{
+	//	if (!xml_loaded) OpenEpubDoc(path);
+
+	//	std::vector<std::string> res;
+	//	return res;
+	//}
+
+	//std::vector<std::string>& GetGenres(const char* path)
+	//{
+	//	if (!xml_loaded) OpenEpubDoc(path);
+
+	//	std::vector<std::string> res;
+	//	return res;
+
+	//}
+
+	//std::vector<std::string>& GetTitles(const char* path)
+	//{
+	//	if (!xml_loaded) OpenEpubDoc(path);
+
+	//	std::vector<std::string> res;
+	//	return res;
+	//}
+
+	void GetContentOpf(const fs::path& file, vector<string>& author, vector<string>& title)
+	{
+		std::cout << file << '\n';
+		HZIP hz = OpenZip(file.string().c_str(), nullptr);
+		if (!hz) {
+			std::cerr << "OOps!\n";
+			return;
+		}
+		ZIPENTRY ze;
+		GetZipItem(hz, -1, &ze);
+		int numitems = ze.index;
+		for (int i = 0; i < numitems; ++i) {
+			GetZipItem(hz, i, &ze);
+			boost::to_lower(ze.name);
+			if (!boost::ends_with(ze.name, "content.opf")) continue;
+			std::cout << std::string(ze.name) << '\t' << ze.unc_size << '\n';
+			std::vector<TCHAR> buf(ze.unc_size + 1, '\0');
+			UnzipItem(hz, i, &buf[0], ze.unc_size);
+			pugi::xml_document doc;
+			pugi::xml_parse_result result = doc.load_buffer(&buf[0], buf.size());
+			pugi::xpath_query query("/package/metadata/dc:title");
+			pugi::xpath_query query1("/package/metadata/dc:creator");
+			pugi::xpath_node_set res = query.evaluate_node_set(doc);
+			for (auto k : res) {
+				pugi::xml_node nd = k.node().first_child();
+				title.push_back(UnicodeToCodePage(1251, CodePageToUnicode(65001, nd.value()).c_str()));
+			}
+			pugi::xpath_node_set res1 = query1.evaluate_node_set(doc);
+			for (auto k : res1) {
+				pugi::xml_node nd = k.node().first_child();
+				author.push_back(UnicodeToCodePage(1251, CodePageToUnicode(65001, nd.value()).c_str()));
+			}
+		}
+	}
+	void AddAuthor(sql3::database& dbs, int file_id, string& last_name, string& first_name, string& middle_name)
+	{
+		sql3::query q(dbs, "SELECT author_id FROM Authors WHERE crc IS NULL");
+		for (sql3::query::iterator i = q.begin(); i != q.end(); ++i, ++curnt) {
+	}
+
+	void ParseName(const string & name, string & last_name, string & first_name, string & middle_name)
+	{
+		boost::char_separator<char> field_sep(_T(" "), _T(""));
+		boost::tokenizer<boost::char_separator<char> > name_parts(name, field_sep);
+		int n{ 0 }
+		for (auto i = name_parts.begin(); i != name_parts.end(); ++i,++n) {
+			switch (n) {
+			case 0: 
+			}
+			std::string tmp = *tok_iter;
+
+	}
+
+	void EpubInfo(sql3::database& dbs, int file_id, string p)
+	{
+		vector<string> author;
+		vector<string> title;
+		GetContentOpf(fs::path(p), author, title);
+		for (auto& i : author) {
+			string last_name, first_name, middle_name;
+			ParseName(i, last_name, first_name, middle_name);
+			AddAuthor(dbs, file_id, last_name, first_name, middle_name);
+		}
+	}
+
 }
 
 namespace db{
@@ -285,17 +451,25 @@ namespace db{
 	void GetBooksInfo(const char* dbn) {
 		sql3::database dbs(dbn);
 		cout << "Get books info" << endl;
-		sql3::query q(dbs, "SELECT folder||'\\'||file, type_id FROM Folders fd JOIN Files fl ON (fd.folder_id = fl.folder_id) WHERE crc IS NOT NULL");
+		sql3::query q(dbs, "\
+SELECT folder||'\\'||file, type_id, file_id FROM Folders fd \n\
+JOIN Files fl ON (fd.folder_id = fl.folder_id) \n\
+JOIN Types t ON(t.type=fl.type)\n\
+WHERE crc IS NOT NULL");
 		for (sql3::query::iterator i = q.begin(); i != q.end(); ++i) {
 			string p;
 			int type;
+			int file_id;
 			GetFieldVal(i, 0, p);
 			GetFieldVal(i, 1, type);
+			GetFieldVal(i, 1, file_id);
 			switch (type) {
 				case 1:	//zip
 					break;
 				case 2:	//fb2
+					break;
 				case 3:	//epub
+					EpubInfo(dbs, file_id, p);
 					break;
 				case 4:	//djvu
 					break;

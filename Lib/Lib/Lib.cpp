@@ -12,5 +12,6 @@ int main()
     db::Fill("\\tmp\\libra.db", "\\books");
     db::CalcCrc("\\tmp\\libra.db", "\\books");
     db::FindDoubles("\\tmp\\libra.db");
+    db::GetBooksInfo("\\tmp\\libra.db");
 }
 
